@@ -76,13 +76,17 @@ IF(OR(
 
 | # | Name | ID | Auslöser | Aktion | Platzhalter |
 |---|---|---|---|---|---|
-| 1 | Eltern nach 2. Probetraining: Mitgliedsantrag schicken | `wflK2bJewOylD3F7E` | Zähler ≥ 2 und Status = Probetraining und E-Mail gefüllt | Mail an Eltern, Status → „Antrag ausgehändigt/verschickt“ | `[LINK ZUM MITGLIEDSANTRAG EINFÜGEN]`; Text erwähnt „Ab dem 3. Probetraining …“ → auf 6 anpassen |
-| 2 | Antrag eingegangen: Verwaltung informieren | `wflnMGRE7Ca4BoHyx` | Status = Antrag eingegangen | Datum setzen, Mail an Verwaltung | `verwaltung@example.org` |
+| 1 | Eltern nach 2. Probetraining: Mitgliedsantrag schicken | `wflK2bJewOylD3F7E` | Zähler ≥ 2 und Status = Probetraining und E-Mail gefüllt | Mail an Eltern, Status → „Antrag ausgehändigt/verschickt“ | Antrags-Link **vorläufig** = Platzhalter-Seite (siehe unten) |
+| 2 | Antrag eingegangen: Verwaltung informieren | `wflnMGRE7Ca4BoHyx` | Status = Antrag eingegangen | Datum setzen, Mail an Verwaltung | Empfänger **vorläufig** Sascha (privat) |
 | 3 | In DFBnet erfasst: Trainer informieren | `wflkZScVyCN37Dpu4` | Status = In DFBnet erfasst | Datum setzen, Mail an Trainer (Lookup) | – |
-| 4 | Wöchentlich: Datenschutz-Löschliste | `wflcgjCeU3htUMKhn` | Montag (Cron, 06:00 UTC) | Mail mit „Löschen fällig“-Datensätzen | `verwaltung@example.org` |
+| 4 | Wöchentlich: Datenschutz-Löschliste | `wflcgjCeU3htUMKhn` | Montag (Cron, 06:00 UTC) | Mail mit „Löschen fällig“-Datensätzen | Empfänger **vorläufig** Sascha (privat) |
 | 5 | Spielberechtigt: Datum setzen | `wflTSgXU6L5bnECWU` | Status = Spielberechtigt | „Spielberechtigt seit“ = heute | – |
 
 Automation 1: Mailtext am 03.11.2026 auf 6 Probetrainings angepasst („Insgesamt sind 6 Probetrainings möglich. Ab dem 7. Training … nur mit Antrag“); Auslöser bleibt „nach dem 2. Training“.
+
+### Vorläufige Werte (Stand 03.11.2026) – später ersetzen
+- **Antrags-Link** (Automation 1): https://claude.ai/artifact/EMnvhd112CQZsZw9DdW4cs – Platzhalter-Seite „Mitgliedsantrag folgt, bis dahin Papierantrag beim Trainer“ (Quelle: `mitgliedsantrag/index.html`). Die Seite ist privat, bis sie über „Teilen“ freigegeben wird. Sobald es einen echten Online-Antrag gibt: URL in Automation 1 tauschen.
+- **Verwaltungs-E-Mail** (Automation 2 und 4): vorläufig Saschas private Adresse (bewusst nicht im Repo). Später durch die echte Verwaltungsadresse ersetzen.
 
 Automationen kann nur der Nutzer in der Airtable-Oberfläche einschalten.
 

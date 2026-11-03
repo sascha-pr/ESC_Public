@@ -76,7 +76,7 @@ Empfehlung: Variante 1 für den Start.
    - Formel „Löschen fällig“: Frist 42 Tage → **56 Tage** (8 Wochen) – *vorgeschlagen*.
    - Neues Feld „Spielberechtigt seit“ (Datum, per Automation gesetzt); spielberechtigte Kinder **14 Tage** in der App zeigen, danach auf Löschliste – *vorgeschlagen*.
    - Automation 1 (Antragsmail) bleibt bei „nach dem 2. Training“, sofern nicht anders gewünscht.
-2. Platzhalter in Automationen ersetzen (Antrags-Link, Verwaltungs-E-Mail), dann vom Nutzer einschalten lassen.
+2. ✅ *(vorläufig erledigt 03.11.2026: Platzhalter-Antragsseite + private Mail von Sascha, siehe `docs/airtable-schema.md` → „Vorläufige Werte“)* Platzhalter in Automationen ersetzen (Antrags-Link, Verwaltungs-E-Mail), dann vom Nutzer einschalten lassen.
 3. Echte Mannschaften + Trainer-E-Mails in Airtable, Beispieldaten löschen.
 4. **Worker** bauen (TypeScript, `wrangler`), inkl. Tests für Mannschafts-Filter und Limit.
 5. **Prototyp umbauen:** `seed()` und lokalen `state` durch API-Aufrufe ersetzen; Demo-Login-Screen entfernen (Login macht Cloudflare Access); Abmelden → `/cdn-cgi/access/logout`; Lade-/Fehlerzustände; `MAX = 6` beibehalten. Look & Feel (ESC-Rot `#c9252b`, Schwarz, Eichengrün `#006f45`, Wappen, Barlow/Barlow Condensed) **nicht verändern** – den Trainern gefällt es.
