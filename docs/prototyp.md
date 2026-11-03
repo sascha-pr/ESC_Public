@@ -44,3 +44,10 @@ unverändert als Demo mit Beispieldaten (für Trainer-Tests ohne Login). Ausgeli
 - `MAX = 6` bleibt als Vorgabe, der Server meldet den gültigen Wert.
 
 Lokal ausprobieren ohne Airtable: `cd worker && npm run dev:mock` → http://localhost:8787 (erfundene Daten, siehe `worker/dev/mock-airtable.mjs`).
+
+## Testversion (claude.ai): https://claude.ai/artifact/CdAt886T2tT8TcRVnJMRKa
+
+Die echte App mit einem Nachbau des Workers im Browser (`app/dev/mock-api.js`, gleiche Regeln, erfundene Daten) und einem
+Testhelfer-Feld (nächster Trainingstag, Kind wie per Formular, Trainer wechseln, Zustände „Sitzung abgelaufen“, „Kein Zugang“,
+„Datenbank weg“, „Kein Netz“). Neu bauen nach Änderungen an der App: `cd worker && node dev/build-testversion.mjs`
+→ `testversion/index.html` (nicht eingecheckt) und erneut veröffentlichen.
