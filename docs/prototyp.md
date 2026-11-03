@@ -39,7 +39,8 @@ unverändert als Demo mit Beispieldaten (für Trainer-Tests ohne Login). Ausgeli
   Fehler beim Tippen erscheinen als Hinweis unten, ohne die Liste zu verlieren.
 - Trainer mit mehreren Mannschaften bekommen im Kopf Umschalter; die Wahl merkt sich das Handy (`localStorage`).
 - Liste frischt sich auf, wenn die App nach über einer Minute wieder in den Vordergrund kommt; Fußzeile „Stand hh:mm · Aktualisieren“.
-- „Neues Kind“: solange `FORM_URL` leer ist (Aufgabe 6), Hinweis statt QR-Code; danach QR pro Mannschaft.
+- „Neues Kind“: QR-Code zum Elternformular, Mannschaft vorbelegt; Adresse zentral in `app/config.js` (`formUrl` leer → Hinweis statt QR-Code).
+- `app/aushang.html?team=<Mannschaft>`: druckbarer A4-Aushang mit großem QR-Code, aus dem „Neues Kind“-Blatt verlinkt.
 - `MAX = 6` bleibt als Vorgabe, der Server meldet den gültigen Wert.
 
 Lokal ausprobieren ohne Airtable: `cd worker && npm run dev:mock` → http://localhost:8787 (erfundene Daten, siehe `worker/dev/mock-airtable.mjs`).

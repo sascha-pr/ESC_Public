@@ -5,6 +5,8 @@ Ausführliche Fassung als Claude-Dokument: https://claude.ai/code/artifact/aaa19
 
 ## Einwilligungstext für das Elternformular (Pflicht-Häkchen)
 
+So im Airtable-Formular `pag2AaadRpeiFuvDB` hinterlegt (Feld „Einwilligung“); Platzhalter in eckigen Klammern vor dem Veröffentlichen ersetzen.
+
 Ich willige ein, dass der ESC Rellinghausen 06 e. V. die angegebenen Daten (Name und Geburtsdatum des Kindes,
 Mannschaft, Name und Kontaktdaten der/des Erziehungsberechtigten) zur Organisation des Probetrainings und zur
 Kontaktaufnahme wegen einer möglichen Mitgliedschaft verarbeitet. Bei minderjährigen Teilnehmenden erkläre ich,
@@ -12,7 +14,7 @@ dass ich erziehungsberechtigt bin bzw. die Einwilligung der Erziehungsberechtigt
 
 - Zweck: Nachweis der Probetrainings, Information des Trainers, Zusendung des Mitgliedsantrags.
 - Empfänger: Trainer der Mannschaft und Vereinsverwaltung; Verarbeitung über Airtable (Airtable Inc., USA) [und Cloudflare].
-- Speicherdauer: Löschung nach Erfassung der Mitgliedschaft, bei Absage, spätestens [8] Wochen nach dem ersten Probetraining.
+- Speicherdauer: Löschung nach Erfassung der Mitgliedschaft, bei Absage, spätestens 8 Wochen nach dem ersten Probetraining.
 - Widerruf jederzeit, z. B. per E-Mail an [E-Mail-Adresse].
 - Verantwortlich: [Vereinsanschrift, Vorstand], Datenschutzerklärung: [Link].
 

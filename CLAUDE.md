@@ -21,7 +21,7 @@ nur die Zeit zwischen erstem Training und fertigem Pass.
 | Baustein | Status | Wo |
 |---|---|---|
 | Airtable-Base „Probetraining & Neuanmeldungen“ | angelegt, mit Beispieldaten | `docs/airtable-schema.md` (alle IDs) |
-| 4 Airtable-Automationen | als Entwurf angelegt, **ausgeschaltet**, Platzhalter offen | `docs/airtable-schema.md` |
+| 6 Airtable-Automationen | als Entwurf angelegt, **ausgeschaltet**; Antrags-Link und Verwaltungs-Mail vorläufig | `docs/airtable-schema.md` |
 | Airtable-Interface (Trainer-Liste + Verwaltungs-Kanban) | veröffentlicht – Trainern zu unintuitiv, wird durch eigene App ersetzt; Kanban bleibt für Verwaltung | `docs/airtable-schema.md` |
 | **Klickbarer Prototyp der Trainer-App** | fertig, von Trainern positiv bewertet, **nur Beispieldaten im Browser** | `prototype/index.html` |
 | Vereinswappen | vorhanden | `assets/` |
@@ -80,7 +80,7 @@ Empfehlung: Variante 1 für den Start.
 3. Echte Mannschaften + Trainer-E-Mails in Airtable, Beispieldaten löschen.
 4. ✅ *(erledigt 03.11.2026: `worker/`, siehe `worker/README.md`; 51 Tests grün)* **Worker** bauen (TypeScript, `wrangler`), inkl. Tests für Mannschafts-Filter und Limit.
 5. ✅ *(erledigt 03.11.2026: echte App in `app/index.html`, Prototyp bleibt als Demo; siehe `docs/prototyp.md`)* **Prototyp umbauen:** `seed()` und lokalen `state` durch API-Aufrufe ersetzen; Demo-Login-Screen entfernen (Login macht Cloudflare Access); Abmelden → `/cdn-cgi/access/logout`; Lade-/Fehlerzustände; `MAX = 6` beibehalten. Look & Feel (ESC-Rot `#c9252b`, Schwarz, Eichengrün `#006f45`, Wappen, Barlow/Barlow Condensed) **nicht verändern** – den Trainern gefällt es.
-6. Formular für QR-Code (siehe oben) + QR pro Mannschaft.
+6. ✅ *(erledigt 03.11.2026, Variante 1: Airtable-Formular `pag2AaadRpeiFuvDB`, noch unveröffentlicht; Automation 6; QR + Aushang pro Mannschaft in der App)* Formular für QR-Code (siehe oben) + QR pro Mannschaft.
 7. Deployment-Anleitung für den Verein schreiben (Cloudflare-Konto **des Vereins**, nicht privat; DNS-Eintrag bei Domain-Verwalter von esc-06.de).
 8. Kurzanleitung (`docs/trainer-kurzanleitung.md`) auf finalen Ablauf anpassen (6 Trainings, echter Login).
 

@@ -175,6 +175,7 @@ section{display:grid;gap:10px}
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="config.js"></script>
 <script>
 (function(){
   'use strict';
@@ -182,7 +183,7 @@ section{display:grid;gap:10px}
   var MAX = 6; /* Probetrainings bis Mitgliedsantrag Pflicht ist – der Server meldet den gültigen Wert in /api/me */
   /* Anmeldeformular für Eltern (Aufgabe 6). Solange leer, zeigt „Neues Kind“ einen Hinweis statt QR-Code.
      {team} wird durch den Mannschaftsnamen ersetzt (Vorbelegung im Formular). */
-  var FORM_URL = '';
+  var FORM_URL = (window.ESC_CONFIG && window.ESC_CONFIG.formUrl) || ''; /* siehe config.js */
   var LOGOUT_URL = '/cdn-cgi/access/logout';
   var REFRESH_MS = 60000;
 
@@ -364,7 +365,8 @@ section{display:grid;gap:10px}
       '<p>Die Eltern scannen den Code mit der Handykamera und füllen das Formular aus. Das dauert etwa 2 Minuten. Danach steht das Kind in deiner Liste mit Probetraining 1 von '+MAX+'.</p>'+
       '<div class="qr" id="qr"></div>'+
       '<div class="qrcap">Formular für die '+esc(t.name)+' · Mannschaft ist schon ausgewählt</div>'+
-      '<p class="small muted">Jede Mannschaft hat ihren eigenen Code, auch als Aushang für den Platz. Neue Kinder erscheinen nach kurzer Zeit in der Liste – sonst unten auf „Aktualisieren“ tippen.</p>';
+      '<p class="small muted">Neue Kinder erscheinen nach kurzer Zeit in der Liste – sonst unten auf „Aktualisieren“ tippen.</p>'+
+      '<div><a class="linkbtn" href="aushang.html?team='+encodeURIComponent(t.name)+'" target="_blank" rel="noopener">Aushang mit diesem Code für den Platz öffnen</a></div>';
     var box = $('qr');
     if (window.QRCode){
       try { new QRCode(box,{text:url,width:184,height:184,colorDark:'#141414',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.M}); }

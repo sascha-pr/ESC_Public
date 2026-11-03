@@ -81,6 +81,7 @@ IF(OR(
 | 3 | In DFBnet erfasst: Trainer informieren | `wflkZScVyCN37Dpu4` | Status = In DFBnet erfasst | Datum setzen, Mail an Trainer (Lookup) | – |
 | 4 | Wöchentlich: Datenschutz-Löschliste | `wflcgjCeU3htUMKhn` | Montag (Cron, 06:00 UTC) | Mail mit „Löschen fällig“-Datensätzen | Empfänger **vorläufig** Sascha (privat) |
 | 5 | Spielberechtigt: Datum setzen | `wflTSgXU6L5bnECWU` | Status = Spielberechtigt | „Spielberechtigt seit“ = heute | – |
+| 6 | Formular-Anmeldung: 1. Probetraining eintragen | `wflxlxrVhaLWPSY8c` | Formular `pag2AaadRpeiFuvDB` abgeschickt | Status = Probetraining, Zähler = 1, erstes + letztes Probetraining = heute | – |
 
 Automation 1: Mailtext am 03.11.2026 auf 6 Probetrainings angepasst („Insgesamt sind 6 Probetrainings möglich. Ab dem 7. Training … nur mit Antrag“); Auslöser bleibt „nach dem 2. Training“.
 
@@ -94,5 +95,13 @@ Automationen kann nur der Nutzer in der Airtable-Oberfläche einschalten.
 - Seite „Trainer: Wer darf mittrainieren?“ `pagEV3yyo0GAPGT6c` (Grid, gruppiert nach Mannschaft) – wird durch eigene App abgelöst
 - Seite „Verwaltung: Status-Board“ `pagc14tSriQXTpxwW` (Kanban nach Status) – **bleibt Arbeitsplatz der Verwaltung**
 
-## Noch nicht vorhanden
-- Formular-Ansicht für den QR-Code (Prefill Mannschaft, Status = Probetraining, Zähler = 1, Erstes Probetraining = heute)
+## Formular „Anmeldung zum Probetraining – ESC Rellinghausen 06“ `pag2AaadRpeiFuvDB` (Stand 03.11.2026: **unveröffentlicht**)
+- Eigenständiges Airtable-Formular (kein Interface), schreibt in „Interessenten“.
+- Bearbeiten: https://airtable.com/appBKLVL4A4mI2QHr/pag2AaadRpeiFuvDB/edit
+- Felder: Mannschaft (Pflicht, vorbelegt über den QR-Code), Name des Kindes, Geburtsdatum, Name eines Elternteils,
+  E-Mail der Eltern (alle Pflicht), Telefon (freiwillig), Einwilligung (Pflicht-Häkchen mit Text aus `docs/einwilligung-und-rollen.md`).
+- Status, Zähler und Datumsfelder sind **nicht** im Formular: Die setzt Automation 6 nach dem Absenden (Eltern können sie nicht verändern).
+- Vorbelegung der Mannschaft per Link: `…/pag2AaadRpeiFuvDB/form?prefill_Mannschaft=<Name der Mannschaft>`
+  (Adresse steht in `app/config.js`). Nach dem Veröffentlichen einmal prüfen, dass die Vorbelegung greift
+  (ggf. im Formular-Editor „Vorbelegen per URL“ erlauben und das Feld als Verknüpfung vorbelegbar machen).
+- Vor dem Veröffentlichen im Einwilligungstext ersetzen: `[E-MAIL-ADRESSE]`, `[VEREINSANSCHRIFT, VORSTAND]`, `[LINK]`.
