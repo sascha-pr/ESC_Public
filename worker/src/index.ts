@@ -14,6 +14,8 @@ export interface Env {
   ACCESS_AUD?: string;
   /** Nur lokal (.dev.vars): feste Trainer-E-Mail für `wrangler dev`. */
   DEV_USER_EMAIL?: string;
+  /** Nur lokal: andere Airtable-Adresse (z. B. der Nachbau aus dev/mock-airtable.mjs). Wirkt nur zusammen mit DEV_USER_EMAIL. */
+  AIRTABLE_API_URL?: string;
   UNDO: KVNamespace;
   ASSETS?: Fetcher;
 }
@@ -32,7 +34,11 @@ function build(env: Env): (req: Request) => Promise<Response> {
     auth = { authenticate: async () => null };
   }
   const data = new CachedDataSource(
-    new AirtableDataSource({ token: env.AIRTABLE_TOKEN, baseId: env.AIRTABLE_BASE_ID }),
+    new AirtableDataSource({
+      token: env.AIRTABLE_TOKEN,
+      baseId: env.AIRTABLE_BASE_ID,
+      apiUrl: env.DEV_USER_EMAIL && !env.ACCESS_AUD ? env.AIRTABLE_API_URL : undefined,
+    }),
     { teamsTtlMs: 5 * 60_000, kidsTtlMs: 60_000 },
   );
   return createApi({ data, undo: new KvUndoStore(env.UNDO), auth });

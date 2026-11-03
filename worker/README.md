@@ -1,5 +1,7 @@
 # Probetraining-Worker (Cloudflare Worker)
 
+Liefert auch die Trainer-App aus (`../app`).
+
 Schicht zwischen Trainer-App und Airtable. Hält den Airtable-Token geheim, prüft den Login (Cloudflare Access)
 und gibt jedem Trainer nur die Kinder seiner eigenen Mannschaft(en) – mit so wenigen Daten wie nötig.
 
@@ -46,6 +48,9 @@ npm run check          # Typprüfung + Tests
 cp .dev.vars.example .dev.vars   # Token + Test-E-Mail eintragen
 npm run dev            # http://localhost:8787 – Login ist lokal durch DEV_USER_EMAIL ersetzt
 ```
+
+Ohne Airtable-Token: `npm run dev:mock` startet einen lokalen Airtable-Nachbau mit erfundenen Daten
+(`dev/mock-airtable.mjs`, Trainer mit zwei Mannschaften) und den Worker dazu → http://localhost:8787
 
 Tests (`test/`) laufen ohne Cloudflare und ohne Airtable, nur mit erfundenen Beispieldaten.
 

@@ -79,7 +79,7 @@ Empfehlung: Variante 1 für den Start.
 2. ✅ *(vorläufig erledigt 03.11.2026: Platzhalter-Antragsseite + private Mail von Sascha, siehe `docs/airtable-schema.md` → „Vorläufige Werte“)* Platzhalter in Automationen ersetzen (Antrags-Link, Verwaltungs-E-Mail), dann vom Nutzer einschalten lassen.
 3. Echte Mannschaften + Trainer-E-Mails in Airtable, Beispieldaten löschen.
 4. ✅ *(erledigt 03.11.2026: `worker/`, siehe `worker/README.md`; 51 Tests grün)* **Worker** bauen (TypeScript, `wrangler`), inkl. Tests für Mannschafts-Filter und Limit.
-5. **Prototyp umbauen:** `seed()` und lokalen `state` durch API-Aufrufe ersetzen; Demo-Login-Screen entfernen (Login macht Cloudflare Access); Abmelden → `/cdn-cgi/access/logout`; Lade-/Fehlerzustände; `MAX = 6` beibehalten. Look & Feel (ESC-Rot `#c9252b`, Schwarz, Eichengrün `#006f45`, Wappen, Barlow/Barlow Condensed) **nicht verändern** – den Trainern gefällt es.
+5. ✅ *(erledigt 03.11.2026: echte App in `app/index.html`, Prototyp bleibt als Demo; siehe `docs/prototyp.md`)* **Prototyp umbauen:** `seed()` und lokalen `state` durch API-Aufrufe ersetzen; Demo-Login-Screen entfernen (Login macht Cloudflare Access); Abmelden → `/cdn-cgi/access/logout`; Lade-/Fehlerzustände; `MAX = 6` beibehalten. Look & Feel (ESC-Rot `#c9252b`, Schwarz, Eichengrün `#006f45`, Wappen, Barlow/Barlow Condensed) **nicht verändern** – den Trainern gefällt es.
 6. Formular für QR-Code (siehe oben) + QR pro Mannschaft.
 7. Deployment-Anleitung für den Verein schreiben (Cloudflare-Konto **des Vereins**, nicht privat; DNS-Eintrag bei Domain-Verwalter von esc-06.de).
 8. Kurzanleitung (`docs/trainer-kurzanleitung.md`) auf finalen Ablauf anpassen (6 Trainings, echter Login).

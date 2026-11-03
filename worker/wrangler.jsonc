@@ -11,8 +11,8 @@
   // Sobald die Domain im Vereinskonto liegt, eintragen:
   // "routes": [{ "pattern": "probetraining.esc-06.de", "custom_domain": true }],
 
-  // Die Trainer-App (statische Seite). Wird in Aufgabe 5 auf die echte App umgebaut.
-  "assets": { "directory": "../prototype", "binding": "ASSETS" },
+  // Die Trainer-App (statische Seite, ohne Build). prototype/ bleibt als Demo mit Beispieldaten.
+  "assets": { "directory": "../app", "binding": "ASSETS" },
 
   "vars": {
     "AIRTABLE_BASE_ID": "appBKLVL4A4mI2QHr",
