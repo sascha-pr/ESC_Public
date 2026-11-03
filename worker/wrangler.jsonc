@@ -6,6 +6,7 @@
   "compatibility_date": "2026-10-01",
 
   // Nur über die eigene, durch Cloudflare Access geschützte Domain erreichbar – keine *.workers.dev-Adresse.
+  // Übergangslösung ohne eigene Domain: siehe docs/deployment.md, Schritt 2 „Weg B“.
   "workers_dev": false,
   "preview_urls": false,
   // Sobald die Domain im Vereinskonto liegt, eintragen:

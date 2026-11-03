@@ -1,31 +1,36 @@
-# Kurzanleitung für Trainer (WhatsApp-Version, Stand Prototyp)
+# Kurzanleitung für Trainer (WhatsApp-Version, Stand Echtbetrieb)
 
-> Hinweis: Noch auf 3 Probetrainings und Demo-Login formuliert – an finalen Ablauf (6 Trainings, echter Login) anpassen.
+> Vor dem Verschicken `[LINK]` durch die echte Adresse ersetzen (z. B. https://probetraining.esc-06.de).
+> Erst verschicken, wenn die Trainer-E-Mails in Airtable **und** in Cloudflare Access eingetragen sind
+> und das Elternformular veröffentlicht ist (siehe `docs/deployment.md`).
+
+---
 
 Hallo zusammen! ⚽
 
-Wir testen eine kleine App, mit der ihr auf dem Platz seht, welche Probetraining-Kinder schon angemeldet sind. Dauert 5 Minuten – ich freue mich über euer Feedback!
+Ab sofort seht ihr auf dem Platz mit unserer Probetraining-App, welche Kinder noch im Probetraining sind und wer schon angemeldet ist. Danke an alle, die den Test mitgemacht haben!
 
-👉 Link: [LINK EINFÜGEN]
-
-Wichtig: Das ist ein Test mit Beispielkindern. Es wird nichts gespeichert, bitte keine echten Daten eintragen.
+👉 Link: [LINK]
 
 📱 Tipp: Link öffnen und aufs Handy legen
 • iPhone: Teilen-Symbol → „Zum Home-Bildschirm“
 • Android: ⋮ → „Zum Startbildschirm hinzufügen“
 
 1️⃣ Anmelden
-Unten einen Demo-Trainer antippen (z. B. Jan · F1-Jugend) → „Code senden“ → „Anmelden“. Der Code ist schon eingetragen. Später läuft das mit eurer eigenen E-Mail.
+Eure E-Mail-Adresse eingeben, die beim Verein für eure Mannschaft hinterlegt ist. Ihr bekommt einen Code per Mail, den tragt ihr ein. Ein Passwort braucht ihr nicht. Danach bleibt ihr etwa einen Monat angemeldet.
+Kein Code da? Im Spam-Ordner nachsehen. Steht da „Kein Zugang“, bitte bei mir melden.
 
 2️⃣ Kind war beim Training
-Bei jedem Probetraining-Kind einfach „War heute da“ tippen. Fertig.
+Bei jedem Probetraining-Kind „War heute da“ tippen. Fertig.
 • Nach dem 2. Mal bekommen die Eltern automatisch den Mitgliedsantrag per Mail.
-• Nach dem 3. Mal ist Schluss: Die Karte wird rot, ab dann nur noch mit Antrag. Die Telefonnummer der Eltern steht direkt dabei.
-• Vertippt? „Rückgängig“ antippen.
+• Nach dem 6. Mal ist Schluss: Die Karte wird rot, ab dann nur noch mit Antrag. Die Telefonnummer der Eltern steht direkt dabei.
+• Vertippt? „Rückgängig“ antippen (geht am selben Tag).
+• Pro Kind zählt nur ein Training am Tag. Habt ihr mehrere Trainer und ein anderer hat das Kind schon eingetragen, sagt euch die App das beim Tippen.
 
 3️⃣ Neues Kind beim Training
-Unten „Neues Kind beim Training“ → die Eltern scannen den QR-Code und füllen das Formular aus. Danach steht das Kind in eurer Liste.
-Zum Testen: „Formular ausprobieren“ antippen und abschicken.
+Unten „Neues Kind beim Training“ antippen → die Eltern scannen den QR-Code und füllen das Formular aus (ca. 2 Minuten). Danach steht das Kind in eurer Liste, das heutige Training zählt schon als 1. Mal. Ihr müsst also nichts mehr tippen.
+Wenn das Kind nicht gleich auftaucht: unten auf „Aktualisieren“ tippen.
+Für den Platz gibt es den Code auch als Aushang zum Ausdrucken (im selben Fenster).
 
 4️⃣ Was die Farben heißen
 ⬛ Probetraining – darf mittrainieren
@@ -33,9 +38,10 @@ Zum Testen: „Formular ausprobieren“ antippen und abschicken.
 🟨 Antrag liegt vor – darf mittrainieren
 🟩 Mitglied / spielberechtigt – alles gut
 
+Ihr trainiert mehrere Mannschaften? Dann könnt ihr oben zwischen ihnen wechseln.
+
 Um Anträge und DFBnet kümmert sich die Verwaltung. Ihr bekommt eine Mail, sobald ein Kind Mitglied ist.
 
-💬 Feedback bitte kurz an mich:
-1. Hast du ohne Erklärung verstanden, was zu tun ist?
-2. Würdest du das auf dem Platz wirklich nutzen?
-3. Was fehlt oder stört?
+🔒 Bitte keine Screenshots mit Kinderdaten weiterleiten. Wenn ihr aufhört oder das Handy wechselt: oben auf „Abmelden“.
+
+Fragen oder Probleme? Einfach bei mir melden.
