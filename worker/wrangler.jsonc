@@ -1,0 +1,28 @@
+// Konfiguration des Probetraining-Workers. Deployment-Schritte: siehe docs/ (Aufgabe 7).
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "esc06-probetraining",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-10-01",
+
+  // Nur über die eigene, durch Cloudflare Access geschützte Domain erreichbar – keine *.workers.dev-Adresse.
+  "workers_dev": false,
+  "preview_urls": false,
+  // Sobald die Domain im Vereinskonto liegt, eintragen:
+  // "routes": [{ "pattern": "probetraining.esc-06.de", "custom_domain": true }],
+
+  // Die Trainer-App (statische Seite). Wird in Aufgabe 5 auf die echte App umgebaut.
+  "assets": { "directory": "../prototype", "binding": "ASSETS" },
+
+  "vars": {
+    "AIRTABLE_BASE_ID": "appBKLVL4A4mI2QHr",
+    // Aus Cloudflare Zero Trust → Access → Anwendungen übernehmen:
+    "ACCESS_TEAM_DOMAIN": "",
+    "ACCESS_AUD": ""
+  },
+  // Secret separat setzen: npx wrangler secret put AIRTABLE_TOKEN
+
+  // Merkt sich die Werte vor „War heute da“ für „Rückgängig“ (24 h).
+  // Anlegen mit: npx wrangler kv namespace create UNDO  → ID hier eintragen.
+  "kv_namespaces": [{ "binding": "UNDO", "id": "00000000000000000000000000000000" }]
+}

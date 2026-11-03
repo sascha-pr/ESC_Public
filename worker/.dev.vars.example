@@ -1,0 +1,5 @@
+# Kopieren nach .dev.vars (wird nicht eingecheckt) – nur für `npm run dev` auf dem eigenen Rechner.
+# Airtable Personal Access Token: nur Scopes data.records:read + data.records:write, nur Base appBKLVL4A4mI2QHr.
+AIRTABLE_TOKEN=pat_xxx
+# Lokal gibt es kein Cloudflare Access. Diese E-Mail gilt als eingeloggt – NUR auf localhost/127.0.0.1.
+DEV_USER_EMAIL=trainer.f1@example.org
