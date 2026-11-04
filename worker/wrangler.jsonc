@@ -1,4 +1,4 @@
-// Konfiguration des Probetraining-Workers. Deployment-Schritte: siehe docs/ (Aufgabe 7).
+// Konfiguration des Probetraining-Workers. Deployment-Schritte: docs/deployment.md, IT-Doku: docs/deployment-it.md.
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "esc06-probetraining",
@@ -6,11 +6,11 @@
   "compatibility_date": "2026-10-01",
 
   // Nur über die eigene, durch Cloudflare Access geschützte Domain erreichbar – keine *.workers.dev-Adresse.
-  // Übergangslösung ohne eigene Domain: siehe docs/deployment.md, Schritt 2 „Weg B“.
+  // Entscheidung: eigene Vereinsdomain nur für die App (Variante C, docs/deployment-it.md Abschnitt 2).
   "workers_dev": false,
   "preview_urls": false,
-  // Sobald die Domain im Vereinskonto liegt, eintragen:
-  // "routes": [{ "pattern": "probetraining.esc-06.de", "custom_domain": true }],
+  // Sobald die App-Domain im Vereinskonto aktiv ist, eintragen (z. B. probetraining.esc06-jugend.de):
+  // "routes": [{ "pattern": "probetraining.<APP-DOMAIN>", "custom_domain": true }],
 
   // Die Trainer-App (statische Seite, ohne Build). prototype/ bleibt als Demo mit Beispieldaten.
   "assets": { "directory": "../app", "binding": "ASSETS" },

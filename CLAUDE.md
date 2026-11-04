@@ -29,7 +29,7 @@ nur die Zeit zwischen erstem Training und fertigem Pass.
 | **Echte Trainer-App** + Aushang | fertig, gegen API gebaut, lokal getestet | `app/` |
 | **Worker (API)** | fertig, 51 Tests, noch nicht deployt | `worker/` |
 | Elternformular (Airtable) | angelegt, **unveröffentlicht** | `docs/airtable-schema.md` |
-| Deployment-Anleitung | fertig (Klickanleitung + Fassung für die Vereins-IT mit Domain-Optionen) | `docs/deployment.md`, `docs/deployment-it.md` |
+| Deployment-Anleitung (Variante C) + IT-Dokumentation (Entscheidung, Inventar, Betrieb, Änderungsprotokoll) | fertig, Domainname noch offen | `docs/deployment.md`, `docs/deployment-it.md` |
 
 Live-Version des Prototyps (claude.ai-Artifact, öffentlicher Link): https://claude.ai/artifact/P2dsyiesCqNT7KQNyYb63n
 
@@ -51,7 +51,7 @@ Trainer-Handy ──► Cloudflare Access (Login per E-Mail-Einmalcode, nur hint
                     └─► bestehende Airtable-Automationen (Mails an Eltern/Verwaltung/Trainer)
 
 Statische App (prototype/index.html, umgebaut) über Cloudflare Pages / Worker Assets,
-Ziel-URL z. B. probetraining.esc-06.de
+Ziel-URL: probetraining.<APP-DOMAIN> auf eigener Vereinsdomain nur für die App (Variante C, Entscheidung 04.11.2026)
 ```
 
 ### Geplanter API-Vertrag (Worker)
@@ -96,7 +96,8 @@ Empfehlung: Variante 1 für den Start.
 - Bestätigung der vorgeschlagenen Fristen (8 Wochen, 14 Tage).
 
 ### Antworten (03.11.2026)
-- Cloudflare: Verein hat **noch kein Konto** → für Deployment neu anlegen (Vereinskonto). Domain-Verwalter von esc-06.de noch zu klären.
+- Cloudflare: Verein hat **noch kein Konto** → für Deployment neu anlegen (Vereinskonto).
+- Adresse (04.11.2026): **Variante C – eigene Domain nur für die App** (z. B. `esc06-jugend.de`, Inhaber Verein); esc-06.de bleibt unverändert, kein Nameserver-Umzug. Domainname noch offen (Platzhalter `<APP-DOMAIN>`). Begründung und Alternativen: `docs/deployment-it.md` Abschnitt 2.
 - Datenquelle: **Airtable bleibt**; Datenquelle im Worker trotzdem kapseln.
 - Datenschutz: **noch nichts geklärt** (Vorstand, AV-Verträge, Datenschutzerklärung) → vor Echtbetrieb erledigen, bis dahin nur Beispieldaten.
 - Fristen **bestätigt**: Löschung 8 Wochen nach 1. Training, spielberechtigte Kinder 14 Tage sichtbar, Antragsmail nach dem 2. Training.

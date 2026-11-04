@@ -1,7 +1,7 @@
 # Kurzanleitung für Trainer (WhatsApp-Version, Stand Echtbetrieb)
 
-> Vor dem Verschicken `[LINK]` durch die echte Adresse ersetzen (z. B. https://probetraining.esc-06.de).
-> Erst verschicken, wenn die Trainer-E-Mails in Airtable **und** in Cloudflare Access eingetragen sind
+> Vor dem Verschicken `[LINK]` durch die echte Adresse ersetzen (`https://probetraining.<APP-DOMAIN>`, z. B. https://probetraining.esc06-jugend.de).
+> Erst verschicken, wenn die Trainer-E-Mails in Airtable **und** in der Cloudflare-Zugriffsgruppe „Trainer“ eingetragen sind
 > und das Elternformular veröffentlicht ist (siehe `docs/deployment.md`).
 
 ---
