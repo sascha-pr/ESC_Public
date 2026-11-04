@@ -42,7 +42,7 @@ html = head + html.slice(html.indexOf("<body>") + 6, html.lastIndexOf("</body>")
 swap('src="wappen.png"', `src="${logo}"`);
 swap('<script src="config.js"></script>', `<script>\n${config}\n${mock}\n</script>`);
 // Vorschau: Mannschaft wie nach dem Scannen vorbelegt
-swap("var wanted = new URLSearchParams(location.search).get('m');", "var wanted = new URLSearchParams(location.search).get('m') || 'F1';");
+swap("var wanted = new URLSearchParams(location.search).get('m');", "var wanted = new URLSearchParams(location.search).get('m') || decodeURIComponent(location.hash.slice(1)) || 'F1';");
 
 mkdirSync(dirname(out), { recursive: true });
 writeFileSync(out, html);

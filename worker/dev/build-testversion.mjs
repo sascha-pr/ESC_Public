@@ -16,7 +16,9 @@ const swap = (from, to) => {
 };
 // Nur den Seiteninhalt übernehmen (claude.ai ergänzt das Gerüst beim Veröffentlichen)
 html = html.slice(html.indexOf("<body>") + "<body>".length, html.lastIndexOf("</body>"));
-swap('<script src="config.js"></script>', `<script>\n${config}</script>\n<script>\n${mock}</script>`);
+// In der Testversion zeigt der QR-Code auf die Formular-Vorschau (claude.ai); die Mannschaft steht hinter dem #
+const FORM_PREVIEW = "https://claude.ai/artifact/PZPQsEicRrsYcjVtrKkbK5";
+swap('<script src="config.js"></script>', `<script>\n${config}\nwindow.ESC_CONFIG.formUrlFor = function (t) { return '${FORM_PREVIEW}#' + encodeURIComponent(t.id); };\n</script>\n<script>\n${mock}</script>`);
 swap("<title>Probetraining-App</title>", "<title>Probetraining-App Test</title>\n<style>[hidden]{display:none!important}</style>");
 swap("location.href=LOGOUT_URL;", "toast('In der echten App meldet „Abmelden“ dich bei Cloudflare ab.');");
 swap("\n  loadMe();\n})();", "\n  window.__appReload = loadMe;\n  loadMe();\n})();");
