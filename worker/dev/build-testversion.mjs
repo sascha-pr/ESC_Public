@@ -21,7 +21,7 @@ swap("<title>Probetraining-App</title>", "<title>Probetraining-App Test</title>\
 swap("location.href=LOGOUT_URL;", "toast('In der echten App meldet „Abmelden“ dich bei Cloudflare ab.');");
 swap("\n  loadMe();\n})();", "\n  window.__appReload = loadMe;\n  loadMe();\n})();");
 // Der Aushang ist in der Testversion nicht dabei
-swap(`'<div><a class="linkbtn" href="aushang.html?team='+encodeURIComponent(t.name)+'" target="_blank" rel="noopener">Aushang mit diesem Code für den Platz öffnen</a></div>'`,
+swap(`'<div><a class="linkbtn" href="aushang.html?team='+encodeURIComponent(t.name)+'&amp;id='+encodeURIComponent(t.id)+'" target="_blank" rel="noopener">Aushang mit diesem Code für den Platz öffnen</a></div>'`,
   `'<p class="small muted">In der echten App gibt es hier zusätzlich den Aushang zum Ausdrucken.</p>'`);
 
 mkdirSync(dirname(out), { recursive: true });

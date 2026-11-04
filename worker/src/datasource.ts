@@ -11,6 +11,19 @@ export interface DataSource {
   /** Frisch aus der Quelle, ohne Cache (für Schreibzugriffe). */
   getKid(id: string): Promise<KidRecord | null>;
   updateAttendance(id: string, values: AttendanceValues): Promise<KidRecord>;
+  /** Neues Kind aus dem Elternformular anlegen (Status Probetraining, 1. Training = heute). */
+  createKid(kid: NewKid): Promise<KidRecord>;
+}
+
+export interface NewKid {
+  name: string;
+  birthDate: string; // YYYY-MM-DD
+  teamId: string;
+  parentName: string;
+  email: string;
+  phone: string | null;
+  /** Tag der Anmeldung = 1. Probetraining */
+  today: string;
 }
 
 export interface AttendanceValues {

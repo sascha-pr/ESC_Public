@@ -1,5 +1,5 @@
 import type { Authenticator } from "../src/auth";
-import type { AttendanceValues, DataSource } from "../src/datasource";
+import type { AttendanceValues, DataSource, NewKid } from "../src/datasource";
 import type { KidRecord, Team } from "../src/domain";
 
 /** Nur erfundene Beispieldaten – keine echten Kinder in Tests. */
@@ -28,7 +28,8 @@ export function kid(over: Partial<KidRecord> & { id: string }): KidRecord {
 }
 
 export class FakeDataSource implements DataSource {
-  calls = { listTeams: 0, listKids: 0, getKid: 0, update: 0 };
+  calls = { listTeams: 0, listKids: 0, getKid: 0, update: 0, create: 0 };
+  created: NewKid[] = [];
   constructor(
     public teams: Team[],
     public kids: KidRecord[],
@@ -53,6 +54,17 @@ export class FakeDataSource implements DataSource {
     k.count = v.count;
     k.lastTraining = v.lastTraining;
     k.firstTraining = v.firstTraining;
+    return structuredClone(k);
+  }
+  async createKid(n: NewKid) {
+    this.calls.create++;
+    this.created.push(n);
+    const k: KidRecord = {
+      id: `recNew${String(this.calls.create).padStart(11, "0")}`, name: n.name, birthDate: n.birthDate, teamIds: [n.teamId],
+      status: "probetraining", count: 1, firstTraining: n.today, lastTraining: n.today, parentName: n.parentName,
+      phone: n.phone, playableSince: null,
+    };
+    this.kids.push(k);
     return structuredClone(k);
   }
 }

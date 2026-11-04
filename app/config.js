@@ -1,7 +1,13 @@
 /* Einstellungen der Trainer-App – hier zentral ändern. */
 window.ESC_CONFIG = {
-  /* Elternformular „Anmeldung zum Probetraining“ (Airtable, Seite pag2AaadRpeiFuvDB).
-     {team} wird durch den Mannschaftsnamen ersetzt und füllt das Feld „Mannschaft“ vor.
-     Leer lassen, solange das Formular nicht veröffentlicht ist – dann zeigt die App einen Hinweis statt QR-Code. */
-  formUrl: 'https://airtable.com/appBKLVL4A4mI2QHr/pag2AaadRpeiFuvDB/form?prefill_Mannschaft={team}'
+  /* Adresse des Elternformulars (ohne Login) für den QR-Code einer Mannschaft.
+     Läuft die App unter probetraining.<APP-DOMAIN>, liegt das Formular unter anmeldung.<APP-DOMAIN>;
+     lokal (wrangler dev) unter /anmeldung/ auf derselben Adresse. */
+  formUrlFor: function (team) {
+    var h = location.hostname;
+    var base = /^probetraining\./.test(h)
+      ? 'https://' + h.replace(/^probetraining\./, 'anmeldung.') + '/'
+      : location.origin + '/anmeldung/';
+    return base + '?m=' + encodeURIComponent(team.id);
+  }
 };

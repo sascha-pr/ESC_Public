@@ -39,7 +39,7 @@ unverändert als Demo mit Beispieldaten (für Trainer-Tests ohne Login). Ausgeli
   Fehler beim Tippen erscheinen als Hinweis unten, ohne die Liste zu verlieren.
 - Trainer mit mehreren Mannschaften bekommen im Kopf Umschalter; die Wahl merkt sich das Handy (`localStorage`).
 - Liste frischt sich auf, wenn die App nach über einer Minute wieder in den Vordergrund kommt; Fußzeile „Stand hh:mm · Aktualisieren“.
-- „Neues Kind“: QR-Code zum Elternformular, Mannschaft vorbelegt; Adresse zentral in `app/config.js` (`formUrl` leer → Hinweis statt QR-Code).
+- „Neues Kind“: QR-Code zum eigenen Elternformular (`anmeldung.<APP-DOMAIN>/?m=<Mannschafts-ID>`, ohne Login); Adresse wird in `app/config.js` aus der App-Adresse abgeleitet.
 - `app/aushang.html?team=<Mannschaft>`: druckbarer A4-Aushang mit großem QR-Code, aus dem „Neues Kind“-Blatt verlinkt.
 - `MAX = 6` bleibt als Vorgabe, der Server meldet den gültigen Wert.
 
@@ -51,3 +51,7 @@ Die echte App mit einem Nachbau des Workers im Browser (`app/dev/mock-api.js`, g
 Testhelfer-Feld (nächster Trainingstag, Kind wie per Formular, Trainer wechseln, Zustände „Sitzung abgelaufen“, „Kein Zugang“,
 „Datenbank weg“, „Kein Netz“). Neu bauen nach Änderungen an der App: `cd worker && node dev/build-testversion.mjs`
 → `testversion/index.html` (nicht eingecheckt) und erneut veröffentlichen.
+
+## Elternformular-Vorschau (claude.ai): https://claude.ai/artifact/PZPQsEicRrsYcjVtrKkbK5
+
+Das echte Formular `app/anmeldung/index.html` mit nachgebautem Server. Neu bauen: `cd worker && node dev/build-formular-vorschau.mjs`.

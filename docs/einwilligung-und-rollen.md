@@ -5,7 +5,7 @@ Ausführliche Fassung als Claude-Dokument: https://claude.ai/code/artifact/aaa19
 
 ## Einwilligungstext für das Elternformular (Pflicht-Häkchen)
 
-So im Airtable-Formular `pag2AaadRpeiFuvDB` hinterlegt (Feld „Einwilligung“); Platzhalter in eckigen Klammern vor dem Veröffentlichen ersetzen.
+So im Elternformular `app/anmeldung/index.html` hinterlegt (Kurzfassung am Häkchen, Details unter „Was passiert mit den Daten?“). Platzhalter werden in `app/anmeldung/config.js` ersetzt.
 
 Ich willige ein, dass der ESC Rellinghausen 06 e. V. die angegebenen Daten (Name und Geburtsdatum des Kindes,
 Mannschaft, Name und Kontaktdaten der/des Erziehungsberechtigten) zur Organisation des Probetrainings und zur
@@ -22,7 +22,7 @@ dass ich erziehungsberechtigt bin bzw. die Einwilligung der Erziehungsberechtigt
 
 | Wer | Aufgabe | Werkzeug |
 |---|---|---|
-| Eltern | Formular per QR-Code beim 1. Training; Mitgliedsantrag abgeben | Formular, Mail |
+| Eltern | Formular per QR-Code beim 1. Training (ohne Anmeldung); Mitgliedsantrag abgeben | Elternformular, Mail |
 | Trainer | pro Training „War heute da“ tippen, auf Ampel achten | Trainer-App |
 | Verwaltung | Status setzen: Antrag eingegangen → In DFBnet erfasst → Spielberechtigt; montags Löschliste abarbeiten | Airtable-Kanban, DFBnet |
 | Automatisch | Antragsmail an Eltern (nach 2. Training), Info an Verwaltung, Info an Trainer, Löschliste | Airtable-Automationen |

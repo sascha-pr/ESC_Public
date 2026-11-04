@@ -7,7 +7,7 @@ und gibt jedem Trainer nur die Kinder seiner eigenen Mannschaft(en) – mit so w
 
 ## API
 
-Alle Antworten sind JSON mit `Cache-Control: no-store`. Fehler haben die Form `{ "error": "<code>", "message": "<deutscher Text für die App>" }`.
+Trainer-Bereich (hinter Cloudflare Access). Alle Antworten sind JSON mit `Cache-Control: no-store`. Fehler haben die Form `{ "error": "<code>", "message": "<deutscher Text für die App>" }`.
 
 | Methode | Pfad | Antwort |
 |---|---|---|
@@ -22,6 +22,18 @@ Alle Antworten sind JSON mit `Cache-Control: no-store`. Fehler haben die Form `{
 Fehlercodes: `unauthenticated` (401), `unknown_trainer` / `forbidden_team` / `bad_origin` (403),
 `not_found` (404, auch für Kinder fremder Mannschaften), `not_in_trial` / `already_today` / `limit_reached` /
 `nothing_to_undo` / `changed` (409, jeweils mit aktuellem `kid`), `upstream` (502/503).
+
+### Öffentliches Elternformular (ohne Login, eigene Adresse `PUBLIC_HOST`)
+
+| Methode | Pfad | Antwort |
+|---|---|---|
+| GET | `/` | Weiterleitung auf `/anmeldung/` (Formular aus `app/anmeldung/`) |
+| GET | `/api/anmeldung/teams` | `{ teams: [{ id, name }] }` |
+| POST | `/api/anmeldung` | `{ ok, firstName, team, duplicate }` – legt das Kind mit Probetraining 1 und heutigem Datum an |
+
+Fehler: `invalid` / `consent` / `team` (422, mit `fields`), `human` (403, Turnstile), `bad_origin` (403), `too_large` (413), `upstream` (502/503).
+Auf `PUBLIC_HOST` liefert der Worker nichts anderes aus. Lokal ist das Formular unter `/anmeldung/` erreichbar
+(ohne Turnstile-Schlüssel wird der Bot-Check nur lokal übersprungen).
 
 ## Regeln
 
@@ -53,6 +65,7 @@ Ohne Airtable-Token: `npm run dev:mock` startet einen lokalen Airtable-Nachbau m
 (`dev/mock-airtable.mjs`, Trainer mit zwei Mannschaften) und den Worker dazu → http://localhost:8787
 
 Tests (`test/`) laufen ohne Cloudflare und ohne Airtable, nur mit erfundenen Beispieldaten.
+Vorschau-Seiten für claude.ai: `node dev/build-testversion.mjs` (Trainer-App) und `node dev/build-formular-vorschau.mjs` (Elternformular).
 
 ## Konfiguration für den Betrieb
 
@@ -60,6 +73,7 @@ Siehe `wrangler.jsonc`. Benötigt (Details folgen in der Deployment-Anleitung, A
 
 - Secret `AIRTABLE_TOKEN` (`npx wrangler secret put AIRTABLE_TOKEN`) – Personal Access Token nur mit
   `data.records:read` + `data.records:write`, nur für Base `appBKLVL4A4mI2QHr`.
+- Secret `TURNSTILE_SECRET` und Websiteschlüssel in `app/anmeldung/config.js`; `PUBLIC_HOST` in `wrangler.jsonc`.
 - KV-Namespace `UNDO` anlegen und ID in `wrangler.jsonc` eintragen.
 - `ACCESS_TEAM_DOMAIN` und `ACCESS_AUD` aus der Access-Anwendung eintragen. Ohne diese Werte lässt der Worker niemanden rein.
 - Route/Custom Domain eintragen, sobald esc-06.de im Vereinskonto liegt. `workers_dev` ist bewusst aus.

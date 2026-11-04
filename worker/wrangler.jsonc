@@ -10,18 +10,25 @@
   "workers_dev": false,
   "preview_urls": false,
   // Sobald die App-Domain im Vereinskonto aktiv ist, eintragen (z. B. probetraining.esc06-jugend.de):
-  // "routes": [{ "pattern": "probetraining.<APP-DOMAIN>", "custom_domain": true }],
+  // Trainer-App (hinter Cloudflare Access) und Elternformular (öffentlich, ohne Login):
+  // "routes": [
+  //   { "pattern": "probetraining.<APP-DOMAIN>", "custom_domain": true },
+  //   { "pattern": "anmeldung.<APP-DOMAIN>", "custom_domain": true }
+  // ],
 
   // Die Trainer-App (statische Seite, ohne Build). prototype/ bleibt als Demo mit Beispieldaten.
-  "assets": { "directory": "../app", "binding": "ASSETS" },
+  // run_worker_first: Jede Anfrage geht durch den Worker – so liefert die öffentliche Formular-Adresse nur das Formular aus.
+  "assets": { "directory": "../app", "binding": "ASSETS", "run_worker_first": true },
 
   "vars": {
     "AIRTABLE_BASE_ID": "appBKLVL4A4mI2QHr",
     // Aus Cloudflare Zero Trust → Access → Anwendungen übernehmen:
     "ACCESS_TEAM_DOMAIN": "",
-    "ACCESS_AUD": ""
+    "ACCESS_AUD": "",
+    // Öffentliche Adresse des Elternformulars, z. B. "anmeldung.esc06-jugend.de"
+    "PUBLIC_HOST": ""
   },
-  // Secret separat setzen: npx wrangler secret put AIRTABLE_TOKEN
+  // Secrets separat setzen: npx wrangler secret put AIRTABLE_TOKEN  und  npx wrangler secret put TURNSTILE_SECRET
 
   // Merkt sich die Werte vor „War heute da“ für „Rückgängig“ (24 h).
   // Anlegen mit: npx wrangler kv namespace create UNDO  → ID hier eintragen.

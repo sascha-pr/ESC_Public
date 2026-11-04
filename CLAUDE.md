@@ -27,8 +27,8 @@ nur die Zeit zwischen erstem Training und fertigem Pass.
 | Vereinswappen | vorhanden | `assets/` |
 | Trainer-Kurzanleitung (WhatsApp) & Einwilligungstext | Kurzanleitung final (Link fehlt), Einwilligung mit Platzhaltern | `docs/` |
 | **Echte Trainer-App** + Aushang | fertig, gegen API gebaut, lokal getestet | `app/` |
-| **Worker (API)** | fertig, 51 Tests, noch nicht deployt | `worker/` |
-| Elternformular (Airtable) | angelegt, **unveröffentlicht** | `docs/airtable-schema.md` |
+| **Worker (API + Elternformular)** | fertig, 68 Tests, noch nicht deployt | `worker/` |
+| **Elternformular (eigenes, ohne Login)** | fertig, getestet; Turnstile-Schlüssel und Einwilligungsangaben offen | `app/anmeldung/`, `worker/src/public.ts` |
 | Deployment-Anleitung (Variante C) + IT-Dokumentation (Entscheidung, Inventar, Betrieb, Änderungsprotokoll) | fertig, Domainname noch offen | `docs/deployment.md`, `docs/deployment-it.md` |
 
 Live-Version des Prototyps (claude.ai-Artifact, öffentlicher Link): https://claude.ai/artifact/P2dsyiesCqNT7KQNyYb63n
@@ -68,7 +68,9 @@ Airtable-Token = Personal Access Token mit nur `data.records:read/write` auf gen
 Airtable-Free-Plan hat nur **1.000 API-Aufrufe/Monat** → kurz cachen (z. B. 60 s pro Mannschaft) oder Team-Plan für 1 Person.
 
 ### „Neues Kind“ / QR-Code
-Offen, eine von zwei Varianten wählen:
+**Entschieden (04.11.2026): Variante 2** – eigenes Formular `anmeldung.<APP-DOMAIN>` ohne Login mit Turnstile,
+weil das Airtable-Formular im Test eine Anmeldung verlangte und nicht im Vereinsdesign gestaltbar ist.
+Ursprüngliche Optionen:
 1. QR → **Airtable-Formular** (Form-View in Tabelle Interessenten, Mannschaft vorbelegt per URL-Prefill). Einfach, kein öffentlicher Endpunkt.
 2. QR → eigenes Formular in der App → öffentlicher Worker-Endpunkt (dann Spam-Schutz z. B. Cloudflare Turnstile nötig).
 Empfehlung: Variante 1 für den Start.
@@ -84,7 +86,7 @@ Empfehlung: Variante 1 für den Start.
 3. Echte Mannschaften + Trainer-E-Mails in Airtable, Beispieldaten löschen.
 4. ✅ *(erledigt 03.11.2026: `worker/`, siehe `worker/README.md`; 51 Tests grün)* **Worker** bauen (TypeScript, `wrangler`), inkl. Tests für Mannschafts-Filter und Limit.
 5. ✅ *(erledigt 03.11.2026: echte App in `app/index.html`, Prototyp bleibt als Demo; siehe `docs/prototyp.md`)* **Prototyp umbauen:** `seed()` und lokalen `state` durch API-Aufrufe ersetzen; Demo-Login-Screen entfernen (Login macht Cloudflare Access); Abmelden → `/cdn-cgi/access/logout`; Lade-/Fehlerzustände; `MAX = 6` beibehalten. Look & Feel (ESC-Rot `#c9252b`, Schwarz, Eichengrün `#006f45`, Wappen, Barlow/Barlow Condensed) **nicht verändern** – den Trainern gefällt es.
-6. ✅ *(erledigt 03.11.2026, Variante 1: Airtable-Formular `pag2AaadRpeiFuvDB`, noch unveröffentlicht; Automation 6; QR + Aushang pro Mannschaft in der App)* Formular für QR-Code (siehe oben) + QR pro Mannschaft.
+6. ✅ *(erledigt; 04.11.2026 umgestellt auf Variante 2: eigenes Elternformular ohne Login, `app/anmeldung/`; QR + Aushang pro Mannschaft in der App; Airtable-Formular und Automation 6 nur noch Reserve)* Formular für QR-Code (siehe oben) + QR pro Mannschaft.
 7. ✅ *(erledigt 03.11.2026: `docs/deployment.md`)* Deployment-Anleitung für den Verein schreiben (Cloudflare-Konto **des Vereins**, nicht privat; DNS-Eintrag bei Domain-Verwalter von esc-06.de).
 8. ✅ *(erledigt 03.11.2026)* Kurzanleitung (`docs/trainer-kurzanleitung.md`) auf finalen Ablauf anpassen (6 Trainings, echter Login).
 

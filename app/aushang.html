@@ -52,7 +52,7 @@ ol b{font-family:var(--display);font-size:8mm;color:var(--brand);width:7mm}
     <div id="qr"></div>
     <ol>
       <li><b>1</b><span>Code mit der Handykamera scannen</span></li>
-      <li><b>2</b><span>Formular ausfüllen (etwa 2 Minuten)</span></li>
+      <li><b>2</b><span>Formular ausfüllen (etwa 2 Minuten, ohne Anmeldung)</span></li>
       <li><b>3</b><span>Nach dem 2. Training kommt der Mitgliedsantrag per Mail</span></li>
     </ol>
   </main>
@@ -62,15 +62,16 @@ ol b{font-family:var(--display);font-size:8mm;color:var(--brand);width:7mm}
 <script src="config.js"></script>
 <script>
 (function(){
-  var team = new URLSearchParams(location.search).get('team') || '';
-  var tpl = (window.ESC_CONFIG && window.ESC_CONFIG.formUrl) || '';
-  if (!team || !tpl){
-    document.getElementById('main').innerHTML = '<p class="err">'+(!tpl ? 'Das Anmeldeformular ist noch nicht eingerichtet.' : 'Keine Mannschaft angegeben. Bitte den Aushang aus der App heraus öffnen.')+'</p>';
+  var q = new URLSearchParams(location.search);
+  var team = q.get('team') || '', id = q.get('id') || '';
+  var cfg = window.ESC_CONFIG || {};
+  if (!team || !id || !cfg.formUrlFor){
+    document.getElementById('main').innerHTML = '<p class="err">Keine Mannschaft angegeben. Bitte den Aushang aus der App heraus öffnen.</p>';
     return;
   }
   document.getElementById('team').textContent = team;
   document.title = 'Aushang ' + team;
-  var url = tpl.replace('{team}', encodeURIComponent(team));
+  var url = cfg.formUrlFor({ id: id, name: team });
   var box = document.getElementById('qr');
   try { new QRCode(box,{text:url,width:380,height:380,colorDark:'#141414',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.M}); }
   catch(e){ box.textContent = url; }

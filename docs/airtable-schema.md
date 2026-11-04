@@ -81,7 +81,7 @@ IF(OR(
 | 3 | In DFBnet erfasst: Trainer informieren | `wflkZScVyCN37Dpu4` | Status = In DFBnet erfasst | Datum setzen, Mail an Trainer (Lookup) | – |
 | 4 | Wöchentlich: Datenschutz-Löschliste | `wflcgjCeU3htUMKhn` | Montag (Cron, 06:00 UTC) | Mail mit „Löschen fällig“-Datensätzen | Empfänger **vorläufig** Sascha (privat) |
 | 5 | Spielberechtigt: Datum setzen | `wflTSgXU6L5bnECWU` | Status = Spielberechtigt | „Spielberechtigt seit“ = heute | – |
-| 6 | Formular-Anmeldung: 1. Probetraining eintragen | `wflxlxrVhaLWPSY8c` | Formular `pag2AaadRpeiFuvDB` abgeschickt | Status = Probetraining, Zähler = 1, erstes + letztes Probetraining = heute | – |
+| 6 | Formular-Anmeldung: 1. Probetraining eintragen (**nicht einschalten**, nur für das Airtable-Reserveformular) | `wflxlxrVhaLWPSY8c` | Formular `pag2AaadRpeiFuvDB` abgeschickt | Status = Probetraining, Zähler = 1, erstes + letztes Probetraining = heute | – |
 
 Automation 1: Mailtext am 03.11.2026 auf 6 Probetrainings angepasst („Insgesamt sind 6 Probetrainings möglich. Ab dem 7. Training … nur mit Antrag“); Auslöser bleibt „nach dem 2. Training“.
 
@@ -95,7 +95,15 @@ Automationen kann nur der Nutzer in der Airtable-Oberfläche einschalten.
 - Seite „Trainer: Wer darf mittrainieren?“ `pagEV3yyo0GAPGT6c` (Grid, gruppiert nach Mannschaft) – wird durch eigene App abgelöst
 - Seite „Verwaltung: Status-Board“ `pagc14tSriQXTpxwW` (Kanban nach Status) – **bleibt Arbeitsplatz der Verwaltung**
 
-## Formular „Anmeldung zum Probetraining – ESC Rellinghausen 06“ `pag2AaadRpeiFuvDB` (Stand 03.11.2026: **unveröffentlicht**)
+## Neue Kinder: eigenes Elternformular (seit 04.11.2026)
+
+Eltern melden ihr Kind über das eigene Formular `https://anmeldung.<APP-DOMAIN>/?m=<Mannschafts-ID>` an (ohne Login,
+Code: `app/anmeldung/`, `worker/src/public.ts`). Der Worker legt den Datensatz direkt an:
+Name, Geburtsdatum, Mannschaft (Link), Status = Probetraining, Anzahl = 1, Erstes = Letztes Probetraining = heute,
+Erziehungsberechtigte/r, E-Mail, Telefon, Datenschutz-Einwilligung = ✓. Doppelte Anmeldungen (gleiche Mannschaft,
+gleicher Name, gleiches Geburtsdatum) werden nicht erneut angelegt.
+
+## Reserve: Airtable-Formular `pag2AaadRpeiFuvDB` (unveröffentlicht, **nicht mehr verwendet**)
 - Eigenständiges Airtable-Formular (kein Interface), schreibt in „Interessenten“.
 - Bearbeiten: https://airtable.com/appBKLVL4A4mI2QHr/pag2AaadRpeiFuvDB/edit
 - Felder: Mannschaft (Pflicht, vorbelegt über den QR-Code), Name des Kindes, Geburtsdatum, Name eines Elternteils,

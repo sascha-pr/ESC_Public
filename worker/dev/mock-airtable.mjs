@@ -54,6 +54,21 @@ createServer((req, res) => {
     const page = rows.slice(offset, offset + size).map((r) => pick(r, url.searchParams.getAll("fields[]")));
     return send(res, 200, { records: page, ...(offset + size < rows.length ? { offset: String(offset + size) } : {}) });
   }
+  if (req.method === "POST" && !id) {
+    let raw = "";
+    req.on("data", (c) => (raw += c));
+    req.on("end", () => {
+      const created = JSON.parse(raw).records.map((r) => {
+        const fields = { ...r.fields };
+        for (const k of Object.keys(fields)) if (fields[k] === null) delete fields[k];
+        const rec = { id: "recMockNew" + String(rows.length).padStart(7, "0"), fields };
+        rows.push(rec);
+        return rec;
+      });
+      send(res, 200, { records: created });
+    });
+    return;
+  }
   const rec = rows.find((r) => r.id === id);
   if (!rec) return send(res, 404, { error: "NOT_FOUND" });
   if (req.method === "GET") return send(res, 200, rec);

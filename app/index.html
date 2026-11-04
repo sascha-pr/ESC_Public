@@ -183,7 +183,7 @@ section{display:grid;gap:10px}
   var MAX = 6; /* Probetrainings bis Mitgliedsantrag Pflicht ist – der Server meldet den gültigen Wert in /api/me */
   /* Anmeldeformular für Eltern (Aufgabe 6). Solange leer, zeigt „Neues Kind“ einen Hinweis statt QR-Code.
      {team} wird durch den Mannschaftsnamen ersetzt (Vorbelegung im Formular). */
-  var FORM_URL = (window.ESC_CONFIG && window.ESC_CONFIG.formUrl) || ''; /* siehe config.js */
+  var CFG = window.ESC_CONFIG || {}; /* siehe config.js */
   var LOGOUT_URL = '/cdn-cgi/access/logout';
   var REFRESH_MS = 60000;
 
@@ -351,7 +351,7 @@ section{display:grid;gap:10px}
   }
 
   /* ---------- Neues Kind ---------- */
-  function formUrl(t){ return FORM_URL ? FORM_URL.replace('{team}', encodeURIComponent(t.name)) : ''; }
+  function formUrl(t){ return CFG.formUrlFor ? CFG.formUrlFor(t) : ''; }
   function renderSheet(){
     var t = team(), b = $('sheet-body'), url = formUrl(t);
     var top = '<div class="sheet-top"><h3 id="sheet-h">Neues Kind anmelden</h3><button class="x" type="button" data-action="close" aria-label="Schließen">✕</button></div>';
@@ -366,7 +366,7 @@ section{display:grid;gap:10px}
       '<div class="qr" id="qr"></div>'+
       '<div class="qrcap">Formular für die '+esc(t.name)+' · Mannschaft ist schon ausgewählt</div>'+
       '<p class="small muted">Neue Kinder erscheinen nach kurzer Zeit in der Liste – sonst unten auf „Aktualisieren“ tippen.</p>'+
-      '<div><a class="linkbtn" href="aushang.html?team='+encodeURIComponent(t.name)+'" target="_blank" rel="noopener">Aushang mit diesem Code für den Platz öffnen</a></div>';
+      '<div><a class="linkbtn" href="aushang.html?team='+encodeURIComponent(t.name)+'&amp;id='+encodeURIComponent(t.id)+'" target="_blank" rel="noopener">Aushang mit diesem Code für den Platz öffnen</a></div>';
     var box = $('qr');
     if (window.QRCode){
       try { new QRCode(box,{text:url,width:184,height:184,colorDark:'#141414',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.M}); }

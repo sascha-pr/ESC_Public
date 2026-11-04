@@ -2,7 +2,7 @@
 
 > Vor dem Verschicken `[LINK]` durch die echte Adresse ersetzen (`https://probetraining.<APP-DOMAIN>`, z. B. https://probetraining.esc06-jugend.de).
 > Erst verschicken, wenn die Trainer-E-Mails in Airtable **und** in der Cloudflare-Zugriffsgruppe „Trainer“ eingetragen sind
-> und das Elternformular veröffentlicht ist (siehe `docs/deployment.md`).
+> und das Elternformular online ist (siehe `docs/deployment.md`).
 
 ---
 
@@ -28,7 +28,7 @@ Bei jedem Probetraining-Kind „War heute da“ tippen. Fertig.
 • Pro Kind zählt nur ein Training am Tag. Habt ihr mehrere Trainer und ein anderer hat das Kind schon eingetragen, sagt euch die App das beim Tippen.
 
 3️⃣ Neues Kind beim Training
-Unten „Neues Kind beim Training“ antippen → die Eltern scannen den QR-Code und füllen das Formular aus (ca. 2 Minuten). Danach steht das Kind in eurer Liste, das heutige Training zählt schon als 1. Mal. Ihr müsst also nichts mehr tippen.
+Unten „Neues Kind beim Training“ antippen → die Eltern scannen den QR-Code und füllen das Formular aus (ca. 2 Minuten, die Eltern brauchen dafür keine Anmeldung). Danach steht das Kind in eurer Liste, das heutige Training zählt schon als 1. Mal. Ihr müsst also nichts mehr tippen.
 Wenn das Kind nicht gleich auftaucht: unten auf „Aktualisieren“ tippen.
 Für den Platz gibt es den Code auch als Aushang zum Ausdrucken (im selben Fenster).
 

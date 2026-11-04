@@ -1,4 +1,4 @@
-import { DataSourceError, type AttendanceValues, type DataSource } from "./datasource";
+import { DataSourceError, type AttendanceValues, type DataSource, type NewKid } from "./datasource";
 import type { KidRecord, SourceStatus, Team } from "./domain";
 
 /** Feld-IDs aus docs/airtable-schema.md – IDs statt Namen, damit Umbenennungen nichts kaputt machen. */
@@ -22,6 +22,8 @@ export const AIRTABLE = {
     parentName: "fldDgCoupcrJnrXsz",
     phone: "fld6qcqlKJLk3QZxq",
     playableSince: "fldYRU9DWyxvP1Jp1",
+    email: "fldcLIrtbOMJTLAQ3",
+    consent: "fldSWUKHlLliAOqHw",
   },
 } as const;
 
@@ -102,6 +104,36 @@ export class AirtableDataSource implements DataSource {
     });
     await ensureOk(res);
     return toKid((await res.json()) as AirtableRecord);
+  }
+
+  async createKid(k: NewKid): Promise<KidRecord> {
+    if (!RECORD_ID.test(k.teamId)) throw new DataSourceError("Ungültige Mannschafts-ID", 400);
+    const f = AIRTABLE.kids;
+    const res = await this.request(f.table, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        returnFieldsByFieldId: true,
+        records: [{
+          fields: {
+            [f.name]: k.name,
+            [f.birthDate]: k.birthDate,
+            [f.team]: [k.teamId],
+            [f.status]: "Probetraining",
+            [f.count]: 1,
+            [f.firstTraining]: k.today,
+            [f.lastTraining]: k.today,
+            [f.parentName]: k.parentName,
+            [f.email]: k.email,
+            [f.phone]: k.phone,
+            [f.consent]: true,
+          },
+        }],
+      }),
+    });
+    await ensureOk(res);
+    const body = (await res.json()) as { records: AirtableRecord[] };
+    return toKid(body.records[0]!);
   }
 
   private async listAll(table: string, fieldIds: string[]): Promise<AirtableRecord[]> {

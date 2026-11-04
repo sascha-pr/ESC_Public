@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Anmeldung Probetraining · ESC Rellinghausen 06</title>
+<link rel="icon" href="wappen.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Barlow:wght@400;500;600&display=swap">
+<style>
+/* Layout: eine Handy-Spalte im Vereinslook der Trainer-App – schwarzer Kopf mit roter Kante, darunter ein Formular-Blatt */
+:root{
+  --bg:#f3f3f4; --surface:#ffffff; --fg:#141414; --muted:#5f5f64; --line:#e1e1e4; --line-strong:#c9c9ce;
+  --pitch:#141414; --pitch-ink:#ffffff; --chalk:rgba(255,255,255,.08);
+  --brand:#c9252b; --accent:#c9252b; --accent-ink:#ffffff; --focus:#c9252b;
+  --red:#b0101f; --red-bg:#fde6e8; --green:#006f45; --green-bg:#e0f1e8; --amber:#8a5a0c; --amber-bg:#fbf0d6;
+  --radius:6px; --shadow:0 1px 2px rgba(0,0,0,.05),0 6px 16px rgba(0,0,0,.06);
+  --display:"Barlow Condensed","Arial Narrow",system-ui,sans-serif;
+  --body:"Barlow",system-ui,-apple-system,"Segoe UI",sans-serif;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0f0f10; --surface:#1b1b1d; --fg:#ededee; --muted:#a3a3a9; --line:#2c2c30; --line-strong:#3e3e44;
+  --pitch:#000000; --chalk:rgba(255,255,255,.07); --accent:#de3a40; --focus:#ff6b7a;
+  --red:#ff7180; --red-bg:#3a1418; --green:#6fd295; --green-bg:#163021; --amber:#e9b45d; --amber-bg:#36290f;
+  --shadow:none; color-scheme:dark;
+}}
+:root[data-theme="dark"]{
+  --bg:#0f0f10; --surface:#1b1b1d; --fg:#ededee; --muted:#a3a3a9; --line:#2c2c30; --line-strong:#3e3e44;
+  --pitch:#000000; --chalk:rgba(255,255,255,.07); --accent:#de3a40; --focus:#ff6b7a;
+  --red:#ff7180; --red-bg:#3a1418; --green:#6fd295; --green-bg:#163021; --amber:#e9b45d; --amber-bg:#36290f;
+  --shadow:none; color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.45;-webkit-font-smoothing:antialiased}
+[hidden]{display:none!important}
+.gut{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.col{max-width:520px;margin:0 auto}
+p{margin:0}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+a{color:inherit}
+
+/* Kopf */
+.top{background:var(--pitch);color:var(--pitch-ink);position:relative;overflow:hidden;border-bottom:5px solid var(--brand)}
+.top::before{content:"";position:absolute;width:230px;height:230px;border:2px solid var(--chalk);border-radius:50%;right:-95px;top:50%;transform:translateY(-50%)}
+.top::after{content:"";position:absolute;right:19px;top:0;bottom:0;border-left:2px solid var(--chalk)}
+.hdr{position:relative;z-index:1;padding-block:18px 22px}
+.eyebrow{display:flex;align-items:center;gap:10px;font-size:13px;letter-spacing:.09em;text-transform:uppercase;font-weight:600;padding-right:60px}
+.crest{width:52px;height:52px;border-radius:50%;background:#fff;flex:none;box-shadow:0 0 0 2px rgba(255,255,255,.9)}
+h1{font-family:var(--display);font-weight:700;font-size:42px;line-height:.95;margin:14px 0 8px;text-transform:uppercase;letter-spacing:.01em;text-wrap:balance}
+.sub{font-size:15px;opacity:.86}
+
+/* Formular */
+main{padding-block:20px 40px}
+.sheet{background:var(--surface);border:1px solid var(--line);border-top:4px solid var(--brand);border-radius:var(--radius);padding:20px 16px;display:grid;gap:18px;box-shadow:var(--shadow)}
+.team{display:flex;justify-content:space-between;align-items:center;gap:12px;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+.team .lbl{font-size:13px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;font-weight:600}
+.team strong{font-family:var(--display);font-size:24px;line-height:1.05;display:block}
+.linkbtn{background:none;border:0;padding:6px;font-size:15px;text-decoration:underline;text-underline-offset:3px;cursor:pointer;flex:none}
+fieldset{border:0;margin:0;padding:0;display:grid;gap:14px}
+legend{font-family:var(--display);font-weight:700;font-size:20px;letter-spacing:.04em;text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:8px;padding:0}
+legend::before{content:"";width:4px;height:16px;background:var(--brand)}
+.field{display:grid;gap:6px}
+.field label{font-weight:600;font-size:15px}
+.field .opt{font-weight:400;color:var(--muted)}
+.field input,.field select{min-height:50px;width:100%;border:1px solid var(--line-strong);border-radius:10px;padding:10px 12px;font-size:17px;background:var(--bg)}
+.field input:focus,.field select:focus{border-color:var(--accent)}
+.field[data-bad] input,.field[data-bad] select{border-color:var(--red);background:var(--red-bg)}
+.hint{font-size:14px;color:var(--muted)}
+.err{color:var(--red);font-size:14px;font-weight:500}
+.check{display:flex;gap:12px;align-items:flex-start;font-size:15px;line-height:1.45;cursor:pointer}
+.check input{width:24px;height:24px;accent-color:var(--accent);flex:none;margin:1px 0 0}
+details{font-size:14px;color:var(--muted);background:var(--bg);border-radius:10px;padding:10px 12px}
+details summary{cursor:pointer;font-weight:600;color:var(--fg)}
+details ul{margin:8px 0 0;padding-left:18px;display:grid;gap:4px}
+.big{width:100%;min-height:58px;border:0;border-radius:var(--radius);background:var(--accent);color:var(--accent-ink);font-family:var(--display);font-size:22px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;cursor:pointer}
+.big:active{transform:scale(.985)}
+.big:disabled{opacity:.6;cursor:default}
+.big.alt{background:var(--surface);color:var(--accent);border:2px solid var(--accent)}
+.alert{background:var(--red-bg);color:var(--red);border-radius:10px;padding:12px 14px;font-weight:500}
+.ts{min-height:0}
+.foot{font-size:13px;color:var(--muted);text-align:center;margin-top:18px;display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+
+/* Bestätigung */
+.done{display:grid;gap:16px;text-align:center;justify-items:center}
+.tick{width:72px;height:72px;border-radius:50%;background:var(--green-bg);color:var(--green);display:grid;place-items:center}
+.tick svg{width:38px;height:38px}
+.done h2{font-family:var(--display);font-size:34px;line-height:1;margin:0;text-transform:uppercase}
+.steps{display:grid;gap:10px;text-align:left;width:100%;margin:0;padding:0;list-style:none}
+.steps li{display:flex;gap:12px;background:var(--bg);border-radius:10px;padding:12px 14px}
+.steps b{font-family:var(--display);font-size:22px;color:var(--brand);line-height:1;min-width:18px}
+@media (prefers-reduced-motion:no-preference){.done{animation:rise .3s ease-out}}
+@keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+<header class="top gut">
+  <div class="col hdr">
+    <div class="eyebrow"><img class="crest" src="wappen.png" alt="Wappen ESC Rellinghausen 06">ESC Rellinghausen 06 · Jugend</div>
+    <h1>Anmeldung Probetraining</h1>
+    <p class="sub">Schön, dass euer Kind bei uns mittrainiert! Das Formular dauert etwa 2 Minuten.</p>
+  </div>
+</header>
+
+<main class="gut">
+  <div class="col">
+    <form class="sheet" id="form" novalidate>
+      <div class="team" id="team-fixed" hidden>
+        <div><span class="lbl">Mannschaft</span><strong id="team-name"></strong></div>
+        <button type="button" class="linkbtn" id="team-change">Ändern</button>
+      </div>
+      <div class="field" id="team-pick" hidden>
+        <label for="f-team">Mannschaft</label>
+        <select id="f-team"><option value="">Bitte wählen …</option></select>
+        <div class="err" id="e-team" hidden></div>
+      </div>
+
+      <fieldset>
+        <legend>Euer Kind</legend>
+        <div class="field">
+          <label for="f-childName">Vor- und Nachname</label>
+          <input id="f-childName" type="text" autocomplete="off" autocapitalize="words" maxlength="80">
+          <div class="err" id="e-childName" hidden></div>
+        </div>
+        <div class="field">
+          <label for="f-birthDate">Geburtsdatum</label>
+          <input id="f-birthDate" type="date">
+          <div class="err" id="e-birthDate" hidden></div>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Eltern</legend>
+        <div class="field">
+          <label for="f-parentName">Name eines Elternteils</label>
+          <input id="f-parentName" type="text" autocomplete="name" autocapitalize="words" maxlength="80">
+          <div class="err" id="e-parentName" hidden></div>
+        </div>
+        <div class="field">
+          <label for="f-email">E-Mail</label>
+          <input id="f-email" type="email" inputmode="email" autocomplete="email" maxlength="120">
+          <div class="hint">An diese Adresse schicken wir nach dem 2. Training den Mitgliedsantrag.</div>
+          <div class="err" id="e-email" hidden></div>
+        </div>
+        <div class="field">
+          <label for="f-phone">Telefon <span class="opt">(freiwillig, für Rückfragen)</span></label>
+          <input id="f-phone" type="tel" inputmode="tel" autocomplete="tel" maxlength="30">
+          <div class="err" id="e-phone" hidden></div>
+        </div>
+      </fieldset>
+
+      <div class="field">
+        <label class="check" for="f-consent"><input id="f-consent" type="checkbox"><span>Ich bin erziehungsberechtigt und willige ein, dass der ESC Rellinghausen 06 e.&nbsp;V. diese Daten zur Organisation des Probetrainings und zur Kontaktaufnahme wegen einer Mitgliedschaft verarbeitet.</span></label>
+        <div class="err" id="e-consent" hidden></div>
+        <details>
+          <summary>Was passiert mit den Daten?</summary>
+          <ul id="privacy"></ul>
+        </details>
+      </div>
+
+      <div class="ts" id="ts"></div>
+      <div class="alert" id="alert" role="alert" hidden></div>
+      <button class="big" type="submit" id="submit">Zum Probetraining anmelden</button>
+    </form>
+
+    <section class="sheet done" id="done" hidden aria-live="polite">
+      <div class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>
+      <h2 id="done-h"></h2>
+      <p id="done-p"></p>
+      <ul class="steps">
+        <li><b>1</b><span>Das heutige Training zählt als <strong>1. von 6 Probetrainings</strong>. Der Trainer sieht euer Kind jetzt in seiner Liste.</span></li>
+        <li><b>2</b><span>Nach dem 2. Training schicken wir den <strong>Mitgliedsantrag</strong> an <strong id="done-mail"></strong>.</span></li>
+        <li><b>3</b><span>Spätestens nach dem 6. Training geht es nur noch mit Mitgliedsantrag weiter.</span></li>
+      </ul>
+      <button class="big alt" type="button" id="again">Weiteres Kind anmelden</button>
+    </section>
+
+    <div class="foot" id="foot"></div>
+  </div>
+</main>
+
+<script src="config.js"></script>
+<script>
+(function(){
+  'use strict';
+  var C = window.ANMELDUNG_CONFIG || {};
+  var $ = function(id){ return document.getElementById(id); };
+  var FIELDS = ['team','childName','birthDate','parentName','email','phone','consent'];
+  var teams = [], token = '', widget = null, busy = false;
+  var wanted = new URLSearchParams(location.search).get('m');
+
+  function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]}); }
+
+  /* Datenschutz-Hinweise und Fußzeile aus der Konfiguration */
+  $('privacy').innerHTML = [
+    'Zweck: Nachweis der Probetrainings, Information des Trainers, Zusendung des Mitgliedsantrags.',
+    'Empfänger: Trainer der Mannschaft und Vereinsverwaltung; Verarbeitung über Airtable (Airtable Inc., USA) und Cloudflare.',
+    'Speicherdauer: Löschung nach Erfassung der Mitgliedschaft, bei Absage, spätestens 8 Wochen nach dem ersten Probetraining.',
+    'Widerruf jederzeit, z. B. per E-Mail an ' + esc(C.widerrufEmail || '[E-MAIL-ADRESSE]') + '.',
+    'Verantwortlich: ' + esc(C.verantwortlich || '[VEREINSANSCHRIFT, VORSTAND]') + '.'
+  ].map(function(t){ return '<li>'+t+'</li>'; }).join('');
+  $('foot').innerHTML = (C.datenschutzUrl ? '<a href="'+esc(C.datenschutzUrl)+'" target="_blank" rel="noopener">Datenschutz</a>' : '') +
+    (C.impressumUrl ? '<a href="'+esc(C.impressumUrl)+'" target="_blank" rel="noopener">Impressum</a>' : '') +
+    '<span>ESC Rellinghausen 06 e.&nbsp;V., Essen</span>';
+
+  /* Geburtsdatum: nur sinnvolle Jahre anbieten */
+  var y = new Date().getFullYear();
+  $('f-birthDate').min = (y-20)+'-01-01'; $('f-birthDate').max = new Date().toISOString().slice(0,10);
+
+  /* Mannschaft: aus dem QR-Code vorbelegt, sonst auswählen */
+  function showTeam(){
+    var t = teams.filter(function(x){ return x.id===wanted; })[0];
+    $('team-fixed').hidden = !t; $('team-pick').hidden = !!t;
+    if (t){ $('team-name').textContent = t.name; $('f-team').value = t.id; }
+  }
+  fetch('/api/anmeldung/teams').then(function(r){ return r.json(); }).then(function(b){
+    teams = b.teams || [];
+    $('f-team').innerHTML = '<option value="">Bitte wählen …</option>' + teams.map(function(t){ return '<option value="'+esc(t.id)+'">'+esc(t.name)+'</option>'; }).join('');
+    showTeam();
+  }).catch(function(){ $('team-pick').hidden = false; showAlert('Die Mannschaften konnten nicht geladen werden. Bitte die Seite neu laden.'); });
+  $('team-change').addEventListener('click', function(){ wanted = null; $('team-fixed').hidden = true; $('team-pick').hidden = false; $('f-team').value=''; $('f-team').focus(); });
+
+  /* Bot-Check (Cloudflare Turnstile) */
+  window.onTurnstileLoad = function(){
+    if (!C.turnstileSiteKey || !window.turnstile) return;
+    widget = window.turnstile.render('#ts', { sitekey: C.turnstileSiteKey, language: 'de', appearance: 'interaction-only',
+      callback: function(t){ token = t; }, 'expired-callback': function(){ token = ''; }, 'error-callback': function(){ token = ''; } });
+  };
+  if (C.turnstileSiteKey){
+    var s = document.createElement('script');
+    s.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&onload=onTurnstileLoad';
+    s.async = true; s.defer = true; document.head.appendChild(s);
+  }
+
+  /* Fehleranzeige */
+  function setErr(name, msg){
+    var e = $('e-'+name), f = e && e.closest('.field');
+    if (!e) return;
+    e.textContent = msg || ''; e.hidden = !msg;
+    if (f){ if (msg) f.setAttribute('data-bad',''); else f.removeAttribute('data-bad'); }
+  }
+  function clearErrs(){ FIELDS.forEach(function(n){ setErr(n,''); }); $('alert').hidden = true; }
+  function showAlert(msg){ $('alert').textContent = msg; $('alert').hidden = false; }
+  document.addEventListener('input', function(e){ var id=(e.target.id||''); if (id.indexOf('f-')===0) setErr(id.slice(2),''); });
+
+  function values(){
+    return {
+      team: $('f-team').value, childName: $('f-childName').value, birthDate: $('f-birthDate').value,
+      parentName: $('f-parentName').value, email: $('f-email').value, phone: $('f-phone').value,
+      consent: $('f-consent').checked, turnstileToken: token || (C.turnstileSiteKey ? '' : 'lokal')
+    };
+  }
+
+  /* Gleiche Prüfungen wie im Worker, damit Fehler sofort sichtbar sind */
+  function check(v){
+    var e = {};
+    if (!v.team) e.team = 'Bitte die Mannschaft auswählen.';
+    if (v.childName.trim().split(/\s+/).length < 2) e.childName = 'Bitte Vor- und Nachnamen des Kindes eintragen.';
+    if (!v.birthDate) e.birthDate = 'Bitte das Geburtsdatum eintragen.';
+    if (v.parentName.trim().length < 2) e.parentName = 'Bitte den Namen eines Elternteils eintragen.';
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.email.trim())) e.email = 'Bitte eine gültige E-Mail-Adresse eintragen. An sie geht später der Mitgliedsantrag.';
+    if (!v.consent) e.consent = 'Ohne Einwilligung können wir die Anmeldung leider nicht annehmen.';
+    return e;
+  }
+
+  $('form').addEventListener('submit', function(ev){
+    ev.preventDefault();
+    if (busy) return;
+    clearErrs();
+    var v = values(), e = check(v), keys = Object.keys(e);
+    keys.forEach(function(k){ setErr(k, e[k]); });
+    if (keys.length){ var first = $('f-'+keys[0]); if (first) first.focus(); return; }
+    if (C.turnstileSiteKey && !token){ showAlert('Einen Moment – die Sicherheitsprüfung läuft noch. Bitte gleich nochmal tippen.'); return; }
+
+    busy = true; $('submit').disabled = true; $('submit').textContent = 'Wird gesendet …';
+    fetch('/api/anmeldung', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(v) })
+      .then(function(r){ return r.json().catch(function(){ return {}; }).then(function(b){ return {ok:r.ok, b:b}; }); })
+      .then(function(res){
+        if (res.ok){ done(res.b, v.email.trim()); return; }
+        var f = res.b.fields || {};
+        Object.keys(f).forEach(function(k){ setErr(k, f[k]); });
+        if (!Object.keys(f).length) showAlert(res.b.message || 'Das hat nicht geklappt. Bitte nochmal versuchen.');
+      }, function(){ showAlert('Keine Verbindung. Bitte Internet prüfen und nochmal absenden.'); })
+      .then(function(){
+        busy = false; $('submit').disabled = false; $('submit').textContent = 'Zum Probetraining anmelden';
+        if (widget !== null && window.turnstile){ token = ''; window.turnstile.reset(widget); }
+      });
+  });
+
+  function done(b, mail){
+    $('form').hidden = true; $('done').hidden = false;
+    $('done-h').textContent = b.duplicate ? b.firstName + ' ist schon angemeldet' : 'Danke! ' + b.firstName + ' ist angemeldet';
+    $('done-p').textContent = b.duplicate ? 'Die Anmeldung für die ' + b.team + ' lag bereits vor – ihr müsst nichts weiter tun.' : 'Willkommen bei der ' + b.team + '!';
+    $('done-mail').textContent = mail;
+    window.scrollTo(0,0);
+  }
+
+  /* Geschwisterkind: Elterndaten behalten, Kinderdaten leeren */
+  $('again').addEventListener('click', function(){
+    $('f-childName').value = ''; $('f-birthDate').value = ''; $('f-consent').checked = false;
+    $('done').hidden = true; $('form').hidden = false; clearErrs(); $('f-childName').focus();
+  });
+})();
+</script>
+</body>
+</html>

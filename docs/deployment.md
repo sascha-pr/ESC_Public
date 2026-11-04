@@ -12,7 +12,8 @@ Platzhalter in dieser Anleitung:
 | Platzhalter | Bedeutung | Beispiel |
 |---|---|---|
 | `<APP-DOMAIN>` | die neue Domain des Vereins für die App | `esc06-jugend.de` |
-| `<APP-HOST>` | Adresse der App | `probetraining.esc06-jugend.de` |
+| `<APP-HOST>` | Adresse der Trainer-App (mit Login) | `probetraining.esc06-jugend.de` |
+| `<FORM-HOST>` | Adresse des Elternformulars (ohne Login) | `anmeldung.esc06-jugend.de` |
 | `<TEAM>` | Team-Name in Cloudflare Zero Trust | `esc06` |
 
 Alles läuft in **Konten des Vereins**, nicht in privaten Konten: Vereinsadresse verwenden (z. B. die der Jugendleitung),
@@ -21,7 +22,9 @@ Zwei-Faktor-Anmeldung einschalten, **mindestens zwei Admins**. Jeden erledigten 
 
 ```
 Trainer-Handy → Cloudflare Access (Login per E-Mail-Code) → Cloudflare Worker (App + API) → Airtable
-                 alles unter https://<APP-HOST>
+                 https://<APP-HOST>
+Eltern-Handy  → QR-Code → Elternformular (ohne Login, Bot-Check Turnstile) → Cloudflare Worker → Airtable
+                 https://<FORM-HOST>
 ```
 
 ---
@@ -32,7 +35,7 @@ Trainer-Handy → Cloudflare Access (Login per E-Mail-Code) → Cloudflare Worke
       bzw. akzeptiert; Datenschutzerklärung des Vereins um Probetraining-App, Airtable und Cloudflare ergänzt.
       Klären, ob auf `<APP-HOST>` ein Link zu Impressum/Datenschutz nötig ist.
       (Kein Rechtsrat – vom Vorstand/Datenschutzbeauftragten freigeben lassen.)
-- [ ] **Einwilligungstext** im Airtable-Formular vervollständigt (Platzhalter `[E-MAIL-ADRESSE]`, `[VEREINSANSCHRIFT, VORSTAND]`, `[LINK]`).
+- [ ] **Einwilligungstext** im Elternformular vervollständigt: in `app/anmeldung/config.js` Widerrufs-E-Mail, Verantwortlicher sowie Links zu Datenschutzerklärung und Impressum eintragen.
 - [ ] **Mannschaften** mit Trainer-E-Mails in Airtable eingetragen, Beispieldaten gelöscht.
 - [ ] **Domainname** gewählt: erkennbar zum Verein gehörend, z. B. `esc06-jugend.de`; Verfügbarkeit geprüft.
 - [ ] **IT-Verantwortlicher informiert** (Kopie von `docs/deployment-it.md`), zweiter Admin benannt.
@@ -70,13 +73,22 @@ Kosten bei Cloudflare: 0 € (Free-Tarife für Domain, Workers, KV und Zero Trus
    **Diese Liste muss zu „Mannschaften → Trainer E-Mail“ in Airtable passen.**
 4. **Zugriff → Anwendungen → Anwendung hinzufügen → Self-hosted:**
    - Name: `Probetraining-App`
-   - Domain: `<APP-HOST>`
+   - Domain: `<APP-HOST>` (**nur** diese Adresse – das Elternformular `<FORM-HOST>` bleibt bewusst ohne Login)
    - Sitzungsdauer: **1 Monat**
    - Login-Methode: nur „One-time PIN“, „Sofort umleiten“ aktivieren
    - Richtlinie: Name `Trainer`, Aktion **Zulassen**, Einschließen → Zugriffsgruppe `Trainer`
 5. Speichern, die Anwendung öffnen und den **Application Audience (AUD) Tag** kopieren.
 
 Die Menübezeichnungen im Dashboard können sich ändern; die Begriffe (Self-hosted-Anwendung, One-time PIN, AUD-Tag) bleiben gleich.
+
+## 3a. Turnstile (Spam-Schutz fürs Elternformular) einrichten
+
+1. Dashboard → **Turnstile** → **Widget hinzufügen**.
+2. Name: `Probetraining-Anmeldung`; Hostname: `<FORM-HOST>` (für lokale Tests zusätzlich `localhost`); Modus: **Verwaltet**.
+3. Den **Websiteschlüssel** in `app/anmeldung/config.js` bei `turnstileSiteKey` eintragen (öffentlich, darf ins Repository).
+4. Den **Geheimschlüssel** notieren – er kommt in Schritt 5 als Secret in den Worker, nirgendwo sonst hin.
+
+Ohne Geheimschlüssel nimmt der Worker im Betrieb **keine** Anmeldungen an (sicherer Standard).
 
 ## 4. Airtable-Token erstellen
 
@@ -105,11 +117,15 @@ npx wrangler kv namespace create UNDO
 Der letzte Befehl gibt eine `id` aus. Dann in `worker/wrangler.jsonc` eintragen:
 
 ```jsonc
-"routes": [{ "pattern": "<APP-HOST>", "custom_domain": true }],
+"routes": [
+  { "pattern": "<APP-HOST>", "custom_domain": true },
+  { "pattern": "<FORM-HOST>", "custom_domain": true }
+],
 "vars": {
   "AIRTABLE_BASE_ID": "appBKLVL4A4mI2QHr",
   "ACCESS_TEAM_DOMAIN": "<TEAM>.cloudflareaccess.com",
-  "ACCESS_AUD": "<AUD-Tag aus Schritt 3>"
+  "ACCESS_AUD": "<AUD-Tag aus Schritt 3>",
+  "PUBLIC_HOST": "<FORM-HOST>"
 },
 "kv_namespaces": [{ "binding": "UNDO", "id": "<id aus dem kv-Befehl>" }]
 ```
@@ -117,11 +133,12 @@ Der letzte Befehl gibt eine `id` aus. Dann in `worker/wrangler.jsonc` eintragen:
 Domain, Team-Domain, AUD-Tag und KV-ID sind keine Geheimnisse und dürfen ins Repository (Änderung committen). Dann:
 
 ```bash
-npx wrangler secret put AIRTABLE_TOKEN    # Token aus Schritt 4 einfügen
+npx wrangler secret put AIRTABLE_TOKEN     # Token aus Schritt 4 einfügen
+npx wrangler secret put TURNSTILE_SECRET   # Geheimschlüssel aus Schritt 3a einfügen
 npx wrangler deploy
 ```
 
-Cloudflare legt den DNS-Eintrag für `<APP-HOST>` und das Zertifikat automatisch an (einige Minuten).
+Cloudflare legt die DNS-Einträge für `<APP-HOST>` und `<FORM-HOST>` und die Zertifikate automatisch an (einige Minuten).
 
 **Updates später:** im Ordner `worker` erneut `npm run check` und `npx wrangler deploy`.
 *Optional:* Workers → `esc06-probetraining` → Einstellungen → Build: GitHub-Repository verbinden
@@ -135,7 +152,10 @@ Cloudflare legt den DNS-Eintrag für `<APP-HOST>` und das Zertifikat automatisch
 4. Ohne Anmeldung `https://<APP-HOST>/api/kids` → Umleitung zum Login, keine Daten.
 5. Testkind: „War heute da“ und „Rückgängig“ → in Airtable Zähler und Datum prüfen.
 6. „Abmelden“ → man landet wieder beim Login.
-7. Nach Schritt 7: „Neues Kind“ → QR-Code scannen → Formular mit vorbelegter Mannschaft.
+7. „Neues Kind“ → QR-Code mit einem **anderen Handy ohne Anmeldung** scannen → Formular öffnet sich **ohne Login**
+   mit vorbelegter Mannschaft → Testkind anmelden → Danke-Seite → Kind erscheint in der Trainer-App mit 1/6.
+8. `https://<FORM-HOST>/index.html` und `https://<FORM-HOST>/api/kids` → „Nicht gefunden“ (die Trainer-App ist dort nicht erreichbar).
+9. Testkind in Airtable wieder löschen.
 
 Ergebnis im Änderungsprotokoll (`docs/deployment-it.md`, Abschnitt 9) festhalten.
 Fehlersuche: Workers → `esc06-probetraining` → **Logs** (nur Fehlercodes, keine Kinderdaten) und Zero Trust → Logs → Access.
@@ -144,12 +164,10 @@ Fehlersuche: Workers → `esc06-probetraining` → **Logs** (nur Fehlercodes, ke
 
 In dieser Reihenfolge (alles in der Airtable-Oberfläche):
 
-1. **Formular** „Anmeldung zum Probetraining“ veröffentlichen
-   (https://airtable.com/appBKLVL4A4mI2QHr/pag2AaadRpeiFuvDB/edit). Prüfen, dass es ohne Airtable-Konto ausfüllbar ist
-   und die Vorbelegung der Mannschaft per Link funktioniert. Weicht die Formular-Adresse von `app/config.js` ab:
-   dort anpassen und neu deployen.
-2. **Automationen** einschalten: 6 (Formular), 5 (Spielberechtigt), 3 (Trainer-Info), 2 (Verwaltung), 4 (Löschliste),
+1. **Automationen** einschalten: 5 (Spielberechtigt), 3 (Trainer-Info), 2 (Verwaltung), 4 (Löschliste),
    zuletzt **1** (Antragsmail an Eltern – erst, wenn der Antrags-Link stimmt und die Seite öffentlich erreichbar ist).
+   **Nicht** einschalten: Automation 6 und das Airtable-Formular – beides ist durch das eigene Elternformular ersetzt.
+2. Status, Zähler und Datum setzt bei neuen Kindern der Worker selbst.
 3. Vorläufige Werte ersetzen (`docs/airtable-schema.md` → „Vorläufige Werte“): Verwaltungs-E-Mail in Automation 2 und 4,
    Antrags-Link in Automation 1.
 
