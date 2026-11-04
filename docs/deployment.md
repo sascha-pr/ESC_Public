@@ -1,5 +1,7 @@
 # Deployment-Anleitung: Probetraining-App online stellen
 
+Technischer Hintergrund, Sicherheit und alle Adress-Optionen für die Vereins-IT: `docs/deployment-it.md`.
+
 Für: die Person im Verein, die die App einrichtet (etwas Technik-Erfahrung reicht: Konten anlegen, Werte kopieren,
 ein paar Befehle im Terminal ausführen). Dauer: etwa 1–2 Stunden, plus Wartezeit beim Domain-Umzug.
 
@@ -33,24 +35,31 @@ Kosten: Workers, KV und Zero Trust (Access) sind im kostenlosen Tarif enthalten 
 
 ## 2. Adresse festlegen
 
-### Weg A (empfohlen): `probetraining.esc-06.de`
+### Weg A: `probetraining.esc-06.de` (Nameserver-Umzug)
 
 Dafür muss die Domain **esc-06.de** zu Cloudflare umziehen. Umziehen heißt nur: Cloudflare übernimmt die
 DNS-Verwaltung (Nameserver). Die Domain bleibt beim bisherigen Anbieter registriert, Website und E-Mail laufen weiter.
 
 1. Cloudflare-Dashboard → **Domain hinzufügen** → `esc-06.de` → Tarif **Free**.
-2. Cloudflare liest die vorhandenen DNS-Einträge ein. **Mit dem bisherigen Anbieter vergleichen**, besonders die
-   E-Mail-Einträge (`MX`, `TXT` mit SPF/DKIM) und die Website (`A`/`CNAME` für `@` und `www`). Fehlende Einträge nachtragen.
-3. Cloudflare zeigt zwei Nameserver an (z. B. `xxx.ns.cloudflare.com`). Diese beim Domain-Anbieter eintragen
+2. **DNSSEC:** Falls beim Domain-Anbieter aktiv, **vorher deaktivieren** (sonst ist die Domain nach dem Wechsel nicht erreichbar);
+   nach dem Umzug in Cloudflare wieder aktivieren und den neuen DS-Eintrag beim Anbieter hinterlegen.
+3. Cloudflare liest die vorhandenen DNS-Einträge ein. **Mit dem bisherigen Anbieter vergleichen**, besonders die
+   E-Mail-Einträge (`MX`, `TXT` mit SPF/DKIM) und die Website (`A`/`CNAME` für `@` und `www`). Fehlende Einträge nachtragen. Alle übernommenen Einträge auf „Nur DNS“ (graue Wolke) stellen.
+4. Cloudflare zeigt zwei Nameserver an (z. B. `xxx.ns.cloudflare.com`). Diese beim Domain-Anbieter eintragen
    (Domain-Verwaltung → Nameserver ändern). Das macht die Person, die die Domain verwaltet.
-4. Warten, bis Cloudflare „Aktiv“ meldet (meist Minuten bis wenige Stunden, selten bis 24 h).
-5. Website und E-Mail kurz testen.
+5. Warten, bis Cloudflare „Aktiv“ meldet (meist Minuten bis wenige Stunden, selten bis 24 h).
+6. Website und E-Mail kurz testen.
 
-### Weg B (Übergang): Adresse `….workers.dev`
+Vollständige Checkliste mit Risiken und Rückweg: `docs/deployment-it.md`, Abschnitt 5.
 
-Falls der Domain-Umzug (noch) nicht geht: Die App kann vorerst unter einer Cloudflare-Adresse wie
-`esc06-probetraining.<konto>.workers.dev` laufen. Voraussetzung ist, dass Cloudflare Access für `workers.dev`
-eingeschaltet werden kann (Worker → Einstellungen → Domains & Routen → bei `workers.dev` „Cloudflare Access“ aktivieren).
+### Weg B (empfohlen für den Start, ohne Eingriff in esc-06.de): Adresse `….workers.dev`
+
+Die App läuft unter einer Cloudflare-Adresse wie `esc06-probetraining.<konto>.workers.dev`. Cloudflare bietet an,
+Access direkt für die `workers.dev`-Adresse eines Workers einzuschalten (beim Worker unter Einstellungen →
+Domains & Routen; Bezeichnungen im Dashboard können abweichen). Optional richtet der Domain-Verwalter beim bisherigen
+Anbieter eine Weiterleitung `probetraining.esc-06.de` → workers.dev-Adresse ein.
+
+Weitere Alternative ohne Eingriff: eine eigene, zusätzliche Domain nur für die App (siehe `docs/deployment-it.md`, Option C).
 In `worker/wrangler.jsonc` dann `"workers_dev": true` setzen und die `routes`-Zeile weglassen.
 **Ohne eingeschaltetes Access nie mit `workers_dev: true` veröffentlichen.** (Der Worker lässt ohne gültigen Access-Login
 zwar niemanden an Daten, die App-Seite wäre aber öffentlich.)

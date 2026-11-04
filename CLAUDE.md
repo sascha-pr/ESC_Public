@@ -29,7 +29,7 @@ nur die Zeit zwischen erstem Training und fertigem Pass.
 | **Echte Trainer-App** + Aushang | fertig, gegen API gebaut, lokal getestet | `app/` |
 | **Worker (API)** | fertig, 51 Tests, noch nicht deployt | `worker/` |
 | Elternformular (Airtable) | angelegt, **unveröffentlicht** | `docs/airtable-schema.md` |
-| Deployment-Anleitung | fertig | `docs/deployment.md` |
+| Deployment-Anleitung | fertig (Klickanleitung + Fassung für die Vereins-IT mit Domain-Optionen) | `docs/deployment.md`, `docs/deployment-it.md` |
 
 Live-Version des Prototyps (claude.ai-Artifact, öffentlicher Link): https://claude.ai/artifact/P2dsyiesCqNT7KQNyYb63n
 

@@ -11,5 +11,5 @@ Daten in Airtable, Login über Cloudflare Access, DFBnet bleibt führend.
 | `mitgliedsantrag/` | Vorläufige Seite für den Mitgliedsantrag |
 | `docs/` | Airtable-Schema, Deployment-Anleitung, Trainer-Kurzanleitung, Einwilligung & Rollen |
 
-Einstieg für Entwickler: `CLAUDE.md`. Online stellen: `docs/deployment.md`.
+Einstieg für Entwickler: `CLAUDE.md`. Online stellen: `docs/deployment.md` (Klickanleitung) und `docs/deployment-it.md` (für die Vereins-IT: Aufbau, Sicherheit, Domain-Optionen).
 Lokal ausprobieren ohne Airtable: `cd worker && npm install && npm run dev:mock` → http://localhost:8787
