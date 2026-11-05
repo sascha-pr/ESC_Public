@@ -7,7 +7,7 @@ const EMAIL = (process.env.DEV_USER_EMAIL ?? "trainer.f1@example.org").toLowerCa
 const T = { table: "tbl6pyFB5M2UoFmCF", name: "fldb4pIWaZQt2lYJ0", klasse: "fldFVQv8zJ7bZV23K", trainer: "fld8WnvL4lrRnfJ9P", email: "fldW5d0dO3sGbvsQG" };
 const K = {
   table: "tblyfT5TCWF76fZ44", name: "fldWH5f8NuyKSZAAm", geb: "fldz5RqCREzQb8Gew", team: "fldqEXZu0N4WNJMjt",
-  status: "fldgXAjpTkk8tCSj8", count: "fldDwB2Cl9qswdjEg", first: "fldeUlh3Si9dcj33X", last: "fldvP82QxQlHDLy77",
+  status: "fldgXAjpTkk8tCSj8", count: "fldDwB2Cl9qswdjEg", first: "fldeUlh3Si9dcj33X", last: "fldvP82QxQlHDLy77", paper: "fldlyupDUsoOK2Dp5",
   parent: "fldDgCoupcrJnrXsz", phone: "fld6qcqlKJLk3QZxq", since: "fldYRU9DWyxvP1Jp1",
 };
 
@@ -28,7 +28,7 @@ const tables = {
   ],
   [K.table]: [
     kid("recMockKid0000001", "recMockTeamF1xxxx", "Max Beispiel", "2018-03-01", 1, ago(4), "Probetraining", "Anna Beispiel", "0171 0000001"),
-    kid("recMockKid0000002", "recMockTeamF1xxxx", "Mia Schulz", "2019-06-12", 4, ago(4), "Antrag ausgehändigt/verschickt", "Jörg Schulz", "0160 0000002"),
+    (() => { const r = kid("recMockKid0000002", "recMockTeamF1xxxx", "Mia Schulz", "2019-06-12", 4, ago(4), "Probetraining", "Jörg Schulz", "0160 0000002"); r.fields[K.paper] = true; return r; })(),
     kid("recMockKid0000003", "recMockTeamF1xxxx", "Noah Wagner", "2018-01-20", 6, ago(2), "Antrag ausgehändigt/verschickt", "Sevgi Wagner", "0152 0000003"),
     kid("recMockKid0000004", "recMockTeamF1xxxx", "Ella Hoffmann", "2018-09-09", 5, ago(7), "Antrag ausgehändigt/verschickt", "Tim Hoffmann", "0176 0000004"),
     kid("recMockKid0000005", "recMockTeamF1xxxx", "Emil Test", "2018-02-02", 2, ago(21), "Antrag eingegangen", "Petra Test", "0175 0000005"),

@@ -1,5 +1,5 @@
 import { DataSourceError, type AttendanceValues, type DataSource, type NewKid } from "./datasource";
-import type { KidRecord, SourceStatus, Team } from "./domain";
+import { formatDates, parseDates, type KidRecord, type SourceStatus, type Team } from "./domain";
 
 /** Feld-IDs aus docs/airtable-schema.md – IDs statt Namen, damit Umbenennungen nichts kaputt machen. */
 export const AIRTABLE = {
@@ -24,6 +24,8 @@ export const AIRTABLE = {
     playableSince: "fldYRU9DWyxvP1Jp1",
     email: "fldcLIrtbOMJTLAQ3",
     consent: "fldSWUKHlLliAOqHw",
+    trainingDates: "fldy7NF7MKeneEY5R",
+    paper: "fldlyupDUsoOK2Dp5",
   },
 } as const;
 
@@ -77,7 +79,7 @@ export class AirtableDataSource implements DataSource {
     const f = AIRTABLE.kids;
     const fields = [
       f.name, f.birthDate, f.team, f.status, f.count, f.firstTraining,
-      f.lastTraining, f.parentName, f.phone, f.playableSince,
+      f.lastTraining, f.parentName, f.phone, f.playableSince, f.trainingDates, f.paper,
     ];
     const records = await this.listAll(f.table, fields);
     return records.map(toKid);
@@ -99,7 +101,10 @@ export class AirtableDataSource implements DataSource {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         returnFieldsByFieldId: true,
-        fields: { [f.count]: v.count, [f.lastTraining]: v.lastTraining, [f.firstTraining]: v.firstTraining },
+        fields: {
+          [f.count]: v.count, [f.lastTraining]: v.lastTraining, [f.firstTraining]: v.firstTraining,
+          [f.trainingDates]: formatDates(v.trainingDates) || null,
+        },
       }),
     });
     await ensureOk(res);
@@ -127,6 +132,8 @@ export class AirtableDataSource implements DataSource {
             [f.email]: k.email,
             [f.phone]: k.phone,
             [f.consent]: true,
+            [f.trainingDates]: formatDates([k.today]),
+            [f.paper]: k.paper,
           },
         }],
       }),
@@ -187,6 +194,8 @@ function toKid(r: AirtableRecord): KidRecord {
     parentName: str(r.fields[f.parentName]),
     phone: str(r.fields[f.phone]),
     playableSince: str(r.fields[f.playableSince]),
+    trainingDates: parseDates(str(r.fields[f.trainingDates])),
+    paper: r.fields[f.paper] === true,
   };
 }
 

@@ -35,6 +35,8 @@ export interface Registration {
   email: string;
   phone: string;
   consent: boolean;
+  /** Keine E-Mail – Mitgliedsantrag auf Papier */
+  paper: boolean;
   turnstileToken: string;
 }
 
@@ -52,7 +54,12 @@ export function validate(input: Partial<Registration>, today: string): Record<st
   const parent = clean(input.parentName);
   if (parent.length < 2 || parent.length > 80) e.parentName = "Bitte den Namen eines Elternteils eintragen.";
   const mail = clean(input.email);
-  if (mail.length > 120 || !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(mail)) e.email = "Bitte eine gültige E-Mail-Adresse eintragen. An sie geht später der Mitgliedsantrag.";
+  const validMail = mail.length <= 120 && /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(mail);
+  if (input.paper === true) {
+    if (mail && !validMail) e.email = "Bitte die E-Mail-Adresse prüfen oder das Feld leer lassen.";
+  } else if (!validMail) {
+    e.email = "Bitte eine gültige E-Mail-Adresse eintragen – oder unten „keine E-Mail“ ankreuzen.";
+  }
   const phone = clean(input.phone);
   if (phone && (phone.length > 30 || !/^[0-9+()\/\- ]{5,}$/.test(phone))) e.phone = "Bitte eine gültige Telefonnummer eintragen oder das Feld leer lassen.";
   if (input.consent !== true) e.consent = MESSAGES.consent;
@@ -122,12 +129,16 @@ export function createPublicApi(deps: PublicDeps): (req: Request) => Promise<Res
             birthDate,
             teamId: team.id,
             parentName: clean(input.parentName),
-            email: clean(input.email).toLowerCase(),
+            email: clean(input.email).toLowerCase() || null,
             phone: clean(input.phone) || null,
+            paper: input.paper === true && !clean(input.email),
             today,
           });
         }
-        return json(200, { ok: true, firstName: (existing ? existing.name : childName).split(" ")[0], team: team.name, duplicate: !!existing });
+        return json(200, {
+          ok: true, firstName: (existing ? existing.name : childName).split(" ")[0], team: team.name, duplicate: !!existing,
+          paper: existing ? existing.paper : input.paper === true && !clean(input.email),
+        });
       }
 
       return error(404, "no_route");

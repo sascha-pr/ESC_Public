@@ -163,6 +163,38 @@ describe("Limit", () => {
   });
 });
 
+describe("Teilnahme-Protokoll", () => {
+  it("„War heute da“ hängt das Datum an, „Rückgängig“ stellt das alte Protokoll wieder her", async () => {
+    data.kids.find((k) => k.id === "recKidF1probe0001")!.trainingDates = ["2026-10-27"];
+    await api(req("POST", "/api/kids/recKidF1probe0001/attend", F1));
+    expect(data.kids.find((k) => k.id === "recKidF1probe0001")!.trainingDates).toEqual(["2026-10-27", TODAY]);
+    await api(req("POST", "/api/kids/recKidF1probe0001/undo", F1));
+    expect(data.kids.find((k) => k.id === "recKidF1probe0001")!.trainingDates).toEqual(["2026-10-27"]);
+  });
+
+  it("das Protokoll geht nicht an die Trainer-App", async () => {
+    data.kids.find((k) => k.id === "recKidF1probe0001")!.trainingDates = ["2026-10-27"];
+    const text = await (await api(req("GET", "/api/kids", F1))).text();
+    expect(text).not.toContain("2026-10-20"); // erstes Training
+    expect(text).not.toContain("trainingDates");
+  });
+});
+
+describe("Papierantrag", () => {
+  it("Kinder ohne E-Mail der Eltern sind für den Trainer markiert", async () => {
+    data.kids.find((k) => k.id === "recKidF1probe0001")!.paper = true;
+    const kids: KidDto[] = (await body(await api(req("GET", "/api/kids", F1)))).kids;
+    expect(kids.find((k) => k.name === "Anton")!.paperApplication).toBe(true);
+    expect(kids.find((k) => k.name === "Carl")!.paperApplication).toBeUndefined();
+  });
+
+  it("nach der Anmeldung (Antrag liegt vor) nicht mehr markiert", async () => {
+    data.kids.find((k) => k.id === "recKidF1antrg0001")!.paper = true;
+    const kids: KidDto[] = (await body(await api(req("GET", "/api/kids", F1)))).kids;
+    expect(kids.find((k) => k.name === "Dora")!.paperApplication).toBeUndefined();
+  });
+});
+
 describe("Rückgängig", () => {
   it("stellt die vom Server gemerkten Werte wieder her", async () => {
     await api(req("POST", "/api/kids/recKidF1probe0001/attend", F1));

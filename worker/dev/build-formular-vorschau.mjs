@@ -26,7 +26,7 @@ const mock = `
       var v = JSON.parse(init.body), team = TEAMS.filter(function(t){ return t.id === v.team; })[0];
       var name = v.childName.replace(/\\s+/g,' ').trim(), key = v.team + '|' + name.toLowerCase() + '|' + v.birthDate;
       var dup = !!seen[key]; if (!dup) seen[key] = name;
-      return reply(200, {ok:true, firstName:(seen[key]||name).split(' ')[0], team:team.name, duplicate:dup});
+      return reply(200, {ok:true, firstName:(seen[key]||name).split(' ')[0], team:team.name, duplicate:dup, paper: !!v.paper && !v.email});
     }
     return reply(404, {error:'no_route'});
   };

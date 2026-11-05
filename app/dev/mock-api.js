@@ -21,10 +21,10 @@
   };
   var kids, undo;
   function seed(){
-    function k(id,team,name,jg,count,last,status,parent,phone,since){ return {id:id,team:team,name:name,jg:jg,count:count,first:ago(30),last:last,status:status,parent:parent,phone:phone,since:since||null}; }
+    function k(id,team,name,jg,count,last,status,parent,phone,since,paper){ return {id:id,team:team,name:name,jg:jg,count:count,first:ago(30),last:last,status:status,parent:parent,phone:phone,since:since||null,paper:!!paper}; }
     kids = [
       k('k1','F1','Max Beispiel',2018,1,ago(4),'probetraining','Anna Beispiel','0171 0000001'),
-      k('k2','F1','Mia Schulz',2019,4,ago(4),'antrag_verschickt','Jörg Schulz','0160 0000002'),
+      k('k2','F1','Mia Schulz',2019,4,ago(4),'probetraining','Jörg Schulz','0160 0000002',null,true),
       k('k3','F1','Noah Wagner',2018,6,ago(2),'antrag_verschickt','Sevgi Wagner','0152 0000003'),
       k('k4','F1','Ella Hoffmann',2018,5,ago(7),'antrag_verschickt','Tim Hoffmann','0176 0000004'),
       k('k5','F1','Emil Test',2018,2,ago(21),'antrag_eingegangen','Petra Test','0175 0000005'),
@@ -45,6 +45,7 @@
   function dto(k){
     var s = APP[k.status] || 'probe', d = {id:k.id, name:k.name, jg:k.jg, count:k.count, last:k.last, status:s, attendedToday:k.last===today()};
     if (s==='probe' && k.count>=MAX) d.contact = {parent:k.parent, phone:k.phone};
+    if (s==='probe' && k.paper) d.paperApplication = true;
     return d;
   }
   var MSG = {
@@ -82,7 +83,7 @@
         if (k.count>=MAX) return err(409,'limit_reached',{kid:dto(k)});
         undo[k.id] = {day:t, count:k.count, last:k.last, first:k.first};
         k.count++; k.last=t; k.first=k.first||t;
-        if (k.count===2 && k.status==='probetraining') k.status='antrag_verschickt'; /* wie Automation 1 */
+        if (k.count===2 && k.status==='probetraining' && !k.paper) k.status='antrag_verschickt'; /* wie Automation 1 (nur mit E-Mail) */
         return json(200, {kid:dto(k)});
       }
       var e = undo[k.id];

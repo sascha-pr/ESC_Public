@@ -40,6 +40,8 @@ Beispieldatensätze: F1 `recuL5quoCtlJlxvf`, E1 `recxrebTTbfjH20HB`, D1 `recn8mI
 | Trainer | `fldboIYe5zLCmv3ZA` | Lookup |
 | Trainer E-Mail | `fld2VgBCM8qAv9LBr` | Lookup |
 | Spielberechtigt seit | `fldYRU9DWyxvP1Jp1` | Datum (Automation 5) |
+| Trainingstermine | `fldy7NF7MKeneEY5R` | Langtext – Teilnahme-Protokoll, ein Datum (TT.MM.JJJJ) pro Zeile; pflegt die App bei „War heute da“/„Rückgängig“ (Nachweis z. B. für die Versicherung) |
+| Antrag auf Papier | `fldlyupDUsoOK2Dp5` | Checkbox – Eltern ohne E-Mail; kein Mailversand (Automation 1 braucht E-Mail), die Trainer-App erinnert ab dem 2. Training an den Papierantrag |
 
 ### Status-Optionen (`fldgXAjpTkk8tCSj8`)
 | Name | Choice-ID |
@@ -100,7 +102,7 @@ Automationen kann nur der Nutzer in der Airtable-Oberfläche einschalten.
 Eltern melden ihr Kind über das eigene Formular `https://anmeldung.<APP-DOMAIN>/?m=<Mannschafts-ID>` an (ohne Login; Mannschaft fest aus dem QR-Code,
 Code: `app/anmeldung/`, `worker/src/public.ts`). Der Worker legt den Datensatz direkt an:
 Name, Geburtsdatum, Mannschaft (Link), Status = Probetraining, Anzahl = 1, Erstes = Letztes Probetraining = heute,
-Erziehungsberechtigte/r, E-Mail, Telefon, Datenschutz-Einwilligung = ✓. Doppelte Anmeldungen (gleiche Mannschaft,
+Erziehungsberechtigte/r, E-Mail (oder leer + „Antrag auf Papier“ = ✓), Telefon, Datenschutz-Einwilligung = ✓, Trainingstermine = heute. Doppelte Anmeldungen (gleiche Mannschaft,
 gleicher Name, gleiches Geburtsdatum) werden nicht erneut angelegt.
 
 ## Reserve: Airtable-Formular `pag2AaadRpeiFuvDB` (unveröffentlicht, **nicht mehr verwendet**)

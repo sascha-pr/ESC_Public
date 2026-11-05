@@ -40,11 +40,29 @@ describe("Elternformular: Anmeldung", () => {
   it("legt das Kind mit Probetraining 1 und heutigem Datum an", async () => {
     const res = await api(post(good()));
     expect(res.status).toBe(200);
-    expect(await json(res)).toEqual({ ok: true, firstName: "Leo", team: "F1-Jugend", duplicate: false });
+    expect(await json(res)).toEqual({ ok: true, firstName: "Leo", team: "F1-Jugend", duplicate: false, paper: false });
     expect(data.created).toEqual([{
       name: "Leo Neumann", birthDate: "2018-08-14", teamId: "recTeamF1aaaaaaaa",
-      parentName: "Kerstin Neumann", email: "k.neumann@example.org", phone: "0151 4455667", today: TODAY,
+      parentName: "Kerstin Neumann", email: "k.neumann@example.org", phone: "0151 4455667", paper: false, today: TODAY,
     }]);
+  });
+
+  it("ohne E-Mail mit „Antrag auf Papier“: wird angelegt und gekennzeichnet", async () => {
+    const res = await api(post({ ...good(), email: "", paper: true }));
+    expect(res.status).toBe(200);
+    expect((await json(res)).paper).toBe(true);
+    expect(data.created[0]).toMatchObject({ email: null, paper: true });
+  });
+
+  it("ohne E-Mail und ohne „Antrag auf Papier“: 422", async () => {
+    const res = await api(post({ ...good(), email: "" }));
+    expect(res.status).toBe(422);
+    expect((await json(res)).fields.email).toBeDefined();
+  });
+
+  it("E-Mail angegeben trotz Häkchen: E-Mail gewinnt, kein Papierantrag", async () => {
+    await api(post({ ...good(), paper: true }));
+    expect(data.created[0]).toMatchObject({ email: "k.neumann@example.org", paper: false });
   });
 
   it("Telefon ist freiwillig", async () => {

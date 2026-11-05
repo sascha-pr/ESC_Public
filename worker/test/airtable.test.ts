@@ -50,6 +50,26 @@ describe("Airtable-Datenquelle", () => {
     expect((first.init.headers as Record<string, string>).Authorization).toBe("Bearer pat_test");
   });
 
+  it("liest Protokoll und Papier-Kennzeichen", async () => {
+    const { ds } = source(() => Response.json({ records: [{ id: "recKid00000000001", fields: {
+      [K.trainingDates]: "20.10.2026\n2026-10-27\n\nMüll\n3.11.2026", [K.paper]: true,
+    } }] }));
+    const k = (await ds.listKids())[0]!;
+    expect(k.trainingDates).toEqual(["2026-10-20", "2026-10-27", "2026-11-03"]);
+    expect(k.paper).toBe(true);
+  });
+
+  it("legt ein neues Kind mit Protokoll und ohne E-Mail an", async () => {
+    const { ds, seen } = source(() => Response.json({ records: [{ id: "recKid00000000009", fields: {} }] }));
+    await ds.createKid({ name: "Leo Neumann", birthDate: "2018-08-14", teamId: "recTeam0000000001", parentName: "Kerstin Neumann",
+      email: null, phone: null, paper: true, today: "2026-11-05" });
+    const f = JSON.parse(String(seen[0]!.init.body)).records[0].fields;
+    expect(f[K.trainingDates]).toBe("05.11.2026");
+    expect(f[K.paper]).toBe(true);
+    expect(f[K.email]).toBeNull();
+    expect(f[K.count]).toBe(1);
+  });
+
   it("unbekannte Status-Option wird nicht als Probetraining gedeutet", async () => {
     const { ds } = source(() => Response.json({ records: [{ id: "recKid00000000001", fields: { [K.status]: "Umbenannt" } }] }));
     expect((await ds.listKids())[0]!.status).toBe("unbekannt");
@@ -65,19 +85,20 @@ describe("Airtable-Datenquelle", () => {
 
   it("schreibt Zähler und Daten per PATCH mit Feld-IDs", async () => {
     const { ds, seen } = source(() => Response.json({ id: "recKid00000000001", fields: { [K.count]: 3 } }));
-    await ds.updateAttendance("recKid00000000001", { count: 3, lastTraining: "2026-11-03", firstTraining: "2026-10-20" });
+    await ds.updateAttendance("recKid00000000001", { count: 3, lastTraining: "2026-11-03", firstTraining: "2026-10-20", trainingDates: ["2026-11-03", "2026-10-20"] });
     const call = seen[0]!;
     expect(call.init.method).toBe("PATCH");
     expect(call.url.pathname).toBe(`/v0/appBKLVL4A4mI2QHr/${K.table}/recKid00000000001`);
     expect(JSON.parse(String(call.init.body)).fields).toEqual({
       [K.count]: 3, [K.lastTraining]: "2026-11-03", [K.firstTraining]: "2026-10-20",
+      [K.trainingDates]: "20.10.2026\n03.11.2026",
     });
   });
 
   it("ungültige ID geht nicht an Airtable", async () => {
     const { ds, seen } = source(() => Response.json({}));
     expect(await ds.getKid("../tbl6pyFB5M2UoFmCF")).toBeNull();
-    await expect(ds.updateAttendance("recKurz", { count: 1, lastTraining: null, firstTraining: null })).rejects.toThrow();
+    await expect(ds.updateAttendance("recKurz", { count: 1, lastTraining: null, firstTraining: null, trainingDates: [] })).rejects.toThrow();
     expect(seen).toHaveLength(0);
   });
 

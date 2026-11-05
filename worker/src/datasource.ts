@@ -20,8 +20,10 @@ export interface NewKid {
   birthDate: string; // YYYY-MM-DD
   teamId: string;
   parentName: string;
-  email: string;
+  email: string | null;
   phone: string | null;
+  /** Keine E-Mail: Mitgliedsantrag auf Papier */
+  paper: boolean;
   /** Tag der Anmeldung = 1. Probetraining */
   today: string;
 }
@@ -30,6 +32,7 @@ export interface AttendanceValues {
   count: number;
   lastTraining: string | null;
   firstTraining: string | null;
+  trainingDates: string[];
 }
 
 /** Fehler der Datenquelle; `status` ist der HTTP-Status der Gegenseite (0 = Netzwerkfehler). */

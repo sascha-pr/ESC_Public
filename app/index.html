@@ -95,6 +95,7 @@ section{display:grid;gap:10px}
 .dot{width:26px;height:26px;border-radius:50%;border:2px solid var(--line-strong);display:grid;place-items:center;font-size:13px;font-weight:600;color:var(--muted);font-variant-numeric:tabular-nums}
 .dot.on{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
 .note{font-size:15px;color:var(--muted)}
+.note.paper{background:var(--amber-bg);color:var(--amber);border-radius:var(--radius);padding:10px 12px}
 .big{width:100%;min-height:58px;border:0;border-radius:var(--radius);background:var(--accent);color:var(--accent-ink);font-family:var(--display);font-size:22px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;display:flex;align-items:center;justify-content:center;gap:10px;transition:transform .08s}
 .big:active{transform:scale(.985)}
 .big.alt{background:var(--surface);color:var(--accent);border:2px solid var(--accent)}
@@ -305,7 +306,10 @@ a.big{text-decoration:none;box-sizing:border-box}
     var limit = k.count>=MAX, att = k.attendedToday, busy = state.busy[k.id];
     var dots = Array.from({length:MAX},function(_,j){return j+1}).map(function(i){ return '<span class="dot'+(i<=k.count?' on':'')+'">'+i+'</span>'; }).join('');
     var pill = limit ? '<span class="pill t-stop">Limit erreicht</span>' : '<span class="pill t-probe">Probetraining '+k.count+'/'+MAX+'</span>';
-    var note = limit ? 'Alle '+MAX+' Probetrainings genutzt. Weiter mittrainieren nur mit Mitgliedsantrag.'
+    var paper = !!k.paperApplication, paperDue = paper && k.count>=2;
+    var note = limit ? 'Alle '+MAX+' Probetrainings genutzt. Weiter mittrainieren nur mit Mitgliedsantrag.' + (paper ? ' Die Eltern haben keine E-Mail – Antrag auf Papier mitgeben.' : '')
+      : paperDue ? '<strong>Bitte den Mitgliedsantrag auf Papier mitgeben</strong> – die Eltern haben keine E-Mail.'
+      : paper ? 'Keine E-Mail: Nach dem 2. Training den Mitgliedsantrag auf Papier mitgeben.'
       : (k.count>=2 ? 'Der Mitgliedsantrag ist automatisch per Mail an die Eltern gegangen.'
       : 'Nach dem 2. Training bekommen die Eltern den Mitgliedsantrag automatisch per Mail.');
     var c = k.contact;
@@ -319,7 +323,7 @@ a.big{text-decoration:none;box-sizing:border-box}
       '<div class="card-head"><div><div class="name">'+esc(k.name)+'</div>'+
       '<div class="meta">'+(k.jg?'Jg. '+esc(k.jg)+' · ':'')+(k.last ? 'zuletzt '+(k.last===state.today?'heute':esc(fmt(k.last))) : 'noch kein Training')+'</div></div>'+pill+'</div>'+
       '<div class="dots" role="img" aria-label="'+k.count+' von '+MAX+' Probetrainings"><span class="dlabel">Probetrainings</span>'+dots+'</div>'+
-      '<p class="note">'+note+'</p>'+contact+action+'</article>';
+      '<p class="note'+(paperDue && !limit ? ' paper' : '')+'">'+note+'</p>'+contact+action+'</article>';
   }
 
   var ROWS = {
@@ -394,6 +398,7 @@ a.big{text-decoration:none;box-sizing:border-box}
       delete state.busy[id]; replaceKid(b.kid); render();
       var n = b.kid;
       if (kind==='undo') toast('Eintrag für '+first(n.name)+' zurückgenommen.');
+      else if (n.count===2 && n.paperApplication) toast('Eingetragen! Bitte gib den Eltern von '+first(n.name)+' jetzt den Mitgliedsantrag auf Papier mit.');
       else if (n.count===2) toast('Eingetragen! Die Eltern von '+first(n.name)+' bekommen jetzt automatisch den Mitgliedsantrag per Mail.');
       else if (n.count>=MAX) toast('Das war das '+MAX+'. Probetraining von '+first(n.name)+'. Ab jetzt nur mit Mitgliedsantrag.');
       else toast('Eingetragen! '+first(n.name)+' ist bei Probetraining '+n.count+' von '+MAX+'.');

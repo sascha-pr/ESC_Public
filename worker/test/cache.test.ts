@@ -22,7 +22,7 @@ describe("Cache", () => {
     await ds.listKids();
     await ds.getKid("recKid00000000001");
     expect(inner.calls.getKid).toBe(1);
-    await ds.updateAttendance("recKid00000000001", { count: 2, lastTraining: "2026-11-03", firstTraining: "2026-10-20" });
+    await ds.updateAttendance("recKid00000000001", { count: 2, lastTraining: "2026-11-03", firstTraining: "2026-10-20", trainingDates: ["2026-10-20", "2026-11-03"] });
     expect((await ds.listKids())[0]!.count).toBe(2);
     expect(inner.calls.listKids).toBe(1);
   });

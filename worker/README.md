@@ -16,7 +16,7 @@ Trainer-Bereich (hinter Cloudflare Access). Alle Antworten sind JSON mit `Cache-
 | POST | `/api/kids/:id/attend` | `{ kid: KidDto }` – Zähler +1, „Letztes Probetraining“ = heute (beim 1. Mal auch „Erstes Probetraining“) |
 | POST | `/api/kids/:id/undo` | `{ kid: KidDto }` – stellt die serverseitig gemerkten Werte wieder her |
 
-`KidDto`: `{ id, name, jg, count, last, status: "probe"|"antrag"|"mitglied"|"spielberechtigt", attendedToday, contact? }`
+`KidDto`: `{ id, name, jg, count, last, status: "probe"|"antrag"|"mitglied"|"spielberechtigt", attendedToday, contact?, paperApplication? }`
 – `contact: { parent, phone }` gibt es **nur bei erreichtem Limit**. Geburtsdatum, Eltern-E-Mail und Bemerkungen verlassen den Worker nie.
 
 Fehlercodes: `unauthenticated` (401), `unknown_trainer` / `forbidden_team` / `bad_origin` (403),
@@ -29,7 +29,7 @@ Fehlercodes: `unauthenticated` (401), `unknown_trainer` / `forbidden_team` / `ba
 |---|---|---|
 | GET | `/` | Weiterleitung auf `/anmeldung/` (Formular aus `app/anmeldung/`) |
 | GET | `/api/anmeldung/team?id=<Mannschafts-ID>` | `{ id, name }` der Mannschaft aus dem QR-Code (404, wenn unbekannt); bewusst keine Liste aller Mannschaften |
-| POST | `/api/anmeldung` | `{ ok, firstName, team, duplicate }` – legt das Kind mit Probetraining 1 und heutigem Datum an |
+| POST | `/api/anmeldung` | `{ ok, firstName, team, duplicate, paper }` – legt das Kind mit Probetraining 1 und heutigem Datum an; E-Mail optional, wenn `paper: true` |
 
 Fehler: `invalid` / `consent` / `team` (422, mit `fields`), `human` (403, Turnstile), `bad_origin` (403), `too_large` (413), `upstream` (502/503).
 Auf `PUBLIC_HOST` liefert der Worker nichts anderes aus. Lokal ist das Formular unter `/anmeldung/` erreichbar
@@ -42,6 +42,8 @@ Auf `PUBLIC_HOST` liefert der Worker nichts anderes aus. Lokal ist das Formular 
   „Mannschaften → Trainer E-Mail“ stehen (Groß-/Kleinschreibung egal). Ein Trainer kann mehrere Mannschaften haben.
 - **Mannschafts-Filter:** Jeder Lese- und Schreibzugriff prüft die Zugehörigkeit; Schreibzugriffe lesen dafür den Datensatz frisch.
 - **Limit:** „War heute da“ nur im Status Probetraining / Antrag verschickt, nur einmal pro Tag, höchstens 6-mal.
+- **Teilnahme-Protokoll:** „War heute da“ hängt das Datum an das Airtable-Feld „Trainingstermine“ an, „Rückgängig“ stellt das vorherige Protokoll wieder her. Das Protokoll geht nicht an die Trainer-App.
+- **Papierantrag:** Eltern ohne E-Mail (Feld „Antrag auf Papier“) → `paperApplication: true`, solange das Kind im Probetraining ist.
 - **Rückgängig:** nur am selben Tag, nur einmal und nur, wenn seitdem niemand den Datensatz geändert hat.
   Die Vorwerte liegen 24 h in Workers KV – der Client kann keine Werte vorgeben.
 - **Sichtbarkeit:** Abgesagte nie; Spielberechtigte bis 14 Tage nach „Spielberechtigt seit“.

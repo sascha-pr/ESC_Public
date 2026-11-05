@@ -7,6 +7,8 @@ export interface UndoEntry {
   prevCount: number;
   prevLast: string | null;
   prevFirst: string | null;
+  /** Protokoll vor dem Tippen (fehlt bei Einträgen aus älteren Versionen) */
+  prevDates?: string[];
 }
 
 export interface UndoStore {

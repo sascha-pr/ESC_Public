@@ -79,6 +79,9 @@ legend::before{content:"";width:4px;height:16px;background:var(--brand)}
 .err{color:var(--red);font-size:14px;font-weight:500}
 .check{display:flex;gap:12px;align-items:flex-start;font-size:15px;line-height:1.45;cursor:pointer}
 .check input{width:24px;height:24px;accent-color:var(--accent);flex:none;margin:1px 0 0}
+.check.small{font-size:14px;color:var(--muted);margin-top:4px}
+.check.small input{width:20px;height:20px}
+.field input:disabled{opacity:.5}
 details{font-size:14px;color:var(--muted);background:var(--bg);border-radius:10px;padding:10px 12px}
 details summary{cursor:pointer;font-weight:600;color:var(--fg)}
 details ul{margin:8px 0 0;padding-left:18px;display:grid;gap:4px}
@@ -145,8 +148,9 @@ details ul{margin:8px 0 0;padding-left:18px;display:grid;gap:4px}
         <div class="field">
           <label for="f-email">E-Mail</label>
           <input id="f-email" type="email" inputmode="email" autocomplete="email" maxlength="120">
-          <div class="hint">An diese Adresse schicken wir nach dem 2. Training den Mitgliedsantrag.</div>
+          <div class="hint" id="email-hint">An diese Adresse schicken wir nach dem 2. Training den Mitgliedsantrag.</div>
           <div class="err" id="e-email" hidden></div>
+          <label class="check small" for="f-paper"><input id="f-paper" type="checkbox"><span>Wir haben keine E-Mail-Adresse – bitte den Mitgliedsantrag auf Papier mitgeben.</span></label>
         </div>
         <div class="field">
           <label for="f-phone">Telefon <span class="opt">(freiwillig, für Rückfragen)</span></label>
@@ -181,7 +185,7 @@ details ul{margin:8px 0 0;padding-left:18px;display:grid;gap:4px}
       <p id="done-p"></p>
       <ul class="steps">
         <li><b>1</b><span>Das heutige Training zählt als <strong>1. von 6 Probetrainings</strong>. Der Trainer sieht euer Kind jetzt in seiner Liste.</span></li>
-        <li><b>2</b><span>Nach dem 2. Training schicken wir den <strong>Mitgliedsantrag</strong> an <strong id="done-mail"></strong>.</span></li>
+        <li><b>2</b><span id="done-step2">Nach dem 2. Training schicken wir den <strong>Mitgliedsantrag</strong> an <strong id="done-mail"></strong>.</span></li>
         <li><b>3</b><span>Spätestens nach dem 6. Training geht es nur noch mit Mitgliedsantrag weiter.</span></li>
       </ul>
       <p class="tnote" id="trainer-back" hidden>Fertig – bitte gebt das Handy jetzt dem Trainer zurück.</p>
@@ -260,12 +264,18 @@ details ul{margin:8px 0 0;padding-left:18px;display:grid;gap:4px}
   function clearErrs(){ FIELDS.forEach(function(n){ setErr(n,''); }); $('alert').hidden = true; }
   function showAlert(msg){ $('alert').textContent = msg; $('alert').hidden = false; }
   document.addEventListener('input', function(e){ var id=(e.target.id||''); if (id.indexOf('f-')===0) setErr(id.slice(2),''); });
+  /* Keine E-Mail: Feld sperren, Antrag kommt auf Papier über den Trainer */
+  $('f-paper').addEventListener('change', function(){
+    var p = this.checked;
+    $('f-email').disabled = p; if (p){ $('f-email').value = ''; setErr('email',''); }
+    $('email-hint').textContent = p ? 'Kein Problem: Der Trainer gibt euch den Mitgliedsantrag nach dem 2. Training auf Papier mit.' : 'An diese Adresse schicken wir nach dem 2. Training den Mitgliedsantrag.';
+  });
 
   function values(){
     return {
       team: team ? team.id : '', childName: $('f-childName').value, birthDate: $('f-birthDate').value,
-      parentName: $('f-parentName').value, email: $('f-email').value, phone: $('f-phone').value,
-      consent: $('f-consent').checked, turnstileToken: token || (C.turnstileSiteKey ? '' : 'lokal')
+      parentName: $('f-parentName').value, email: $('f-paper').checked ? '' : $('f-email').value, phone: $('f-phone').value,
+      consent: $('f-consent').checked, paper: $('f-paper').checked, turnstileToken: token || (C.turnstileSiteKey ? '' : 'lokal')
     };
   }
 
@@ -276,7 +286,7 @@ details ul{margin:8px 0 0;padding-left:18px;display:grid;gap:4px}
     if (v.childName.trim().split(/\s+/).length < 2) e.childName = 'Bitte Vor- und Nachnamen des Kindes eintragen.';
     if (!v.birthDate) e.birthDate = 'Bitte das Geburtsdatum eintragen.';
     if (v.parentName.trim().length < 2) e.parentName = 'Bitte den Namen eines Elternteils eintragen.';
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.email.trim())) e.email = 'Bitte eine gültige E-Mail-Adresse eintragen. An sie geht später der Mitgliedsantrag.';
+    if (!v.paper && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.email.trim())) e.email = 'Bitte eine gültige E-Mail-Adresse eintragen – oder „keine E-Mail-Adresse“ ankreuzen.';
     if (!v.consent) e.consent = 'Ohne Einwilligung können wir die Anmeldung leider nicht annehmen.';
     return e;
   }
@@ -309,7 +319,8 @@ details ul{margin:8px 0 0;padding-left:18px;display:grid;gap:4px}
     $('form').hidden = true; $('done').hidden = false;
     $('done-h').textContent = b.duplicate ? b.firstName + ' ist schon angemeldet' : 'Danke! ' + b.firstName + ' ist angemeldet';
     $('done-p').textContent = b.duplicate ? 'Die Anmeldung für die ' + b.team + ' lag bereits vor – ihr müsst nichts weiter tun.' : 'Willkommen bei der ' + b.team + '!';
-    $('done-mail').textContent = mail;
+    if (b.paper) $('done-step2').innerHTML = 'Nach dem 2. Training gibt euch der Trainer den <strong>Mitgliedsantrag auf Papier</strong> mit.';
+    else { $('done-step2').innerHTML = 'Nach dem 2. Training schicken wir den <strong>Mitgliedsantrag</strong> an <strong id="done-mail"></strong>.'; $('done-mail').textContent = mail; }
     window.scrollTo(0,0);
   }
 

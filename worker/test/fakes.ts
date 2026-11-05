@@ -23,6 +23,8 @@ export function kid(over: Partial<KidRecord> & { id: string }): KidRecord {
     parentName: "Elternteil Beispiel",
     phone: "0170 0000000",
     playableSince: null,
+    trainingDates: [],
+    paper: false,
     ...over,
   };
 }
@@ -54,6 +56,7 @@ export class FakeDataSource implements DataSource {
     k.count = v.count;
     k.lastTraining = v.lastTraining;
     k.firstTraining = v.firstTraining;
+    k.trainingDates = [...v.trainingDates];
     return structuredClone(k);
   }
   async createKid(n: NewKid) {
@@ -62,7 +65,7 @@ export class FakeDataSource implements DataSource {
     const k: KidRecord = {
       id: `recNew${String(this.calls.create).padStart(11, "0")}`, name: n.name, birthDate: n.birthDate, teamIds: [n.teamId],
       status: "probetraining", count: 1, firstTraining: n.today, lastTraining: n.today, parentName: n.parentName,
-      phone: n.phone, playableSince: null,
+      phone: n.phone, playableSince: null, trainingDates: [n.today], paper: n.paper,
     };
     this.kids.push(k);
     return structuredClone(k);

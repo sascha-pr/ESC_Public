@@ -97,12 +97,14 @@ legt das Kind direkt in Airtable an (Status Probetraining, Zähler 1, Datum heut
 | Daten | Ort | Zugriff |
 |---|---|---|
 | Kind (Name, Geburtsdatum), Mannschaft, Elternteil (Name, E-Mail, Telefon), Einwilligung, Zähler/Daten, Status | Airtable (Airtable Inc., USA) | Verwaltung (Airtable), Trainer der eigenen Mannschaft (App, eingeschränkt) |
-| In der App beim Trainer | Name, **Jahrgang**, Zähler, letztes Training, Status; Elternname/Telefon **nur** bei erreichtem Limit | Trainer der Mannschaft |
+| In der App beim Trainer | Name, **Jahrgang**, Zähler, letztes Training, Status, Hinweis „Papierantrag“; Elternname/Telefon **nur** bei erreichtem Limit | Trainer der Mannschaft |
+| Teilnahme-Protokoll (jedes Probetraining-Datum) | Airtable, Feld „Trainingstermine“; nicht in der Trainer-App | Verwaltung |
 | Rückgängig-Werte | Cloudflare Workers KV, 24 h; nur Datensatz-ID, Zähler, Datum | technisch |
 | Elternformular | wird direkt nach Airtable geschrieben, im Worker nicht gespeichert; Turnstile wertet Browsermerkmale für den Bot-Check aus | – |
 | Login-Protokoll | Cloudflare Zero Trust (E-Mail, Zeit, IP) | Konto-Admins |
 | Trainer-E-Mails | Airtable und Zugriffsgruppe „Trainer“ | Konto-Admins |
 
+- **Unfall im Probetraining:** Datensatz (inkl. Teilnahme-Protokoll) nicht löschen, bis der Fall mit der Versicherung abgeschlossen ist. Ob Nichtmitglieder versichert sind, hängt von der Nichtmitglieder-Zusatzversicherung des Vereins beim LSB NRW/ARAG ab (vom Vorstand zu klären).
 - **Löschkonzept:** Formel „Löschen fällig“ (8 Wochen nach dem 1. Training ohne Beitritt, sofort bei Absage, 14 Tage nach
   Spielberechtigung); Automation 4 mailt montags die Liste; Löschung von Hand durch die Verwaltung.
 - **Offen vor Echtbetrieb:** Zustimmung Vorstand; AV-Verträge mit Airtable und Cloudflare; Datenschutzerklärung ergänzen;
@@ -161,6 +163,7 @@ neuen Token erst nach Klärung setzen; Vorstand informieren (Meldepflichten prü
 | 04.11.2026 | Eigenes Elternformular ohne Login (`anmeldung.<APP-DOMAIN>`, Turnstile) statt Airtable-Formular – Grund: Airtable-Formular verlangte im Test eine Anmeldung und lässt sich nicht im Vereinsdesign gestalten | Projektleitung |
 | 05.11.2026 | Elternformular: Mannschaft nur noch aus dem QR-Code, nicht mehr änderbar; ohne gültigen Code Hinweis statt Formular (vermeidet Anmeldungen in falschen Mannschaften) | Projektleitung |
 | 05.11.2026 | „Eltern ohne Handy“: Trainer öffnet das Elternformular auf dem eigenen Handy (gleiches Formular, gleiche Prüfungen) | Projektleitung |
+| 05.11.2026 | Teilnahme-Protokoll („Trainingstermine“) und Papierantrag für Eltern ohne E-Mail (Feld „Antrag auf Papier“, Hinweis in der Trainer-App) | Projektleitung |
 | | Domain registriert: | |
 | | Cloudflare-Konto, Zone, Access eingerichtet | |
 | | Worker veröffentlicht, Abnahme (deployment.md Schritt 6) bestanden | |

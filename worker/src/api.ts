@@ -78,12 +78,14 @@ export function createApi(deps: ApiDeps): (req: Request) => Promise<Response> {
       count: kid.count + 1,
       lastTraining: ctx.today,
       firstTraining: kid.firstTraining ?? ctx.today,
+      trainingDates: [...kid.trainingDates.filter((d) => d !== ctx.today), ctx.today],
     });
     await deps.undo.put(kid.id, {
       day: ctx.today,
       prevCount: kid.count,
       prevLast: kid.lastTraining,
       prevFirst: kid.firstTraining,
+      prevDates: kid.trainingDates,
     });
     return json(200, { kid: toKidDto(updated, ctx.today) });
   });
@@ -102,6 +104,7 @@ export function createApi(deps: ApiDeps): (req: Request) => Promise<Response> {
       count: entry.prevCount,
       lastTraining: entry.prevLast,
       firstTraining: entry.prevFirst,
+      trainingDates: entry.prevDates ?? kid.trainingDates.filter((d) => d !== ctx.today),
     });
     await deps.undo.delete(kid.id);
     return json(200, { kid: toKidDto(updated, ctx.today) });

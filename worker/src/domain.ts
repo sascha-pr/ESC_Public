@@ -46,6 +46,10 @@ export interface KidRecord {
   parentName: string | null;
   phone: string | null;
   playableSince: string | null; // YYYY-MM-DD
+  /** Teilnahme-Protokoll: jedes Probetraining-Datum (YYYY-MM-DD, aufsteigend) */
+  trainingDates: string[];
+  /** Eltern ohne E-Mail: Mitgliedsantrag auf Papier statt per Mail */
+  paper: boolean;
 }
 
 /** Was ein Trainer über ein Kind sieht – bewusst minimal. */
@@ -60,6 +64,8 @@ export interface KidDto {
   attendedToday: boolean;
   /** Elternkontakt nur, wenn das Limit erreicht ist und der Trainer die Eltern ansprechen muss. */
   contact?: { parent: string | null; phone: string | null };
+  /** Eltern haben keine E-Mail: Trainer gibt den Mitgliedsantrag auf Papier mit. */
+  paperApplication?: true;
 }
 
 export function toAppStatus(s: SourceStatus | null): AppStatus | null {
@@ -123,7 +129,25 @@ export function toKidDto(kid: KidRecord, today: string): KidDto {
     attendedToday: kid.lastTraining === today,
   };
   if (isLimitReached(kid)) dto.contact = { parent: kid.parentName, phone: kid.phone };
+  if (kid.paper && status === "probe") dto.paperApplication = true;
   return dto;
+}
+
+/** Protokoll-Text aus Airtable (eine Zeile pro Datum, TT.MM.JJJJ oder YYYY-MM-DD) → sortierte ISO-Daten. */
+export function parseDates(text: string | null): string[] {
+  const out = new Set<string>();
+  for (const line of (text ?? "").split(/\r?\n/)) {
+    const t = line.trim();
+    let m = /^(\d{1,2})\.(\d{1,2})\.(\d{4})$/.exec(t);
+    if (m) out.add(`${m[3]}-${m[2]!.padStart(2, "0")}-${m[1]!.padStart(2, "0")}`);
+    else if ((m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(t))) out.add(t);
+  }
+  return [...out].sort();
+}
+
+/** ISO-Daten → Protokoll-Text für Airtable (TT.MM.JJJJ, eine Zeile pro Datum). */
+export function formatDates(dates: readonly string[]): string {
+  return [...new Set(dates)].sort().map((d) => `${d.slice(8, 10)}.${d.slice(5, 7)}.${d.slice(0, 4)}`).join("\n");
 }
 
 export function belongsToTeams(kid: KidRecord, teamIds: readonly string[]): boolean {
