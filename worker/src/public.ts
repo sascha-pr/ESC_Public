@@ -17,7 +17,7 @@ export interface PublicDeps {
 
 const MESSAGES = {
   invalid: "Bitte die markierten Felder prüfen.",
-  team: "Die Mannschaft ist unbekannt. Bitte den QR-Code erneut scannen oder die Mannschaft auswählen.",
+  team: "Die Mannschaft ist unbekannt. Bitte den QR-Code eurer Mannschaft beim Training erneut scannen.",
   consent: "Ohne Einwilligung können wir die Anmeldung leider nicht annehmen.",
   human: "Die Sicherheitsprüfung hat nicht geklappt. Bitte die Seite neu laden und nochmal absenden.",
   bad_origin: "Anfrage von fremder Seite abgelehnt.",
@@ -79,11 +79,12 @@ export function createPublicApi(deps: PublicDeps): (req: Request) => Promise<Res
   return async (req: Request): Promise<Response> => {
     const url = new URL(req.url);
     try {
-      if (req.method === "GET" && url.pathname === "/api/anmeldung/teams") {
-        const teams = (await deps.data.listTeams())
-          .map((t) => ({ id: t.id, name: t.name }))
-          .sort((a, b) => a.name.localeCompare(b.name, "de", { numeric: true }));
-        return json(200, { teams }, "public, max-age=300");
+      // Nur den Namen der Mannschaft zur ID aus dem QR-Code – keine Liste aller Mannschaften
+      if (req.method === "GET" && url.pathname === "/api/anmeldung/team") {
+        const id = url.searchParams.get("id") ?? "";
+        const team = (await deps.data.listTeams()).find((t) => t.id === id);
+        if (!team) return error(404, "team");
+        return json(200, { id: team.id, name: team.name }, "public, max-age=300");
       }
 
       if (req.method === "POST" && url.pathname === "/api/anmeldung") {

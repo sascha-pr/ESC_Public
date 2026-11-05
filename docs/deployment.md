@@ -153,7 +153,7 @@ Cloudflare legt die DNS-Einträge für `<APP-HOST>` und `<FORM-HOST>` und die Ze
 5. Testkind: „War heute da“ und „Rückgängig“ → in Airtable Zähler und Datum prüfen.
 6. „Abmelden“ → man landet wieder beim Login.
 7. „Neues Kind“ → QR-Code mit einem **anderen Handy ohne Anmeldung** scannen → Formular öffnet sich **ohne Login**
-   mit vorbelegter Mannschaft → Testkind anmelden → Danke-Seite → Kind erscheint in der Trainer-App mit 1/6.
+   mit fester (nicht änderbarer) Mannschaft → Testkind anmelden → Danke-Seite → Kind erscheint in der Trainer-App mit 1/6.
 8. `https://<FORM-HOST>/index.html` und `https://<FORM-HOST>/api/kids` → „Nicht gefunden“ (die Trainer-App ist dort nicht erreichbar).
 9. Testkind in Airtable wieder löschen.
 

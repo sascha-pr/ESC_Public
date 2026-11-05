@@ -87,7 +87,7 @@ legt das Kind direkt in Airtable an (Status Probetraining, Zähler 1, Datum heut
 | Schreibregeln | Limit 6, einmal pro Tag, Rückgängig nur am selben Tag – serverseitig; POST von fremden Origins abgelehnt |
 | Geheimnisse | Ein Secret: Airtable-Token (nur `data.records:read/write`, nur diese Base) als Worker-Secret. Nichts Geheimes im Repository. |
 | Erreichbarkeit | Trainer-App nur `https://probetraining.<APP-DOMAIN>` hinter Access; `workers.dev` und Preview-URLs abgeschaltet |
-| Elternformular (öffentlich) | eigene Adresse ohne Login; dort liefert der Worker **nur** das Formular und zwei Endpunkte aus (Mannschaftsliste mit ID+Name, Anmeldung), nie die Trainer-App oder Trainer-API. Schutz: Turnstile-Bot-Check (serverseitig geprüft, ohne Schlüssel keine Anmeldung), strenge Eingabeprüfung, 4-KB-Limit, Origin-Prüfung, Dublettenerkennung; die Antwort enthält nie Daten anderer Kinder |
+| Elternformular (öffentlich) | eigene Adresse ohne Login; dort liefert der Worker **nur** das Formular und zwei Endpunkte aus (Name zur Mannschafts-ID aus dem QR-Code, Anmeldung; keine Liste aller Mannschaften). Die Mannschaft kommt fest aus dem QR-Code und ist für Eltern nicht änderbar, nie die Trainer-App oder Trainer-API. Schutz: Turnstile-Bot-Check (serverseitig geprüft, ohne Schlüssel keine Anmeldung), strenge Eingabeprüfung, 4-KB-Limit, Origin-Prüfung, Dublettenerkennung; die Antwort enthält nie Daten anderer Kinder |
 | Kopfzeilen | `X-Frame-Options: DENY`, `X-Content-Type-Options: nosniff`, `Referrer-Policy: no-referrer` |
 | Domain | Inhaber Verein, Zwei-Faktor beim Registrar und bei Cloudflare, DNSSEC empfohlen |
 | Logs | nur Fehlercodes, keine Namen/Kontaktdaten |
@@ -159,8 +159,9 @@ neuen Token erst nach Klärung setzen; Vorstand informieren (Meldepflichten prü
 | 03.11.2026 | App, Worker, Airtable-Erweiterungen (Limit 6, Formular, Automationen 5–6) entwickelt und getestet; nur Beispieldaten | Projektleitung |
 | 04.11.2026 | Entscheidung Variante C (eigene Domain), siehe Abschnitt 2 | Projektleitung |
 | 04.11.2026 | Eigenes Elternformular ohne Login (`anmeldung.<APP-DOMAIN>`, Turnstile) statt Airtable-Formular – Grund: Airtable-Formular verlangte im Test eine Anmeldung und lässt sich nicht im Vereinsdesign gestalten | Projektleitung |
+| 05.11.2026 | Elternformular: Mannschaft nur noch aus dem QR-Code, nicht mehr änderbar; ohne gültigen Code Hinweis statt Formular (vermeidet Anmeldungen in falschen Mannschaften) | Projektleitung |
 | | Domain registriert: | |
 | | Cloudflare-Konto, Zone, Access eingerichtet | |
 | | Worker veröffentlicht, Abnahme (deployment.md Schritt 6) bestanden | |
 | | Datenschutzfreigabe Vorstand | |
-| | Formular veröffentlicht, Automationen eingeschaltet, Go-Live | |
+| | Elternformular online, Automationen eingeschaltet, Go-Live | |

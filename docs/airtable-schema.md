@@ -97,7 +97,7 @@ Automationen kann nur der Nutzer in der Airtable-Oberfläche einschalten.
 
 ## Neue Kinder: eigenes Elternformular (seit 04.11.2026)
 
-Eltern melden ihr Kind über das eigene Formular `https://anmeldung.<APP-DOMAIN>/?m=<Mannschafts-ID>` an (ohne Login,
+Eltern melden ihr Kind über das eigene Formular `https://anmeldung.<APP-DOMAIN>/?m=<Mannschafts-ID>` an (ohne Login; Mannschaft fest aus dem QR-Code,
 Code: `app/anmeldung/`, `worker/src/public.ts`). Der Worker legt den Datensatz direkt an:
 Name, Geburtsdatum, Mannschaft (Link), Status = Probetraining, Anzahl = 1, Erstes = Letztes Probetraining = heute,
 Erziehungsberechtigte/r, E-Mail, Telefon, Datenschutz-Einwilligung = ✓. Doppelte Anmeldungen (gleiche Mannschaft,

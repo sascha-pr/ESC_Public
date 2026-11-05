@@ -61,6 +61,10 @@ main{padding-block:20px 40px}
 .team .lbl{font-size:13px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;font-weight:600}
 .team strong{font-family:var(--display);font-size:24px;line-height:1.05;display:block}
 .linkbtn{background:none;border:0;padding:6px;font-size:15px;text-decoration:underline;text-underline-offset:3px;cursor:pointer;flex:none}
+.team .lock{width:22px;height:22px;color:var(--muted);flex:none}
+.noteam{display:grid;gap:12px;text-align:center;justify-items:center}
+.noteam h2{font-family:var(--display);font-size:28px;line-height:1.05;margin:0;text-transform:uppercase}
+.qrico{width:64px;height:64px;color:var(--brand)}
 fieldset{border:0;margin:0;padding:0;display:grid;gap:14px}
 legend{font-family:var(--display);font-weight:700;font-size:20px;letter-spacing:.04em;text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:8px;padding:0}
 legend::before{content:"";width:4px;height:16px;background:var(--brand)}
@@ -111,13 +115,9 @@ details ul{margin:8px 0 0;padding-left:18px;display:grid;gap:4px}
     <form class="sheet" id="form" novalidate>
       <div class="team" id="team-fixed" hidden>
         <div><span class="lbl">Mannschaft</span><strong id="team-name"></strong></div>
-        <button type="button" class="linkbtn" id="team-change">Ändern</button>
+        <svg class="lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
       </div>
-      <div class="field" id="team-pick" hidden>
-        <label for="f-team">Mannschaft</label>
-        <select id="f-team"><option value="">Bitte wählen …</option></select>
-        <div class="err" id="e-team" hidden></div>
-      </div>
+      <div class="err" id="e-team" hidden></div>
 
       <fieldset>
         <legend>Euer Kind</legend>
@@ -167,6 +167,12 @@ details ul{margin:8px 0 0;padding-left:18px;display:grid;gap:4px}
       <button class="big" type="submit" id="submit">Zum Probetraining anmelden</button>
     </form>
 
+    <section class="sheet noteam" id="noteam" hidden>
+      <svg class="qrico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3h-3zM20 14v.01M14 20h.01M17 20h4v-3"/></svg>
+      <h2>Bitte den QR-Code scannen</h2>
+      <p>Die Anmeldung funktioniert über den QR-Code eurer Mannschaft. Ihr bekommt ihn beim Training vom Trainer oder findet ihn auf dem Aushang am Platz.</p>
+    </section>
+
     <section class="sheet done" id="done" hidden aria-live="polite">
       <div class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>
       <h2 id="done-h"></h2>
@@ -190,7 +196,7 @@ details ul{margin:8px 0 0;padding-left:18px;display:grid;gap:4px}
   var C = window.ANMELDUNG_CONFIG || {};
   var $ = function(id){ return document.getElementById(id); };
   var FIELDS = ['team','childName','birthDate','parentName','email','phone','consent'];
-  var teams = [], token = '', widget = null, busy = false;
+  var team = null, token = '', widget = null, busy = false;
   var wanted = new URLSearchParams(location.search).get('m');
 
   function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]}); }
@@ -211,18 +217,17 @@ details ul{margin:8px 0 0;padding-left:18px;display:grid;gap:4px}
   var y = new Date().getFullYear();
   $('f-birthDate').min = (y-20)+'-01-01'; $('f-birthDate').max = new Date().toISOString().slice(0,10);
 
-  /* Mannschaft: aus dem QR-Code vorbelegt, sonst auswählen */
-  function showTeam(){
-    var t = teams.filter(function(x){ return x.id===wanted; })[0];
-    $('team-fixed').hidden = !t; $('team-pick').hidden = !!t;
-    if (t){ $('team-name').textContent = t.name; $('f-team').value = t.id; }
-  }
-  fetch('/api/anmeldung/teams').then(function(r){ return r.json(); }).then(function(b){
-    teams = b.teams || [];
-    $('f-team').innerHTML = '<option value="">Bitte wählen …</option>' + teams.map(function(t){ return '<option value="'+esc(t.id)+'">'+esc(t.name)+'</option>'; }).join('');
-    showTeam();
-  }).catch(function(){ $('team-pick').hidden = false; showAlert('Die Mannschaften konnten nicht geladen werden. Bitte die Seite neu laden.'); });
-  $('team-change').addEventListener('click', function(){ wanted = null; $('team-fixed').hidden = true; $('team-pick').hidden = false; $('f-team').value=''; $('f-team').focus(); });
+  /* Mannschaft: kommt ausschließlich aus dem QR-Code und ist nicht änderbar */
+  function noTeam(){ $('form').hidden = true; $('noteam').hidden = false; }
+  if (!wanted) noTeam();
+  else fetch('/api/anmeldung/team?id=' + encodeURIComponent(wanted)).then(function(r){
+    if (r.status === 404){ noTeam(); return null; }
+    if (!r.ok) throw new Error('http');
+    return r.json();
+  }).then(function(t){
+    if (!t) return;
+    team = t; $('team-name').textContent = t.name; $('team-fixed').hidden = false;
+  }).catch(function(){ showAlert('Die Mannschaft konnte nicht geladen werden. Bitte die Seite neu laden.'); });
 
   /* Bot-Check (Cloudflare Turnstile) */
   window.onTurnstileLoad = function(){
@@ -249,7 +254,7 @@ details ul{margin:8px 0 0;padding-left:18px;display:grid;gap:4px}
 
   function values(){
     return {
-      team: $('f-team').value, childName: $('f-childName').value, birthDate: $('f-birthDate').value,
+      team: team ? team.id : '', childName: $('f-childName').value, birthDate: $('f-birthDate').value,
       parentName: $('f-parentName').value, email: $('f-email').value, phone: $('f-phone').value,
       consent: $('f-consent').checked, turnstileToken: token || (C.turnstileSiteKey ? '' : 'lokal')
     };
@@ -258,7 +263,7 @@ details ul{margin:8px 0 0;padding-left:18px;display:grid;gap:4px}
   /* Gleiche Prüfungen wie im Worker, damit Fehler sofort sichtbar sind */
   function check(v){
     var e = {};
-    if (!v.team) e.team = 'Bitte die Mannschaft auswählen.';
+    if (!v.team) e.team = 'Die Mannschaft fehlt. Bitte den QR-Code eurer Mannschaft erneut scannen.';
     if (v.childName.trim().split(/\s+/).length < 2) e.childName = 'Bitte Vor- und Nachnamen des Kindes eintragen.';
     if (!v.birthDate) e.birthDate = 'Bitte das Geburtsdatum eintragen.';
     if (v.parentName.trim().length < 2) e.parentName = 'Bitte den Namen eines Elternteils eintragen.';

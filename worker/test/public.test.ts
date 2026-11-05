@@ -107,11 +107,19 @@ describe("Elternformular: Anmeldung", () => {
   });
 });
 
-describe("Elternformular: Mannschaftsliste", () => {
-  it("liefert nur ID und Name, keine Trainer-Daten", async () => {
-    const b = await json(await api(new Request("https://anmeldung.example.org/api/anmeldung/teams")));
-    expect(b.teams[0]).toEqual({ id: "recTeamD1aaaaaaaa", name: "D1-Jugend" });
-    expect(JSON.stringify(b)).not.toContain("@");
+describe("Elternformular: Mannschaft aus dem QR-Code", () => {
+  it("liefert zur ID nur ID und Name, keine Trainer-Daten", async () => {
+    const b = await json(await api(new Request("https://anmeldung.example.org/api/anmeldung/team?id=recTeamF1aaaaaaaa")));
+    expect(b).toEqual({ id: "recTeamF1aaaaaaaa", name: "F1-Jugend" });
+  });
+
+  it("unbekannte oder fehlende ID: 404", async () => {
+    expect((await api(new Request("https://anmeldung.example.org/api/anmeldung/team?id=recTeamXXaaaaaaaa"))).status).toBe(404);
+    expect((await api(new Request("https://anmeldung.example.org/api/anmeldung/team"))).status).toBe(404);
+  });
+
+  it("es gibt keine öffentliche Liste aller Mannschaften", async () => {
+    expect((await api(new Request("https://anmeldung.example.org/api/anmeldung/teams"))).status).toBe(404);
   });
 });
 

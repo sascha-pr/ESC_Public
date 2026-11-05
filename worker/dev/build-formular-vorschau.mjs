@@ -18,7 +18,10 @@ const mock = `
   window.fetch = function(input, init){
     var url = new URL(typeof input === 'string' ? input : input.url, location.href);
     var reply = function(status, body){ return new Promise(function(res){ setTimeout(function(){ res(new Response(JSON.stringify(body), {status:status, headers:{'Content-Type':'application/json'}})); }, 450); }); };
-    if (url.pathname === '/api/anmeldung/teams') return reply(200, {teams: TEAMS});
+    if (url.pathname === '/api/anmeldung/team'){
+      var t = TEAMS.filter(function(x){ return x.id === url.searchParams.get('id'); })[0];
+      return t ? reply(200, t) : reply(404, {error:'team'});
+    }
     if (url.pathname === '/api/anmeldung' && init && init.method === 'POST'){
       var v = JSON.parse(init.body), team = TEAMS.filter(function(t){ return t.id === v.team; })[0];
       var name = v.childName.replace(/\\s+/g,' ').trim(), key = v.team + '|' + name.toLowerCase() + '|' + v.birthDate;

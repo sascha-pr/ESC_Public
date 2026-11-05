@@ -28,7 +28,7 @@ Fehlercodes: `unauthenticated` (401), `unknown_trainer` / `forbidden_team` / `ba
 | Methode | Pfad | Antwort |
 |---|---|---|
 | GET | `/` | Weiterleitung auf `/anmeldung/` (Formular aus `app/anmeldung/`) |
-| GET | `/api/anmeldung/teams` | `{ teams: [{ id, name }] }` |
+| GET | `/api/anmeldung/team?id=<Mannschafts-ID>` | `{ id, name }` der Mannschaft aus dem QR-Code (404, wenn unbekannt); bewusst keine Liste aller Mannschaften |
 | POST | `/api/anmeldung` | `{ ok, firstName, team, duplicate }` – legt das Kind mit Probetraining 1 und heutigem Datum an |
 
 Fehler: `invalid` / `consent` / `team` (422, mit `fields`), `human` (403, Turnstile), `bad_origin` (403), `too_large` (413), `upstream` (502/503).
