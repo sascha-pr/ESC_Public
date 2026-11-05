@@ -160,6 +160,7 @@ neuen Token erst nach Klärung setzen; Vorstand informieren (Meldepflichten prü
 | 04.11.2026 | Entscheidung Variante C (eigene Domain), siehe Abschnitt 2 | Projektleitung |
 | 04.11.2026 | Eigenes Elternformular ohne Login (`anmeldung.<APP-DOMAIN>`, Turnstile) statt Airtable-Formular – Grund: Airtable-Formular verlangte im Test eine Anmeldung und lässt sich nicht im Vereinsdesign gestalten | Projektleitung |
 | 05.11.2026 | Elternformular: Mannschaft nur noch aus dem QR-Code, nicht mehr änderbar; ohne gültigen Code Hinweis statt Formular (vermeidet Anmeldungen in falschen Mannschaften) | Projektleitung |
+| 05.11.2026 | „Eltern ohne Handy“: Trainer öffnet das Elternformular auf dem eigenen Handy (gleiches Formular, gleiche Prüfungen) | Projektleitung |
 | | Domain registriert: | |
 | | Cloudflare-Konto, Zone, Access eingerichtet | |
 | | Worker veröffentlicht, Abnahme (deployment.md Schritt 6) bestanden | |

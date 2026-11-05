@@ -62,6 +62,7 @@ main{padding-block:20px 40px}
 .team strong{font-family:var(--display);font-size:24px;line-height:1.05;display:block}
 .linkbtn{background:none;border:0;padding:6px;font-size:15px;text-decoration:underline;text-underline-offset:3px;cursor:pointer;flex:none}
 .team .lock{width:22px;height:22px;color:var(--muted);flex:none}
+.tnote{background:var(--amber-bg);color:var(--amber);border-radius:10px;padding:12px 14px;font-weight:600;font-size:15px}
 .noteam{display:grid;gap:12px;text-align:center;justify-items:center}
 .noteam h2{font-family:var(--display);font-size:28px;line-height:1.05;margin:0;text-transform:uppercase}
 .qrico{width:64px;height:64px;color:var(--brand)}
@@ -113,6 +114,7 @@ details ul{margin:8px 0 0;padding-left:18px;display:grid;gap:4px}
 <main class="gut">
   <div class="col">
     <form class="sheet" id="form" novalidate>
+      <p class="tnote" id="trainer-note" hidden>Auf dem Handy des Trainers geöffnet: Bitte füllt als Eltern das Formular selbst aus und gebt das Handy danach zurück.</p>
       <div class="team" id="team-fixed" hidden>
         <div><span class="lbl">Mannschaft</span><strong id="team-name"></strong></div>
         <svg class="lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
@@ -182,6 +184,7 @@ details ul{margin:8px 0 0;padding-left:18px;display:grid;gap:4px}
         <li><b>2</b><span>Nach dem 2. Training schicken wir den <strong>Mitgliedsantrag</strong> an <strong id="done-mail"></strong>.</span></li>
         <li><b>3</b><span>Spätestens nach dem 6. Training geht es nur noch mit Mitgliedsantrag weiter.</span></li>
       </ul>
+      <p class="tnote" id="trainer-back" hidden>Fertig – bitte gebt das Handy jetzt dem Trainer zurück.</p>
       <button class="big alt" type="button" id="again">Weiteres Kind anmelden</button>
     </section>
 
@@ -198,6 +201,12 @@ details ul{margin:8px 0 0;padding-left:18px;display:grid;gap:4px}
   var FIELDS = ['team','childName','birthDate','parentName','email','phone','consent'];
   var team = null, token = '', widget = null, busy = false;
   var wanted = new URLSearchParams(location.search).get('m');
+  var viaTrainer = new URLSearchParams(location.search).get('via') === 'trainer';
+  if (viaTrainer){
+    $('trainer-note').hidden = false; $('trainer-back').hidden = false;
+    /* Das Handy gehört dem Trainer: dessen gespeicherte Daten nicht automatisch einsetzen */
+    ['f-parentName','f-email','f-phone'].forEach(function(id){ $(id).setAttribute('autocomplete','off'); });
+  }
 
   function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]}); }
 

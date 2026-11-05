@@ -30,6 +30,7 @@ Bei jedem Probetraining-Kind „War heute da“ tippen. Fertig.
 3️⃣ Neues Kind beim Training
 Unten „Neues Kind beim Training“ antippen → die Eltern scannen den QR-Code und füllen das Formular aus (ca. 2 Minuten, die Eltern brauchen dafür keine Anmeldung). Danach steht das Kind in eurer Liste, das heutige Training zählt schon als 1. Mal. Ihr müsst also nichts mehr tippen.
 Wenn das Kind nicht gleich auftaucht: unten auf „Aktualisieren“ tippen.
+Eltern ohne Handy? Im selben Fenster „Auf meinem Handy öffnen“ tippen und den Eltern euer Handy zum Ausfüllen geben.
 Für den Platz gibt es den Code auch als Aushang zum Ausdrucken (im selben Fenster).
 
 4️⃣ Was die Farben heißen

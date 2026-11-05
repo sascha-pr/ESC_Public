@@ -40,6 +40,7 @@ unverändert als Demo mit Beispieldaten (für Trainer-Tests ohne Login). Ausgeli
 - Trainer mit mehreren Mannschaften bekommen im Kopf Umschalter; die Wahl merkt sich das Handy (`localStorage`).
 - Liste frischt sich auf, wenn die App nach über einer Minute wieder in den Vordergrund kommt; Fußzeile „Stand hh:mm · Aktualisieren“.
 - „Neues Kind“: QR-Code zum eigenen Elternformular (`anmeldung.<APP-DOMAIN>/?m=<Mannschafts-ID>`, ohne Login); Adresse wird in `app/config.js` aus der App-Adresse abgeleitet.
+- „Eltern ohne Handy?“: Button „Auf meinem Handy öffnen“ öffnet dasselbe Formular auf dem Trainer-Handy (`&via=trainer`: Hinweis „Bitte als Eltern selbst ausfüllen“, kein Autofill der Trainer-Daten, am Ende „Handy zurückgeben“).
 - `app/aushang.html?team=<Mannschaft>`: druckbarer A4-Aushang mit großem QR-Code, aus dem „Neues Kind“-Blatt verlinkt.
 - `MAX = 6` bleibt als Vorgabe, der Server meldet den gültigen Wert.
 

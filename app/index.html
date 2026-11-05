@@ -154,6 +154,9 @@ section{display:grid;gap:10px}
 .teamsw button{background:transparent;border:1px solid rgba(255,255,255,.38);border-radius:999px;padding:5px 12px;font-size:14px;color:var(--pitch-ink)}
 .teamsw button[aria-pressed="true"]{background:var(--pitch-ink);color:var(--pitch);border-color:var(--pitch-ink);font-weight:600}
 .big:disabled{opacity:.6}
+a.big{text-decoration:none;box-sizing:border-box}
+.or{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:14px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-top:4px}
+.or::before,.or::after{content:"";flex:1;border-top:1px solid var(--line)}
 </style>
 
 <header class="top gut" id="hdr"></header>
@@ -352,6 +355,8 @@ section{display:grid;gap:10px}
 
   /* ---------- Neues Kind ---------- */
   function formUrl(t){ return CFG.formUrlFor ? CFG.formUrlFor(t) : ''; }
+  /* Gleiches Formular, auf dem Trainer-Handy geöffnet (Hinweis „Handy den Eltern geben“) */
+  function viaTrainer(u){ return u.indexOf('#') >= 0 ? u : u + (u.indexOf('?') >= 0 ? '&' : '?') + 'via=trainer'; }
   function renderSheet(){
     var t = team(), b = $('sheet-body'), url = formUrl(t);
     var top = '<div class="sheet-top"><h3 id="sheet-h">Neues Kind anmelden</h3><button class="x" type="button" data-action="close" aria-label="Schließen">✕</button></div>';
@@ -365,6 +370,9 @@ section{display:grid;gap:10px}
       '<p>Die Eltern scannen den Code mit der Handykamera und füllen das Formular aus. Das dauert etwa 2 Minuten. Danach steht das Kind in deiner Liste mit Probetraining 1 von '+MAX+'.</p>'+
       '<div class="qr" id="qr"></div>'+
       '<div class="qrcap">Formular für die '+esc(t.name)+' · Mannschaft ist schon ausgewählt</div>'+
+      '<div class="or">Eltern ohne Handy?</div>'+
+      '<a class="big alt" href="'+esc(viaTrainer(url))+'" target="_blank" rel="noopener">Auf meinem Handy öffnen</a>'+
+      '<p class="small muted">Gib dein Handy den Eltern zum Ausfüllen – die Einwilligung müssen die Eltern selbst geben. Danach steht das Kind wie beim Scannen in deiner Liste.</p>'+
       '<p class="small muted">Neue Kinder erscheinen nach kurzer Zeit in der Liste – sonst unten auf „Aktualisieren“ tippen.</p>'+
       '<div><a class="linkbtn" href="aushang.html?team='+encodeURIComponent(t.name)+'&amp;id='+encodeURIComponent(t.id)+'" target="_blank" rel="noopener">Aushang mit diesem Code für den Platz öffnen</a></div>';
     var box = $('qr');
