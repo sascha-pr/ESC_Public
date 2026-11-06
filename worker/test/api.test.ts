@@ -195,6 +195,74 @@ describe("Papierantrag", () => {
   });
 });
 
+describe("E-Mail unzustellbar", () => {
+  const fix = (id: string, body: unknown, user = F1) =>
+    api(new Request(`https://probetraining.example.org/api/kids/${id}/email`, {
+      method: "POST", headers: { "X-Test-User": user, "Content-Type": "application/json" }, body: JSON.stringify(body),
+    }));
+  const bounced = () => {
+    const k = data.kids.find((x) => x.id === "recKidF1fuenf0001")!;
+    Object.assign(k, { status: "antrag_verschickt", count: 2, email: "kerstin@gmx.dee", emailBounced: true });
+    return k;
+  };
+
+  it("der Trainer sieht den Hinweis mit der falschen Adresse", async () => {
+    bounced();
+    const kids: KidDto[] = (await body(await api(req("GET", "/api/kids", F1)))).kids;
+    expect(kids.find((k) => k.name === "Carl")!.emailProblem).toEqual({ email: "kerstin@gmx.dee" });
+    expect(kids.find((k) => k.name === "Anton")!.emailProblem).toBeUndefined();
+  });
+
+  it("E-Mail korrigieren: neue Adresse, Häkchen weg, Status zurück auf Probetraining (Antrag geht neu raus)", async () => {
+    const k = bounced();
+    const res = await fix(k.id, { email: " Kerstin@GMX.de " });
+    expect(res.status).toBe(200);
+    expect(k).toMatchObject({ email: "kerstin@gmx.de", emailBounced: false, status: "probetraining", paper: false });
+    expect((await body(res)).kid.emailProblem).toBeUndefined();
+  });
+
+  it("auf Papierantrag umstellen", async () => {
+    const k = bounced();
+    const res = await fix(k.id, { paper: true });
+    expect(res.status).toBe(200);
+    expect(k).toMatchObject({ email: null, paper: true, emailBounced: false });
+    expect((await body(res)).kid.paperApplication).toBe(true);
+  });
+
+  it("dieselbe falsche Adresse oder Unsinn: 422, nichts geändert", async () => {
+    const k = bounced();
+    expect((await fix(k.id, { email: "KERSTIN@gmx.dee" })).status).toBe(422);
+    expect((await fix(k.id, { email: "kein-mail" })).status).toBe(422);
+    expect(k.emailBounced).toBe(true);
+    expect(data.calls.update).toBe(0);
+  });
+
+  it("nur wenn eine unzustellbare E-Mail gemeldet ist", async () => {
+    const res = await fix("recKidF1probe0001", { email: "neu@example.org" });
+    expect(res.status).toBe(409);
+    expect(data.calls.update).toBe(0);
+  });
+
+  it("nicht für Kinder anderer Mannschaften", async () => {
+    const k = bounced();
+    expect((await fix(k.id, { email: "neu@example.org" }, E1)).status).toBe(404);
+    expect(k.emailBounced).toBe(true);
+  });
+
+  it("nicht von fremder Seite", async () => {
+    const k = bounced();
+    const res = await api(new Request(`https://probetraining.example.org/api/kids/${k.id}/email`, {
+      method: "POST", headers: { "X-Test-User": F1, Origin: "https://evil.example" }, body: JSON.stringify({ email: "neu@example.org" }),
+    }));
+    expect(res.status).toBe(403);
+  });
+
+  it("die E-Mail der Eltern geht sonst nie an die Trainer-App", async () => {
+    const text = await (await api(req("GET", "/api/kids", F1))).text();
+    expect(text).not.toContain("eltern@example.org");
+  });
+});
+
 describe("Rückgängig", () => {
   it("stellt die vom Server gemerkten Werte wieder her", async () => {
     await api(req("POST", "/api/kids/recKidF1probe0001/attend", F1));

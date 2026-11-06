@@ -45,8 +45,8 @@ describe("Airtable-Datenquelle", () => {
     expect(first.url.pathname).toBe(`/v0/appBKLVL4A4mI2QHr/${K.table}`);
     expect(first.url.searchParams.get("returnFieldsByFieldId")).toBe("true");
     expect(first.url.searchParams.getAll("fields[]")).toContain(K.playableSince);
-    // E-Mail der Eltern wird gar nicht erst geladen
-    expect(first.url.searchParams.getAll("fields[]")).not.toContain("fldcLIrtbOMJTLAQ3");
+    // Bemerkungen der Verwaltung werden nie geladen (E-Mail schon – nur für „unzustellbar“, siehe api.test.ts)
+    expect(first.url.searchParams.getAll("fields[]")).not.toContain("fldDXqSG8iFox39DP");
     expect((first.init.headers as Record<string, string>).Authorization).toBe("Bearer pat_test");
   });
 
@@ -68,6 +68,14 @@ describe("Airtable-Datenquelle", () => {
     expect(f[K.paper]).toBe(true);
     expect(f[K.email]).toBeNull();
     expect(f[K.count]).toBe(1);
+  });
+
+  it("E-Mail-Korrektur: schreibt Adresse, löscht Häkchen, setzt Status zurück", async () => {
+    const { ds, seen } = source(() => Response.json({ id: "recKid00000000001", fields: {} }));
+    await ds.updateContact("recKid00000000001", { email: "neu@example.org", paper: false, resetStatus: true });
+    expect(JSON.parse(String(seen[0]!.init.body)).fields).toEqual({
+      [K.email]: "neu@example.org", [K.paper]: false, [K.emailBounced]: false, [K.status]: "Probetraining",
+    });
   });
 
   it("unbekannte Status-Option wird nicht als Probetraining gedeutet", async () => {

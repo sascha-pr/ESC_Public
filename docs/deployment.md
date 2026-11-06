@@ -164,10 +164,11 @@ Fehlersuche: Workers → `esc06-probetraining` → **Logs** (nur Fehlercodes, ke
 
 In dieser Reihenfolge (alles in der Airtable-Oberfläche):
 
-1. **Automationen** einschalten: 5 (Spielberechtigt), 3 (Trainer-Info), 2 (Verwaltung), 4 (Löschliste),
+1. **Automationen** einschalten: 5 (Spielberechtigt), 3 (Trainer-Info), 7 (E-Mail unzustellbar), 2 (Verwaltung), 4 (Löschliste),
    zuletzt **1** (Antragsmail an Eltern – erst, wenn der Antrags-Link stimmt und die Seite öffentlich erreichbar ist).
    **Nicht** einschalten: Automation 6 und das Airtable-Formular – beides ist durch das eigene Elternformular ersetzt.
 2. Status, Zähler und Datum setzt bei neuen Kindern der Worker selbst.
+   *Empfohlen:* Automation 1 auf ein **Vereinspostfach** umstellen (Aktion „Gmail/Outlook: Send email“ mit verbundenem Konto), damit Unzustellbar-Meldungen beim Verein ankommen – siehe `docs/airtable-schema.md` → „Ablauf bei unzustellbarer Antragsmail“.
 3. Vorläufige Werte ersetzen (`docs/airtable-schema.md` → „Vorläufige Werte“): Verwaltungs-E-Mail in Automation 2 und 4,
    Antrags-Link in Automation 1.
 

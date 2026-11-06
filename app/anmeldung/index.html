@@ -82,6 +82,9 @@ legend::before{content:"";width:4px;height:16px;background:var(--brand)}
 .check.small{font-size:14px;color:var(--muted);margin-top:4px}
 .check.small input{width:20px;height:20px}
 .field input:disabled{opacity:.5}
+.field label.again{font-weight:600;font-size:15px;margin-top:6px}
+.typo{background:var(--amber-bg);color:var(--amber);border-radius:10px;padding:10px 12px;font-size:15px}
+.typo button{background:none;border:0;padding:0;font:inherit;font-weight:700;color:inherit;text-decoration:underline;text-underline-offset:3px;cursor:pointer;word-break:break-all}
 details{font-size:14px;color:var(--muted);background:var(--bg);border-radius:10px;padding:10px 12px}
 details summary{cursor:pointer;font-weight:600;color:var(--fg)}
 details ul{margin:8px 0 0;padding-left:18px;display:grid;gap:4px}
@@ -148,6 +151,9 @@ details ul{margin:8px 0 0;padding-left:18px;display:grid;gap:4px}
         <div class="field">
           <label for="f-email">E-Mail</label>
           <input id="f-email" type="email" inputmode="email" autocomplete="email" maxlength="120">
+          <div class="typo" id="typo" hidden></div>
+          <label for="f-email2" class="again">E-Mail wiederholen</label>
+          <input id="f-email2" type="email" inputmode="email" autocomplete="off" maxlength="120">
           <div class="hint" id="email-hint">An diese Adresse schicken wir nach dem 2. Training den Mitgliedsantrag.</div>
           <div class="err" id="e-email" hidden></div>
           <label class="check small" for="f-paper"><input id="f-paper" type="checkbox"><span>Wir haben keine E-Mail-Adresse – bitte den Mitgliedsantrag auf Papier mitgeben.</span></label>
@@ -267,9 +273,39 @@ details ul{margin:8px 0 0;padding-left:18px;display:grid;gap:4px}
   /* Keine E-Mail: Feld sperren, Antrag kommt auf Papier über den Trainer */
   $('f-paper').addEventListener('change', function(){
     var p = this.checked;
-    $('f-email').disabled = p; if (p){ $('f-email').value = ''; setErr('email',''); }
+    $('f-email').disabled = p; $('f-email2').disabled = p;
+    if (p){ $('f-email').value = ''; $('f-email2').value = ''; setErr('email',''); $('typo').hidden = true; }
     $('email-hint').textContent = p ? 'Kein Problem: Der Trainer gibt euch den Mitgliedsantrag nach dem 2. Training auf Papier mit.' : 'An diese Adresse schicken wir nach dem 2. Training den Mitgliedsantrag.';
   });
+
+  /* Tippfehler in der Domain erkennen (z. B. gmx.dee, gmial.com) und eine Korrektur anbieten */
+  var DOMAINS = ['gmx.de','gmx.net','web.de','t-online.de','gmail.com','googlemail.com','outlook.de','outlook.com','hotmail.de','hotmail.com',
+    'live.de','yahoo.de','yahoo.com','icloud.com','me.com','freenet.de','arcor.de','aol.com','posteo.de','mail.de','vodafone.de','online.de','email.de'];
+  function dist(a, b){
+    var d = [], i, j;
+    for (i = 0; i <= a.length; i++){ d[i] = [i]; }
+    for (j = 1; j <= b.length; j++){ d[0][j] = j; }
+    for (i = 1; i <= a.length; i++) for (j = 1; j <= b.length; j++)
+      d[i][j] = Math.min(d[i-1][j] + 1, d[i][j-1] + 1, d[i-1][j-1] + (a[i-1] === b[j-1] ? 0 : 1));
+    return d[a.length][b.length];
+  }
+  function suggest(mail){
+    var at = mail.lastIndexOf('@'); if (at < 1) return null;
+    var dom = mail.slice(at + 1).toLowerCase().replace(/\.+$/, '');
+    if (!dom || DOMAINS.indexOf(dom) >= 0) return null;
+    var best = null, bd = 3;
+    DOMAINS.forEach(function(x){ var n = dist(dom, x); if (n < bd){ bd = n; best = x; } });
+    return best && bd <= 2 ? mail.slice(0, at + 1) + best : null;
+  }
+  function checkTypo(){
+    var s = suggest($('f-email').value.trim()), box = $('typo');
+    if (!s){ box.hidden = true; return; }
+    box.innerHTML = 'Meintet ihr <button type="button" id="typo-fix">' + esc(s) + '</button>?';
+    box.hidden = false;
+    $('typo-fix').addEventListener('click', function(){ $('f-email').value = s; if ($('f-email2').value) $('f-email2').value = s; box.hidden = true; setErr('email',''); $('f-email2').focus(); });
+  }
+  $('f-email').addEventListener('blur', checkTypo);
+  $('f-email').addEventListener('input', function(){ if (!$('typo').hidden) checkTypo(); });
 
   function values(){
     return {
@@ -286,6 +322,7 @@ details ul{margin:8px 0 0;padding-left:18px;display:grid;gap:4px}
     if (v.childName.trim().split(/\s+/).length < 2) e.childName = 'Bitte Vor- und Nachnamen des Kindes eintragen.';
     if (!v.birthDate) e.birthDate = 'Bitte das Geburtsdatum eintragen.';
     if (v.parentName.trim().length < 2) e.parentName = 'Bitte den Namen eines Elternteils eintragen.';
+    if (!v.paper && /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.email.trim()) && v.email.trim().toLowerCase() !== $('f-email2').value.trim().toLowerCase()) e.email = 'Die beiden E-Mail-Adressen stimmen nicht überein. Bitte nochmal prüfen.';
     if (!v.paper && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.email.trim())) e.email = 'Bitte eine gültige E-Mail-Adresse eintragen – oder „keine E-Mail-Adresse“ ankreuzen.';
     if (!v.consent) e.consent = 'Ohne Einwilligung können wir die Anmeldung leider nicht annehmen.';
     return e;

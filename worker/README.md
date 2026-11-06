@@ -14,9 +14,10 @@ Trainer-Bereich (hinter Cloudflare Access). Alle Antworten sind JSON mit `Cache-
 | GET | `/api/me` | `{ email, max: 6, today, teams: [{ id, name, ageClass, trainer }] }` |
 | GET | `/api/kids?team=<id>` | `{ team, today, kids: [KidDto] }` – ohne `team` die erste eigene Mannschaft |
 | POST | `/api/kids/:id/attend` | `{ kid: KidDto }` – Zähler +1, „Letztes Probetraining“ = heute (beim 1. Mal auch „Erstes Probetraining“) |
+| POST | `/api/kids/:id/email` | `{ kid: KidDto }` – Body `{ email }` oder `{ paper: true }`; nur wenn „E-Mail unzustellbar“ gesetzt ist; setzt das Häkchen zurück und den Status von „Antrag verschickt“ auf „Probetraining“ (Automation 1 sendet neu) |
 | POST | `/api/kids/:id/undo` | `{ kid: KidDto }` – stellt die serverseitig gemerkten Werte wieder her |
 
-`KidDto`: `{ id, name, jg, count, last, status: "probe"|"antrag"|"mitglied"|"spielberechtigt", attendedToday, contact?, paperApplication? }`
+`KidDto`: `{ id, name, jg, count, last, status: "probe"|"antrag"|"mitglied"|"spielberechtigt", attendedToday, contact?, paperApplication?, emailProblem?: { email } }`
 – `contact: { parent, phone }` gibt es **nur bei erreichtem Limit**. Geburtsdatum, Eltern-E-Mail und Bemerkungen verlassen den Worker nie.
 
 Fehlercodes: `unauthenticated` (401), `unknown_trainer` / `forbidden_team` / `bad_origin` (403),

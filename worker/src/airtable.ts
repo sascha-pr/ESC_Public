@@ -1,4 +1,4 @@
-import { DataSourceError, type AttendanceValues, type DataSource, type NewKid } from "./datasource";
+import { DataSourceError, type AttendanceValues, type ContactValues, type DataSource, type NewKid } from "./datasource";
 import { formatDates, parseDates, type KidRecord, type SourceStatus, type Team } from "./domain";
 
 /** Feld-IDs aus docs/airtable-schema.md – IDs statt Namen, damit Umbenennungen nichts kaputt machen. */
@@ -26,6 +26,7 @@ export const AIRTABLE = {
     consent: "fldSWUKHlLliAOqHw",
     trainingDates: "fldy7NF7MKeneEY5R",
     paper: "fldlyupDUsoOK2Dp5",
+    emailBounced: "fldByGoeoWiEw9qVs",
   },
 } as const;
 
@@ -80,6 +81,7 @@ export class AirtableDataSource implements DataSource {
     const fields = [
       f.name, f.birthDate, f.team, f.status, f.count, f.firstTraining,
       f.lastTraining, f.parentName, f.phone, f.playableSince, f.trainingDates, f.paper,
+      f.email, f.emailBounced,
     ];
     const records = await this.listAll(f.table, fields);
     return records.map(toKid);
@@ -106,6 +108,20 @@ export class AirtableDataSource implements DataSource {
           [f.trainingDates]: formatDates(v.trainingDates) || null,
         },
       }),
+    });
+    await ensureOk(res);
+    return toKid((await res.json()) as AirtableRecord);
+  }
+
+  async updateContact(id: string, v: ContactValues): Promise<KidRecord> {
+    if (!RECORD_ID.test(id)) throw new DataSourceError("Ungültige Datensatz-ID", 400);
+    const f = AIRTABLE.kids;
+    const fields: Record<string, unknown> = { [f.email]: v.email, [f.paper]: v.paper, [f.emailBounced]: false };
+    if (v.resetStatus) fields[f.status] = "Probetraining";
+    const res = await this.request(`${f.table}/${id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ returnFieldsByFieldId: true, fields }),
     });
     await ensureOk(res);
     return toKid((await res.json()) as AirtableRecord);
@@ -196,6 +212,8 @@ function toKid(r: AirtableRecord): KidRecord {
     playableSince: str(r.fields[f.playableSince]),
     trainingDates: parseDates(str(r.fields[f.trainingDates])),
     paper: r.fields[f.paper] === true,
+    email: str(r.fields[f.email]),
+    emailBounced: r.fields[f.emailBounced] === true,
   };
 }
 

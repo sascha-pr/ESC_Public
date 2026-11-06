@@ -1,4 +1,4 @@
-import type { AttendanceValues, DataSource, NewKid } from "./datasource";
+import type { AttendanceValues, ContactValues, DataSource, NewKid } from "./datasource";
 import type { KidRecord, Team } from "./domain";
 
 /**
@@ -43,6 +43,12 @@ export class CachedDataSource implements DataSource {
     if (this.kids) {
       this.kids = { ...this.kids, value: this.kids.value.map((k) => (k.id === id ? updated : k)) };
     }
+    return updated;
+  }
+
+  async updateContact(id: string, values: ContactValues): Promise<KidRecord> {
+    const updated = await this.inner.updateContact(id, values);
+    if (this.kids) this.kids = { ...this.kids, value: this.kids.value.map((k) => (k.id === id ? updated : k)) };
     return updated;
   }
 

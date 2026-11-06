@@ -1,5 +1,5 @@
 import type { Authenticator } from "../src/auth";
-import type { AttendanceValues, DataSource, NewKid } from "../src/datasource";
+import type { AttendanceValues, ContactValues, DataSource, NewKid } from "../src/datasource";
 import type { KidRecord, Team } from "../src/domain";
 
 /** Nur erfundene Beispieldaten – keine echten Kinder in Tests. */
@@ -25,6 +25,8 @@ export function kid(over: Partial<KidRecord> & { id: string }): KidRecord {
     playableSince: null,
     trainingDates: [],
     paper: false,
+    email: "eltern@example.org",
+    emailBounced: false,
     ...over,
   };
 }
@@ -59,13 +61,23 @@ export class FakeDataSource implements DataSource {
     k.trainingDates = [...v.trainingDates];
     return structuredClone(k);
   }
+  async updateContact(id: string, v: ContactValues) {
+    this.calls.update++;
+    const k = this.kids.find((x) => x.id === id);
+    if (!k) throw new Error("not found");
+    k.email = v.email;
+    k.paper = v.paper;
+    k.emailBounced = false;
+    if (v.resetStatus) k.status = "probetraining";
+    return structuredClone(k);
+  }
   async createKid(n: NewKid) {
     this.calls.create++;
     this.created.push(n);
     const k: KidRecord = {
       id: `recNew${String(this.calls.create).padStart(11, "0")}`, name: n.name, birthDate: n.birthDate, teamIds: [n.teamId],
       status: "probetraining", count: 1, firstTraining: n.today, lastTraining: n.today, parentName: n.parentName,
-      phone: n.phone, playableSince: null, trainingDates: [n.today], paper: n.paper,
+      phone: n.phone, playableSince: null, trainingDates: [n.today], paper: n.paper, email: n.email, emailBounced: false,
     };
     this.kids.push(k);
     return structuredClone(k);

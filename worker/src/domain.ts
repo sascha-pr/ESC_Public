@@ -50,6 +50,10 @@ export interface KidRecord {
   trainingDates: string[];
   /** Eltern ohne E-Mail: Mitgliedsantrag auf Papier statt per Mail */
   paper: boolean;
+  /** E-Mail der Eltern (nur im Worker; an den Trainer nur, wenn sie unzustellbar war) */
+  email: string | null;
+  /** Antragsmail kam zurück (von der Verwaltung gesetzt) */
+  emailBounced: boolean;
 }
 
 /** Was ein Trainer über ein Kind sieht – bewusst minimal. */
@@ -66,6 +70,8 @@ export interface KidDto {
   contact?: { parent: string | null; phone: string | null };
   /** Eltern haben keine E-Mail: Trainer gibt den Mitgliedsantrag auf Papier mit. */
   paperApplication?: true;
+  /** Antragsmail kam zurück: Trainer soll die richtige E-Mail erfragen (mit der falschen Adresse zum Vergleich). */
+  emailProblem?: { email: string | null };
 }
 
 export function toAppStatus(s: SourceStatus | null): AppStatus | null {
@@ -130,6 +136,7 @@ export function toKidDto(kid: KidRecord, today: string): KidDto {
   };
   if (isLimitReached(kid)) dto.contact = { parent: kid.parentName, phone: kid.phone };
   if (kid.paper && status === "probe") dto.paperApplication = true;
+  if (kid.emailBounced && !kid.paper && status === "probe") dto.emailProblem = { email: kid.email };
   return dto;
 }
 
@@ -148,6 +155,11 @@ export function parseDates(text: string | null): string[] {
 /** ISO-Daten → Protokoll-Text für Airtable (TT.MM.JJJJ, eine Zeile pro Datum). */
 export function formatDates(dates: readonly string[]): string {
   return [...new Set(dates)].sort().map((d) => `${d.slice(8, 10)}.${d.slice(5, 7)}.${d.slice(0, 4)}`).join("\n");
+}
+
+const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+export function isValidEmail(v: string): boolean {
+  return v.length <= 120 && EMAIL.test(v);
 }
 
 export function belongsToTeams(kid: KidRecord, teamIds: readonly string[]): boolean {

@@ -26,7 +26,7 @@
       k('k1','F1','Max Beispiel',2018,1,ago(4),'probetraining','Anna Beispiel','0171 0000001'),
       k('k2','F1','Mia Schulz',2019,4,ago(4),'probetraining','Jörg Schulz','0160 0000002',null,true),
       k('k3','F1','Noah Wagner',2018,6,ago(2),'antrag_verschickt','Sevgi Wagner','0152 0000003'),
-      k('k4','F1','Ella Hoffmann',2018,5,ago(7),'antrag_verschickt','Tim Hoffmann','0176 0000004'),
+      (function(){ var x = k('k4','F1','Ella Hoffmann',2018,5,ago(7),'antrag_verschickt','Tim Hoffmann','0176 0000004'); x.email = 'tim.hoffmann@gmx.dee'; x.bounced = true; return x; })(),
       k('k5','F1','Emil Test',2018,2,ago(21),'antrag_eingegangen','Petra Test','0175 0000005'),
       k('k6','F1','Lukas Becker',2019,2,ago(35),'dfbnet_erfasst','Nina Becker','0157 0000006'),
       k('k7','F1','Lina Spiel',2018,3,ago(20),'spielberechtigt','Ole Spiel','0157 0000007',ago(3)),
@@ -46,6 +46,7 @@
     var s = APP[k.status] || 'probe', d = {id:k.id, name:k.name, jg:k.jg, count:k.count, last:k.last, status:s, attendedToday:k.last===today()};
     if (s==='probe' && k.count>=MAX) d.contact = {parent:k.parent, phone:k.phone};
     if (s==='probe' && k.paper) d.paperApplication = true;
+    if (s==='probe' && k.bounced && !k.paper) d.emailProblem = {email: k.email || null};
     return d;
   }
   var MSG = {
@@ -61,7 +62,7 @@
   function json(status, body){ return new Response(JSON.stringify(body), {status:status, headers:{'Content-Type':'application/json'}}); }
   function err(status, code, extra){ var b = {error:code, message:MSG[code]}; for (var x in extra||{}) b[x]=extra[x]; return json(status,b); }
 
-  function handle(method, url){
+  function handle(method, url, body){
     if (mode==='expired') return json(401, {error:'unauthenticated'});
     if (mode==='denied') return err(403,'unknown_trainer');
     if (mode==='down') return err(502,'upstream');
@@ -73,6 +74,21 @@
       if (u.teams.indexOf(team)<0) return err(403,'forbidden_team');
       return json(200, {team:team, today:t, kids:kids.filter(function(k){ return k.team===team && visible(k); }).map(dto)
         .sort(function(a,b){ return a.name.localeCompare(b.name,'de'); })});
+    }
+    if (method==='POST' && (m = url.pathname.match(/^\/api\/kids\/([^/]+)\/email$/))){
+      var kk = kids.filter(function(x){ return x.id===decodeURIComponent(m[1]); })[0];
+      if (!kk || u.teams.indexOf(kk.team)<0) return err(404,'not_found');
+      if (!kk.bounced) return json(409, {error:'no_email_problem', message:'Für dieses Kind ist keine unzustellbare E-Mail gemeldet.'});
+      var b = JSON.parse(body || '{}');
+      if (b.paper){ kk.email = null; kk.paper = true; }
+      else {
+        var e = String(b.email||'').trim().toLowerCase();
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(e)) return json(422, {error:'invalid_email', message:'Bitte eine gültige E-Mail-Adresse eintragen.'});
+        if (e === (kk.email||'').toLowerCase()) return json(422, {error:'same_email', message:'Das ist dieselbe Adresse, die nicht zugestellt werden konnte. Bitte bei den Eltern nachfragen.'});
+        kk.email = e;
+      }
+      kk.bounced = false; if (kk.status==='antrag_verschickt') kk.status='probetraining';
+      return json(200, {kid:dto(kk)});
     }
     if (method==='POST' && (m = url.pathname.match(/^\/api\/kids\/([^/]+)\/(attend|undo)$/))){
       var k = kids.filter(function(x){ return x.id===decodeURIComponent(m[1]); })[0];
@@ -101,7 +117,7 @@
     if (url.pathname.indexOf('/api/')!==0) return realFetch(input, init);
     if (offline) return new Promise(function(_,rej){ setTimeout(function(){ rej(new TypeError('Failed to fetch')); }, 300); });
     var method = (init && init.method) || 'GET';
-    return new Promise(function(res){ setTimeout(function(){ res(handle(method, url)); }, 250); });
+    return new Promise(function(res){ setTimeout(function(){ res(handle(method, url, init && init.body)); }, 250); });
   };
 
   /* ---------- Testhelfer ---------- */

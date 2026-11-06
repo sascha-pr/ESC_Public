@@ -104,6 +104,7 @@ legt das Kind direkt in Airtable an (Status Probetraining, Zähler 1, Datum heut
 | Login-Protokoll | Cloudflare Zero Trust (E-Mail, Zeit, IP) | Konto-Admins |
 | Trainer-E-Mails | Airtable und Zugriffsgruppe „Trainer“ | Konto-Admins |
 
+- **Unzustellbare E-Mail:** Verwaltung setzt „E-Mail unzustellbar“; Trainer wird informiert und korrigiert in der App (oder stellt auf Papierantrag um); der Antrag geht automatisch neu raus. Die Eltern-E-Mail sieht der Trainer nur in diesem Fall (zum Vergleich). Damit Unzustellbar-Meldungen ankommen, Automation 1 über ein Vereinspostfach senden (siehe `docs/airtable-schema.md`).
 - **Unfall im Probetraining:** Datensatz (inkl. Teilnahme-Protokoll) nicht löschen, bis der Fall mit der Versicherung abgeschlossen ist. Ob Nichtmitglieder versichert sind, hängt von der Nichtmitglieder-Zusatzversicherung des Vereins beim LSB NRW/ARAG ab (vom Vorstand zu klären).
 - **Löschkonzept:** Formel „Löschen fällig“ (8 Wochen nach dem 1. Training ohne Beitritt, sofort bei Absage, 14 Tage nach
   Spielberechtigung); Automation 4 mailt montags die Liste; Löschung von Hand durch die Verwaltung.
@@ -164,6 +165,7 @@ neuen Token erst nach Klärung setzen; Vorstand informieren (Meldepflichten prü
 | 05.11.2026 | Elternformular: Mannschaft nur noch aus dem QR-Code, nicht mehr änderbar; ohne gültigen Code Hinweis statt Formular (vermeidet Anmeldungen in falschen Mannschaften) | Projektleitung |
 | 05.11.2026 | „Eltern ohne Handy“: Trainer öffnet das Elternformular auf dem eigenen Handy (gleiches Formular, gleiche Prüfungen) | Projektleitung |
 | 05.11.2026 | Teilnahme-Protokoll („Trainingstermine“) und Papierantrag für Eltern ohne E-Mail (Feld „Antrag auf Papier“, Hinweis in der Trainer-App) | Projektleitung |
+| 06.11.2026 | Absicherung falscher E-Mail-Adressen: „E-Mail wiederholen“ und Tippfehler-Hinweis im Formular; Feld „E-Mail unzustellbar“, Automation 7 (Trainer-Info), Korrektur in der Trainer-App mit automatischem Neuversand | Projektleitung |
 | | Domain registriert: | |
 | | Cloudflare-Konto, Zone, Access eingerichtet | |
 | | Worker veröffentlicht, Abnahme (deployment.md Schritt 6) bestanden | |

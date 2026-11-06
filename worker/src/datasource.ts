@@ -11,8 +11,17 @@ export interface DataSource {
   /** Frisch aus der Quelle, ohne Cache (für Schreibzugriffe). */
   getKid(id: string): Promise<KidRecord | null>;
   updateAttendance(id: string, values: AttendanceValues): Promise<KidRecord>;
+  /** E-Mail nach Unzustellbarkeit korrigieren bzw. auf Papierantrag umstellen. */
+  updateContact(id: string, values: ContactValues): Promise<KidRecord>;
   /** Neues Kind aus dem Elternformular anlegen (Status Probetraining, 1. Training = heute). */
   createKid(kid: NewKid): Promise<KidRecord>;
+}
+
+export interface ContactValues {
+  email: string | null;
+  paper: boolean;
+  /** Status zurück auf „Probetraining“, damit Automation 1 den Antrag neu verschickt */
+  resetStatus: boolean;
 }
 
 export interface NewKid {

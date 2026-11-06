@@ -24,5 +24,5 @@ dass ich erziehungsberechtigt bin bzw. die Einwilligung der Erziehungsberechtigt
 |---|---|---|
 | Eltern | Formular per QR-Code beim 1. Training (ohne Anmeldung); Mitgliedsantrag abgeben | Elternformular, Mail |
 | Trainer | pro Training „War heute da“ tippen, auf Ampel achten | Trainer-App |
-| Verwaltung | Status setzen: Antrag eingegangen → In DFBnet erfasst → Spielberechtigt; montags Löschliste abarbeiten | Airtable-Kanban, DFBnet |
+| Verwaltung | Status setzen: Antrag eingegangen → In DFBnet erfasst → Spielberechtigt; bei zurückgekommener Antragsmail „E-Mail unzustellbar“ ankreuzen; montags Löschliste abarbeiten | Airtable-Kanban, DFBnet |
 | Automatisch | Antragsmail an Eltern (nach 2. Training), Info an Verwaltung, Info an Trainer, Löschliste | Airtable-Automationen |

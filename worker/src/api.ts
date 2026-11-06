@@ -4,6 +4,7 @@ import {
   MAX_TRIALS,
   belongsToTeams,
   checkAttend,
+  isValidEmail,
   isVisible,
   todayIso,
   toKidDto,
@@ -37,6 +38,10 @@ const MESSAGES = {
   nothing_to_undo: "Es gibt heute nichts rückgängig zu machen.",
   changed: "Der Eintrag wurde inzwischen geändert und kann nicht mehr rückgängig gemacht werden.",
   bad_origin: "Anfrage von fremder Seite abgelehnt.",
+  no_email_problem: "Für dieses Kind ist keine unzustellbare E-Mail gemeldet.",
+  invalid_email: "Bitte eine gültige E-Mail-Adresse eintragen.",
+  same_email: "Das ist dieselbe Adresse, die nicht zugestellt werden konnte. Bitte bei den Eltern nachfragen.",
+  bad_request: "Die Anfrage ist ungültig.",
   upstream: "Die Vereinsdatenbank ist gerade nicht erreichbar. Bitte gleich nochmal versuchen.",
   no_route: "Unbekannte Adresse.",
 } as const;
@@ -107,6 +112,34 @@ export function createApi(deps: ApiDeps): (req: Request) => Promise<Response> {
       trainingDates: entry.prevDates ?? kid.trainingDates.filter((d) => d !== ctx.today),
     });
     await deps.undo.delete(kid.id);
+    return json(200, { kid: toKidDto(updated, ctx.today) });
+  });
+
+  // E-Mail nach Unzustellbarkeit korrigieren – oder auf Papierantrag umstellen
+  route("POST", /^\/api\/kids\/([^/]+)\/email$/, async (req, ctx, [id]) => {
+    const raw = await req.text();
+    if (raw.length > 1024) return error(400, "bad_request");
+    let body: { email?: unknown; paper?: unknown };
+    try {
+      body = JSON.parse(raw || "{}");
+    } catch {
+      return error(400, "bad_request");
+    }
+    const kid = await ownKid(id!, ctx);
+    if (!kid) return error(404, "not_found");
+    if (!kid.emailBounced) return error(409, "no_email_problem", { kid: toKidDto(kid, ctx.today) });
+    const paper = body.paper === true;
+    const email = typeof body.email === "string" ? body.email.trim().toLowerCase() : "";
+    if (!paper) {
+      if (!isValidEmail(email)) return error(422, "invalid_email");
+      if (email === (kid.email ?? "").toLowerCase()) return error(422, "same_email");
+    }
+    const updated = await deps.data.updateContact(kid.id, {
+      email: paper ? null : email,
+      paper,
+      // war der Antrag schon „verschickt“: zurück auf Probetraining, dann verschickt Automation 1 ihn neu
+      resetStatus: kid.status === "antrag_verschickt",
+    });
     return json(200, { kid: toKidDto(updated, ctx.today) });
   });
 

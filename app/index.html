@@ -95,6 +95,10 @@ section{display:grid;gap:10px}
 .dot{width:26px;height:26px;border-radius:50%;border:2px solid var(--line-strong);display:grid;place-items:center;font-size:13px;font-weight:600;color:var(--muted);font-variant-numeric:tabular-nums}
 .dot.on{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
 .note{font-size:15px;color:var(--muted)}
+.mailfix{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;background:var(--red-bg);border-radius:var(--radius);padding:12px 14px;font-size:15px}
+.mailfix .lbl{font-size:13px;color:var(--red);font-weight:600;text-transform:uppercase;letter-spacing:.06em}
+.mailfix p{margin:2px 0 0}
+.old{text-decoration:line-through;text-decoration-color:var(--red);overflow-wrap:anywhere}
 .note.paper{background:var(--amber-bg);color:var(--amber);border-radius:var(--radius);padding:10px 12px}
 .big{width:100%;min-height:58px;border:0;border-radius:var(--radius);background:var(--accent);color:var(--accent-ink);font-family:var(--display);font-size:22px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;display:flex;align-items:center;justify-content:center;gap:10px;transition:transform .08s}
 .big:active{transform:scale(.985)}
@@ -208,8 +212,10 @@ a.big{text-decoration:none;box-sizing:border-box}
 
   /* ---------- Server ---------- */
   function ApiError(kind, status, body){ this.kind=kind; this.status=status; this.body=body||{}; }
-  function api(method, path){
-    return fetch(path, {method:method, credentials:'same-origin', redirect:'manual', headers:{'Accept':'application/json'}})
+  function api(method, path, data){
+    var opts = {method:method, credentials:'same-origin', redirect:'manual', headers:{'Accept':'application/json'}};
+    if (data !== undefined){ opts.headers['Content-Type'] = 'application/json'; opts.body = JSON.stringify(data); }
+    return fetch(path, opts)
       .then(function(res){
         /* Abgelaufene Access-Sitzung: Cloudflare leitet auf die Login-Seite um */
         if (res.type==='opaqueredirect' || res.status===401) throw new ApiError('expired', res.status);
@@ -302,6 +308,15 @@ a.big{text-decoration:none;box-sizing:border-box}
   }
   function panel(h, body){ return '<div class="panel"><h2 class="h">'+esc(h)+'</h2>'+body+'</div>'; }
 
+  /* Antragsmail kam zurück: Trainer soll die richtige Adresse erfragen */
+  function mailfix(k){
+    if (!k.emailProblem) return '';
+    var old = k.emailProblem.email;
+    return '<div class="mailfix"><div><div class="lbl">E-Mail unzustellbar</div>'+
+      '<p>Der Mitgliedsantrag kam zurück'+(old ? ' (<span class="old">'+esc(old)+'</span>)' : '')+'. Bitte bei den Eltern die richtige Adresse erfragen.</p></div>'+
+      '<button class="copy" type="button" data-action="mailfix" data-id="'+esc(k.id)+'">E-Mail korrigieren</button></div>';
+  }
+
   function card(k){
     var limit = k.count>=MAX, att = k.attendedToday, busy = state.busy[k.id];
     var dots = Array.from({length:MAX},function(_,j){return j+1}).map(function(i){ return '<span class="dot'+(i<=k.count?' on':'')+'">'+i+'</span>'; }).join('');
@@ -323,7 +338,7 @@ a.big{text-decoration:none;box-sizing:border-box}
       '<div class="card-head"><div><div class="name">'+esc(k.name)+'</div>'+
       '<div class="meta">'+(k.jg?'Jg. '+esc(k.jg)+' · ':'')+(k.last ? 'zuletzt '+(k.last===state.today?'heute':esc(fmt(k.last))) : 'noch kein Training')+'</div></div>'+pill+'</div>'+
       '<div class="dots" role="img" aria-label="'+k.count+' von '+MAX+' Probetrainings"><span class="dlabel">Probetrainings</span>'+dots+'</div>'+
-      '<p class="note'+(paperDue && !limit ? ' paper' : '')+'">'+note+'</p>'+contact+action+'</article>';
+      (k.emailProblem && !limit ? '' : '<p class="note'+(paperDue && !limit ? ' paper' : '')+'">'+note+'</p>')+mailfix(k)+contact+action+'</article>';
   }
 
   var ROWS = {
@@ -361,6 +376,45 @@ a.big{text-decoration:none;box-sizing:border-box}
   function formUrl(t){ return CFG.formUrlFor ? CFG.formUrlFor(t) : ''; }
   /* Gleiches Formular, auf dem Trainer-Handy geöffnet (Hinweis „Handy den Eltern geben“) */
   function viaTrainer(u){ return u.indexOf('#') >= 0 ? u : u + (u.indexOf('?') >= 0 ? '&' : '?') + 'via=trainer'; }
+  function renderMailSheet(){
+    var k = kid(state.mailKid), b = $('sheet-body');
+    if (!k){ closeSheet(); return; }
+    var old = k.emailProblem && k.emailProblem.email;
+    b.innerHTML =
+      '<div class="sheet-top"><h3 id="sheet-h">E-Mail korrigieren</h3><button class="x" type="button" data-action="close" aria-label="Schließen">✕</button></div>'+
+      '<p>Die Antragsmail für <strong>'+esc(k.name)+'</strong> kam zurück'+(old ? ':<br><span class="old">'+esc(old)+'</span>' : '.')+'</p>'+
+      '<div class="field"><label for="m-email">Richtige E-Mail der Eltern</label><input id="m-email" type="email" inputmode="email" autocomplete="off" maxlength="120"></div>'+
+      '<div class="field"><label for="m-email2">E-Mail wiederholen</label><input id="m-email2" type="email" inputmode="email" autocomplete="off" maxlength="120"><div class="err" id="m-err" hidden></div></div>'+
+      '<button class="big" type="button" data-action="mailsave" data-id="'+esc(k.id)+'">Speichern und Antrag neu senden</button>'+
+      '<div class="or">Eltern haben keine E-Mail?</div>'+
+      '<button class="big alt" type="button" data-action="mailpaper" data-id="'+esc(k.id)+'">Antrag auf Papier geben</button>';
+  }
+  function openMailSheet(id){ state.sheet='mail'; state.mailKid=id; renderMailSheet(); $('sheet').hidden=false; document.body.classList.add('noscroll'); var f=$('m-email'); if(f) f.focus(); }
+  function mailErr(msg){ var e=$('m-err'); if(e){ e.textContent=msg; e.hidden=!msg; } }
+  document.addEventListener('input', function(e){ if (e.target.id==='m-email' || e.target.id==='m-email2') mailErr(''); });
+  function saveMail(id, paper){
+    if (state.busy[id]) return;
+    var data;
+    if (paper) data = {paper:true};
+    else {
+      var a = $('m-email').value.trim(), c = $('m-email2').value.trim();
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(a)){ mailErr('Bitte eine gültige E-Mail-Adresse eintragen.'); return; }
+      if (a.toLowerCase() !== c.toLowerCase()){ mailErr('Die beiden Adressen stimmen nicht überein.'); return; }
+      data = {email:a};
+    }
+    state.busy[id] = true;
+    api('POST','/api/kids/'+encodeURIComponent(id)+'/email', data).then(function(b){
+      delete state.busy[id]; replaceKid(b.kid); closeSheet(); render();
+      toast(paper ? 'Gespeichert. Bitte gib den Eltern von '+first(b.kid.name)+' den Mitgliedsantrag auf Papier mit.'
+                  : 'Gespeichert. Der Mitgliedsantrag geht jetzt automatisch an '+data.email+'.');
+    }).catch(function(e){
+      delete state.busy[id];
+      if (e.kind==='expired'){ closeSheet(); fail(e); return; }
+      if (e.body && e.body.kid){ replaceKid(e.body.kid); render(); }
+      mailErr(e.kind==='offline' ? 'Keine Verbindung – nichts gespeichert. Bitte nochmal versuchen.' : (e.body.message || 'Das hat nicht geklappt. Bitte nochmal versuchen.'));
+    });
+  }
+
   function renderSheet(){
     var t = team(), b = $('sheet-body'), url = formUrl(t);
     var top = '<div class="sheet-top"><h3 id="sheet-h">Neues Kind anmelden</h3><button class="x" type="button" data-action="close" aria-label="Schließen">✕</button></div>';
@@ -439,6 +493,9 @@ a.big{text-decoration:none;box-sizing:border-box}
       case 'attend': act(id,'attend'); break;
       case 'undo': act(id,'undo'); break;
       case 'copy': copy(id); break;
+      case 'mailfix': openMailSheet(id); break;
+      case 'mailsave': saveMail(id, false); break;
+      case 'mailpaper': saveMail(id, true); break;
       case 'new': openSheet(); break;
       case 'close': closeSheet(); break;
     }

@@ -41,6 +41,7 @@ Beispieldatensätze: F1 `recuL5quoCtlJlxvf`, E1 `recxrebTTbfjH20HB`, D1 `recn8mI
 | Trainer E-Mail | `fld2VgBCM8qAv9LBr` | Lookup |
 | Spielberechtigt seit | `fldYRU9DWyxvP1Jp1` | Datum (Automation 5) |
 | Trainingstermine | `fldy7NF7MKeneEY5R` | Langtext – Teilnahme-Protokoll, ein Datum (TT.MM.JJJJ) pro Zeile; pflegt die App bei „War heute da“/„Rückgängig“ (Nachweis z. B. für die Versicherung) |
+| E-Mail unzustellbar | `fldByGoeoWiEw9qVs` | Checkbox – setzt die Verwaltung, wenn die Antragsmail zurückkommt; Trainer wird informiert (Automation 7 + App), Korrektur in der App entfernt das Häkchen |
 | Antrag auf Papier | `fldlyupDUsoOK2Dp5` | Checkbox – Eltern ohne E-Mail; kein Mailversand (Automation 1 braucht E-Mail), die Trainer-App erinnert ab dem 2. Training an den Papierantrag |
 
 ### Status-Optionen (`fldgXAjpTkk8tCSj8`)
@@ -83,13 +84,28 @@ IF(OR(
 | 3 | In DFBnet erfasst: Trainer informieren | `wflkZScVyCN37Dpu4` | Status = In DFBnet erfasst | Datum setzen, Mail an Trainer (Lookup) | – |
 | 4 | Wöchentlich: Datenschutz-Löschliste | `wflcgjCeU3htUMKhn` | Montag (Cron, 06:00 UTC) | Mail mit „Löschen fällig“-Datensätzen | Empfänger **vorläufig** Sascha (privat) |
 | 5 | Spielberechtigt: Datum setzen | `wflTSgXU6L5bnECWU` | Status = Spielberechtigt | „Spielberechtigt seit“ = heute | – |
+| 7 | E-Mail unzustellbar: Trainer informieren | `wflepxM0tNONTlyMq` | „E-Mail unzustellbar“ = ✓ | Mail an Trainer (Lookup) mit Bitte, die E-Mail in der App zu korrigieren | – |
 | 6 | Formular-Anmeldung: 1. Probetraining eintragen (**nicht einschalten**, nur für das Airtable-Reserveformular) | `wflxlxrVhaLWPSY8c` | Formular `pag2AaadRpeiFuvDB` abgeschickt | Status = Probetraining, Zähler = 1, erstes + letztes Probetraining = heute | – |
 
 Automation 1: Mailtext am 03.11.2026 auf 6 Probetrainings angepasst („Insgesamt sind 6 Probetrainings möglich. Ab dem 7. Training … nur mit Antrag“); Auslöser bleibt „nach dem 2. Training“.
 
+### Ablauf bei unzustellbarer Antragsmail
+1. Verwaltung bemerkt die Unzustellbar-Meldung und setzt beim Kind **„E-Mail unzustellbar“**.
+2. Automation 7 mailt dem Trainer; in der Trainer-App steht beim Kind rot „E-Mail unzustellbar“ mit der falschen Adresse.
+3. Trainer fragt beim Training nach und tippt **„E-Mail korrigieren“** (neue Adresse zweimal eingeben) oder **„Antrag auf Papier geben“**.
+4. Der Worker speichert die neue Adresse (bzw. „Antrag auf Papier“), entfernt das Häkchen und setzt den Status von
+   „Antrag ausgehändigt/verschickt“ zurück auf „Probetraining“ → **Automation 1 verschickt den Antrag automatisch neu**.
+5. Korrigiert die Verwaltung selbst in Airtable: E-Mail ändern, Häkchen entfernen, Status auf „Probetraining“ → gleicher Effekt.
+
+**Wichtig:** Airtables eigener Mailversand (Aktion „Send email“) schickt über Airtable-Server; Unzustellbar-Meldungen
+erreichen den Verein damit **nicht zuverlässig**. Empfehlung: Automation 1 auf ein Vereinspostfach umstellen
+(Airtable-Aktion „Gmail: Send email“ bzw. „Outlook: Send email“ mit verbundenem Vereinskonto) – dann landen
+Unzustellbar-Meldungen in diesem Postfach. Bis dahin ist „Antwort an“ auf die Verwaltung gesetzt (vorläufig Sascha), damit
+zumindest Rückfragen der Eltern ankommen.
+
 ### Vorläufige Werte (Stand 03.11.2026) – später ersetzen
 - **Antrags-Link** (Automation 1): https://claude.ai/artifact/EMnvhd112CQZsZw9DdW4cs – Platzhalter-Seite „Mitgliedsantrag folgt, bis dahin Papierantrag beim Trainer“ (Quelle: `mitgliedsantrag/index.html`). Die Seite ist privat, bis sie über „Teilen“ freigegeben wird. Sobald es einen echten Online-Antrag gibt: URL in Automation 1 tauschen.
-- **Verwaltungs-E-Mail** (Automation 2 und 4): vorläufig Saschas private Adresse (bewusst nicht im Repo). Später durch die echte Verwaltungsadresse ersetzen.
+- **Verwaltungs-E-Mail** (Automation 2 und 4) und **„Antwort an“** in Automation 1: vorläufig Saschas private Adresse (bewusst nicht im Repo). Später durch die echte Verwaltungsadresse ersetzen.
 
 Automationen kann nur der Nutzer in der Airtable-Oberfläche einschalten.
 
