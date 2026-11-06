@@ -230,8 +230,7 @@ a.big{text-decoration:none;box-sizing:border-box}
 
   /* phase: loading | ready | error | denied | expired */
   var state = {phase:'loading', me:null, team:null, kids:[], today:null, loadedAt:null, busy:{}, sheet:null, msg:'', view:'liste'};
-  /* Start immer mit der Liste; „Karten“ gilt nur, solange die App offen ist */
-  try { localStorage.removeItem('pt-view'); } catch(e){}
+  try { if (localStorage.getItem('pt-view') === 'karten') state.view = 'karten'; } catch(e){}
   /* Zahlen für Menschen: „1 Kind“, „3 Kinder“ */
   function kinder(n){ return n === 1 ? '1 Kind' : n + ' Kinder'; }
   function fmtBirth(s){ return s.slice(8,10)+'.'+s.slice(5,7)+'.'+s.slice(0,4); }
@@ -551,6 +550,7 @@ a.big{text-decoration:none;box-sizing:border-box}
       case 'mailfix': openMailSheet(id); break;
       case 'view':
         state.view = b.dataset.view === 'karten' ? 'karten' : 'liste';
+        try{ localStorage.setItem('pt-view', state.view); }catch(_){}
         render(); break;
       case 'mailsave': saveMail(id, false); break;
       case 'mailpaper': saveMail(id, true); break;
