@@ -19,7 +19,11 @@ Einzelne HTML-Datei, kein Build. Im Browser direkt öffnen. Ursprünglich als cl
 - Login-Screen (E-Mail → Code) ist nur Demo; im Echtbetrieb übernimmt Cloudflare Access.
 - `localStorage` nur für zuletzt gewählte Demo-Mannschaft.
 
-## Ansichten
+## Ansichten (Prototyp)
+
+Seit 06.11.2026 wie in der echten App: Standardansicht **Liste** (eine Zeile pro Kind, „2 von 3“, Button „War heute da“),
+Umschalter zu **Karten**; Kopf und Abschnitte zählen in Worten („2 Kinder im Probetraining“).
+
 1. Anmeldung (Demo) → 2. Mannschaft: Karten „Im Probetraining“ mit Zählerkreisen 1…6, Button „War heute da“,
    bei Limit rote Karte mit Elternkontakt → 3. Liste „Angemeldet“ (Antrag/Mitglied/spielberechtigt)
    → 4. Sheet „Neues Kind“ mit QR-Code und Demo-Elternformular.

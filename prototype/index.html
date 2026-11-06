@@ -79,6 +79,28 @@ section{display:grid;gap:10px}
 .sec .n{font-family:var(--body);font-size:14px;font-weight:600;color:var(--muted);letter-spacing:0;font-variant-numeric:tabular-nums}
 .secsub{font-size:14px;color:var(--muted);margin-top:-6px}
 .cards{display:grid;gap:12px}
+.sechead{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.viewsw{display:inline-flex;border:1px solid var(--line-strong);border-radius:999px;padding:2px;background:var(--surface)}
+.viewsw button{border:0;background:none;padding:6px 14px;border-radius:999px;font-size:14px;font-weight:600;color:var(--muted)}
+.viewsw button[aria-pressed="true"]{background:var(--fg);color:var(--bg)}
+.klist{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow)}
+.krow{display:flex;align-items:center;gap:12px;padding:12px 14px}
+.krow + .krow{border-top:1px solid var(--line)}
+.krow.is-limit{box-shadow:inset 4px 0 0 var(--red)}
+.kmain{min-width:0;flex:1}
+.kname{font-family:var(--display);font-weight:700;font-size:21px;line-height:1.05}
+.kmeta{font-size:14px;color:var(--muted);display:flex;align-items:center;gap:4px 8px;flex-wrap:wrap;margin-top:4px;font-variant-numeric:tabular-nums}
+.kmeta strong{color:var(--fg);font-weight:600}
+.klast{white-space:nowrap}
+.mdots{display:inline-flex;gap:3px}
+.md{width:11px;height:11px;border-radius:50%;border:1.5px solid var(--line-strong);display:inline-block}
+.md.on{background:var(--accent);border-color:var(--accent)}
+.khint{font-size:13.5px;margin-top:6px;border-radius:6px;padding:4px 8px;display:inline-block}
+.khint.red{background:var(--red-bg);color:var(--red)}
+.kbtn{flex:none;min-height:48px;width:96px;border:0;border-radius:var(--radius);background:var(--accent);color:var(--accent-ink);font-family:var(--display);font-size:16px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:4px 8px;line-height:1.05}
+.kbtn:active{transform:scale(.97)}
+.kdone{flex:none;display:flex;flex-direction:column;align-items:flex-end;gap:2px;color:var(--green);font-weight:600;font-size:15px}
+.kdone .linkbtn{padding:2px 0;font-size:14px;color:var(--fg)}
 .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:16px;display:grid;gap:12px;box-shadow:var(--shadow)}
 .card.is-limit{border-color:var(--red);border-width:2px;padding:15px}
 .card-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
@@ -204,7 +226,10 @@ section{display:grid;gap:10px}
     {id:12,team:'D1', name:'Ben Wolf',      jg:2014, count:2, last:ago(28), status:'mitglied', parent:'Aylin Wolf', phone:'0159 5656787'}
   ]; }
 
-  var state = {kids:seed(), team:null, step:'mail', email:'', pending:null, undo:{}, sheet:null, nextId:100};
+  var state = {kids:seed(), team:null, step:'mail', email:'', pending:null, undo:{}, sheet:null, nextId:100, view:'liste'};
+  try { if (localStorage.getItem('pt-view') === 'karten') state.view = 'karten'; } catch(e){}
+  /* Zahlen für Menschen: „1 Kind“, „3 Kinder“ */
+  function kinder(n){ return n === 1 ? '1 Kind' : n + ' Kinder'; }
   try { var saved = localStorage.getItem('pt-team'); if (saved && TEAMS[saved]) state.team = saved; } catch(e){}
 
   var $ = function(id){ return document.getElementById(id); };
@@ -237,10 +262,10 @@ section{display:grid;gap:10px}
         '<div class="sub">Training heute · '+esc(fmtLong(TODAY))+'</div>'+
         '<button class="logout" type="button" data-action="logout">Abmelden</button>'+
         '<div class="tally">'+
-          '<span class="tchip"><i class="d d-red"></i>'+nProbe+' im Probetraining</span>'+
-          (nLimit?'<span class="tchip"><i class="d d-stop"></i>'+nLimit+' Limit erreicht</span>':'')+
-          '<span class="tchip"><i class="d d-amber"></i>'+nAntrag+' Antrag</span>'+
-          '<span class="tchip"><i class="d d-green"></i>'+nMember+' Mitglied</span>'+
+          '<span class="tchip"><i class="d d-red"></i>'+kinder(nProbe)+' im Probetraining</span>'+
+          (nLimit?'<span class="tchip"><i class="d d-stop"></i>'+kinder(nLimit)+': Limit erreicht</span>':'')+
+          '<span class="tchip"><i class="d d-amber"></i>'+kinder(nAntrag)+' mit Antrag</span>'+
+          '<span class="tchip"><i class="d d-green"></i>'+(nMember===1 ? '1 Kind ist Mitglied' : nMember+' Kinder sind Mitglied')+'</span>'+
         '</div>'+
       '</div>';
   }
@@ -284,6 +309,22 @@ section{display:grid;gap:10px}
     $('login').innerHTML = html;
   }
 
+  /* Kompakte Zeile (Standardansicht): alle Probetraining-Kinder auf einen Blick, ein Tipp pro Kind */
+  function krow(k){
+    var limit = k.count>=MAX, att = !!state.undo[k.id];
+    var dots = '';
+    for (var i=1;i<=MAX;i++) dots += '<i class="md'+(i<=k.count?' on':'')+'"></i>';
+    var meta = '<span class="mdots" aria-hidden="true">'+dots+'</span><strong>'+k.count+' von '+MAX+'</strong><span class="klast">zuletzt '+(k.last===TODAY_ISO?'heute':esc(fmt(k.last)))+'</span>';
+    var hint = limit ? '<div class="khint red">Nur noch mit Antrag · Eltern: '+esc(k.parent)+' · <span class="tel" id="tel-'+k.id+'">'+esc(k.phone)+'</span></div>' : '';
+    var action = att ?
+      '<div class="kdone"><span>✓ Heute da</span><button class="linkbtn" type="button" data-action="undo" data-id="'+k.id+'">Rückgängig</button></div>'
+      : limit ? '<span class="pill t-stop">Limit</span>'
+      : '<button class="kbtn" type="button" data-action="attend" data-id="'+k.id+'">War heute da</button>';
+    return '<div class="krow'+(limit?' is-limit':'')+'" id="k-'+k.id+'">'+
+      '<div class="kmain"><div class="kname">'+esc(k.name)+'</div><div class="kmeta" aria-label="'+k.count+' von '+MAX+' Probetrainings">'+meta+'</div>'+hint+'</div>'+
+      action+'</div>';
+  }
+
   function card(k){
     var limit = k.count>=MAX, att = !!state.undo[k.id];
     var dots = Array.from({length:MAX},function(_,j){return j+1}).map(function(i){ return '<span class="dot'+(i<=k.count?' on':'')+'">'+i+'</span>'; }).join('');
@@ -318,11 +359,15 @@ section{display:grid;gap:10px}
     var angem = list.filter(function(k){return k.status!=='probe'}).sort(function(a,b){ return (ORDER[a.status]-ORDER[b.status]) || byName(a,b); });
     $('app').innerHTML =
       '<div class="col stack">'+
-        '<section><h2 class="sec">Im Probetraining <span class="n">'+probe.length+'</span></h2>'+
-          (probe.length ? '<div class="cards">'+probe.map(card).join('')+'</div>'
+        '<section><div class="sechead"><h2 class="sec">Im Probetraining <span class="n">'+kinder(probe.length)+'</span></h2>'+
+          (probe.length ? '<div class="viewsw" role="group" aria-label="Ansicht">'+
+            '<button type="button" data-action="view" data-view="liste" aria-pressed="'+(state.view==='liste')+'">Liste</button>'+
+            '<button type="button" data-action="view" data-view="karten" aria-pressed="'+(state.view==='karten')+'">Karten</button></div>' : '')+
+          '</div>'+
+          (probe.length ? (state.view==='karten' ? '<div class="cards">'+probe.map(card).join('')+'</div>' : '<div class="klist">'+probe.map(krow).join('')+'</div>')
             : '<div class="empty">Gerade ist niemand im Probetraining. Kommt ein neues Kind, tippe unten auf „Neues Kind beim Training“.</div>')+
         '</section>'+
-        '<section><h2 class="sec">Angemeldet <span class="n">'+angem.length+'</span></h2>'+
+        '<section><h2 class="sec">Angemeldet <span class="n">'+kinder(angem.length)+'</span></h2>'+
           '<p class="secsub">Alle hier dürfen mittrainieren.</p>'+
           (angem.length ? '<div class="rows">'+angem.map(function(k){
             var r=ROWS[k.status];
@@ -452,6 +497,10 @@ section{display:grid;gap:10px}
       case 'attend': attend(id); break;
       case 'undo': undo(id); break;
       case 'copy': copy(id); break;
+      case 'view':
+        state.view = b.dataset.view === 'karten' ? 'karten' : 'liste';
+        try{ localStorage.setItem('pt-view', state.view); }catch(_){}
+        render(); break;
       case 'new': openSheet(); break;
       case 'close': closeSheet(); break;
       case 'form': state.sheet='form'; renderSheet(); $('sheet-body').scrollTop=0; break;
