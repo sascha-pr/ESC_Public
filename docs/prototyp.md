@@ -37,7 +37,7 @@ Gleiche Datei-Struktur, gleiches CSS und HTML-Gerüst wie der Prototyp – nur d
 unverändert als Demo mit Beispieldaten (für Trainer-Tests ohne Login). Ausgeliefert wird `app/` vom Worker (`worker/wrangler.jsonc` → `assets`).
 
 - Daten kommen aus dem Worker: `/api/me` (Trainer, Mannschaften, `max`, `today`) und `/api/kids?team=…`.
-- Ansicht „Liste“ (Standard; Name und Button „War heute da“ in einer Zeile, darunter Punkte „2 von 3“ und Hinweise) oder „Karten“ (große Karten wie im Prototyp, mit Geburtsdatum); Umschalter über der Liste, Wahl in `localStorage` (`pt-view`).
+- Ansicht „Liste“ (Standard; Name und Button „War heute da“ in einer Zeile, darunter Punkte „2 von 3“ und Hinweise) oder „Karten“ (große Karten wie im Prototyp, mit Geburtsdatum); Umschalter über der Liste; die App startet immer mit der Liste (Wahl „Karten“ gilt nur bis zum Schließen).
 - Kopf und Abschnitte zählen in Worten: „3 Kinder im Probetraining“, „1 Kind mit Antrag“, „2 Kinder sind Mitglied“.
 - „War heute da“ / „Rückgängig“ → `POST /api/kids/:id/attend|undo`; die Karte nimmt die Antwort des Servers.
   Während der Anfrage ist der Button gesperrt („Wird eingetragen …“), Doppel-Tipps zählen nicht doppelt.
