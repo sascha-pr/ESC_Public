@@ -10,7 +10,7 @@ Einzelne HTML-Datei, kein Build. Im Browser direkt öffnen. Ursprünglich als cl
 - Wappen als Base64 in der Variable `LOGO` eingebettet (Original in `assets/`).
 
 ## Logik (im `<script>` am Ende)
-- `MAX = 6` – Probetrainings bis Antrag Pflicht.
+- `MAX = 6` – Probetrainings bis Antrag Pflicht (Prototyp; die echte App nutzt seit 06.11.2026 **3**).
 - `TEAMS` – Demo-Mannschaften mit Trainer-E-Mail (später aus `/api/me`).
 - `seed()` – Beispielkinder (später aus `/api/kids`).
 - `state` – lokaler Zustand; `undo` merkt sich den Vorwert pro Kind (später serverseitig).
@@ -30,6 +30,8 @@ Gleiche Datei-Struktur, gleiches CSS und HTML-Gerüst wie der Prototyp – nur d
 unverändert als Demo mit Beispieldaten (für Trainer-Tests ohne Login). Ausgeliefert wird `app/` vom Worker (`worker/wrangler.jsonc` → `assets`).
 
 - Daten kommen aus dem Worker: `/api/me` (Trainer, Mannschaften, `max`, `today`) und `/api/kids?team=…`.
+- Ansicht „Liste“ (Standard, eine Zeile pro Kind mit Punkten „2 von 3“, Hinweisen und Button „War heute da“) oder „Karten“ (große Karten wie im Prototyp); Umschalter über der Liste, Wahl in `localStorage` (`pt-view`).
+- Kopf und Abschnitte zählen in Worten: „3 Kinder im Probetraining“, „1 Kind mit Antrag“, „2 Kinder sind Mitglied“.
 - „War heute da“ / „Rückgängig“ → `POST /api/kids/:id/attend|undo`; die Karte nimmt die Antwort des Servers.
   Während der Anfrage ist der Button gesperrt („Wird eingetragen …“), Doppel-Tipps zählen nicht doppelt.
 - „Heute eingetragen“ kommt vom Server (`attendedToday`) – stimmt also auch nach Neuladen und auf anderen Handys.
@@ -45,7 +47,7 @@ unverändert als Demo mit Beispieldaten (für Trainer-Tests ohne Login). Ausgeli
 - Elternformular: „E-Mail wiederholen“ und Tippfehler-Hinweis („Meintet ihr …@gmail.com?“).
 - Eltern ohne E-Mail: Karte zeigt „Keine E-Mail …“, ab dem 2. Training gelb „Bitte den Mitgliedsantrag auf Papier mitgeben“.
 - `app/aushang.html?team=<Mannschaft>`: druckbarer A4-Aushang mit großem QR-Code, aus dem „Neues Kind“-Blatt verlinkt.
-- `MAX = 6` bleibt als Vorgabe, der Server meldet den gültigen Wert.
+- `MAX = 3` als Vorgabe, der Server meldet den gültigen Wert.
 
 Lokal ausprobieren ohne Airtable: `cd worker && npm run dev:mock` → http://localhost:8787 (erfundene Daten, siehe `worker/dev/mock-airtable.mjs`).
 

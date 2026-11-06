@@ -1,6 +1,6 @@
 # Probetraining-App – ESC Rellinghausen 06 e. V.
 
-Handy-App für Trainer der Jugendabteilung: Wer ist im Probetraining (x/6), wer hat einen Antrag abgegeben, wer ist Mitglied?
+Handy-App für Trainer der Jugendabteilung: Wer ist im Probetraining (x/3), wer hat einen Antrag abgegeben, wer ist Mitglied?
 Daten in Airtable, Login über Cloudflare Access, DFBnet bleibt führend.
 
 | Ordner | Inhalt |

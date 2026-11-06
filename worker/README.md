@@ -11,7 +11,7 @@ Trainer-Bereich (hinter Cloudflare Access). Alle Antworten sind JSON mit `Cache-
 
 | Methode | Pfad | Antwort |
 |---|---|---|
-| GET | `/api/me` | `{ email, max: 6, today, teams: [{ id, name, ageClass, trainer }] }` |
+| GET | `/api/me` | `{ email, max: 3, today, teams: [{ id, name, ageClass, trainer }] }` |
 | GET | `/api/kids?team=<id>` | `{ team, today, kids: [KidDto] }` – ohne `team` die erste eigene Mannschaft |
 | POST | `/api/kids/:id/attend` | `{ kid: KidDto }` – Zähler +1, „Letztes Probetraining“ = heute (beim 1. Mal auch „Erstes Probetraining“) |
 | POST | `/api/kids/:id/email` | `{ kid: KidDto }` – Body `{ email }` oder `{ paper: true }`; nur wenn „E-Mail unzustellbar“ gesetzt ist; setzt das Häkchen zurück und den Status von „Antrag verschickt“ auf „Probetraining“ (Automation 1 sendet neu) |
@@ -42,7 +42,7 @@ Auf `PUBLIC_HOST` liefert der Worker nichts anderes aus. Lokal ist das Formular 
   (Signatur gegen die Access-Zertifikate, Aussteller, Audience, Ablauf). Die E-Mail daraus muss in
   „Mannschaften → Trainer E-Mail“ stehen (Groß-/Kleinschreibung egal). Ein Trainer kann mehrere Mannschaften haben.
 - **Mannschafts-Filter:** Jeder Lese- und Schreibzugriff prüft die Zugehörigkeit; Schreibzugriffe lesen dafür den Datensatz frisch.
-- **Limit:** „War heute da“ nur im Status Probetraining / Antrag verschickt, nur einmal pro Tag, höchstens 6-mal.
+- **Limit:** „War heute da“ nur im Status Probetraining / Antrag verschickt, nur einmal pro Tag, höchstens 3-mal.
 - **Teilnahme-Protokoll:** „War heute da“ hängt das Datum an das Airtable-Feld „Trainingstermine“ an, „Rückgängig“ stellt das vorherige Protokoll wieder her. Das Protokoll geht nicht an die Trainer-App.
 - **Papierantrag:** Eltern ohne E-Mail (Feld „Antrag auf Papier“) → `paperApplication: true`, solange das Kind im Probetraining ist.
 - **Rückgängig:** nur am selben Tag, nur einmal und nur, wenn seitdem niemand den Datensatz geändert hat.

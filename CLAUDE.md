@@ -12,7 +12,7 @@ Führendes System für Mitglieder, Spielerpässe und Beiträge ist **DFBnet** (C
 Zwischen Trainer (Platz) und Verwaltung (pflegt DFBnet) gibt es keinen Abgleich.
 
 **Lösung:** Eine schlanke Handy-App für Trainer, die pro Kind den Status zeigt
-(Probetraining x/6 → Antrag liegt vor → Mitglied → spielberechtigt). Daten liegen in **Airtable**,
+(Probetraining x/3 → Antrag liegt vor → Mitglied → spielberechtigt). Daten liegen in **Airtable**,
 Automationen informieren Eltern, Verwaltung und Trainer. DFBnet bleibt führend; die App überbrückt
 nur die Zeit zwischen erstem Training und fertigem Pass.
 
@@ -88,7 +88,9 @@ Empfehlung: Variante 1 für den Start.
 5. ✅ *(erledigt 03.11.2026: echte App in `app/index.html`, Prototyp bleibt als Demo; siehe `docs/prototyp.md`)* **Prototyp umbauen:** `seed()` und lokalen `state` durch API-Aufrufe ersetzen; Demo-Login-Screen entfernen (Login macht Cloudflare Access); Abmelden → `/cdn-cgi/access/logout`; Lade-/Fehlerzustände; `MAX = 6` beibehalten. Look & Feel (ESC-Rot `#c9252b`, Schwarz, Eichengrün `#006f45`, Wappen, Barlow/Barlow Condensed) **nicht verändern** – den Trainern gefällt es.
 6. ✅ *(erledigt; 04.11.2026 umgestellt auf Variante 2: eigenes Elternformular ohne Login, `app/anmeldung/`; QR + Aushang pro Mannschaft in der App; Airtable-Formular und Automation 6 nur noch Reserve)* Formular für QR-Code (siehe oben) + QR pro Mannschaft.
 7. ✅ *(erledigt 03.11.2026: `docs/deployment.md`)* Deployment-Anleitung für den Verein schreiben (Cloudflare-Konto **des Vereins**, nicht privat; DNS-Eintrag bei Domain-Verwalter von esc-06.de).
-8. ✅ *(erledigt 03.11.2026)* Kurzanleitung (`docs/trainer-kurzanleitung.md`) auf finalen Ablauf anpassen (6 Trainings, echter Login).
+8. ✅ *(erledigt 03.11.2026)* Kurzanleitung (`docs/trainer-kurzanleitung.md`) auf finalen Ablauf anpassen (echter Login).
+
+**Änderung 06.11.2026:** Limit von 6 auf **3 Probetrainings** gesenkt (Worker `MAX_TRIALS`, App, Airtable-Ampel, Automation 1, Texte). Antragsmail bleibt nach dem 2. Training.
 
 ## 5. Offene Fragen an den Nutzer
 

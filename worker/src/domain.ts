@@ -4,7 +4,7 @@
  */
 
 /** Probetrainings, bis ein Mitgliedsantrag Pflicht ist (muss zur Airtable-Formel „Ampel“ passen). */
-export const MAX_TRIALS = 6;
+export const MAX_TRIALS = 3;
 /** So viele Tage bleiben spielberechtigte Kinder in der App sichtbar (danach Löschliste). */
 export const SHOW_PLAYABLE_DAYS = 14;
 /** Zeitzone für „heute“ – Trainings finden in Essen statt. */

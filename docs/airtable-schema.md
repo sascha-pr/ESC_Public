@@ -1,4 +1,4 @@
-# Airtable – Schema & IDs (Stand 03.11.2026, nach Umstellung auf 6 Probetrainings)
+# Airtable – Schema & IDs (Stand 06.11.2026: 3 Probetrainings)
 
 Vor Änderungen per Schema-Abfrage prüfen, ob der Nutzer inzwischen selbst etwas geändert hat.
 
@@ -35,7 +35,7 @@ Beispieldatensätze: F1 `recuL5quoCtlJlxvf`, E1 `recxrebTTbfjH20HB`, D1 `recn8mI
 | Antrag eingegangen am | `fldIiv2fzk2yLzeMO` | Datum (Automation 2) |
 | In DFBnet erfasst am | `fldpRvJWKLM32GA2s` | Datum (Automation 3) |
 | Bemerkungen | `fldDXqSG8iFox39DP` | Langtext |
-| Ampel | `fldmhyiAvuf04lT1P` | Formel – Limit **6** |
+| Ampel | `fldmhyiAvuf04lT1P` | Formel – Limit **3** (seit 06.11.2026, vorher 6) |
 | Löschen fällig | `fldfuXXYewGHR2F5s` | Formel – Frist **56 Tage** (8 Wochen); spielberechtigt: 14 Tage nach „Spielberechtigt seit“ |
 | Trainer | `fldboIYe5zLCmv3ZA` | Lookup |
 | Trainer E-Mail | `fld2VgBCM8qAv9LBr` | Lookup |
@@ -64,7 +64,7 @@ SWITCH({Status},
 "In DFBnet erfasst", "🟢 Mitglied (Pass in Arbeit)",
 "Antrag eingegangen", "🟡 Antrag liegt vor",
 "Kein Interesse / abgesagt", "⚪ abgesagt",
-IF({Anzahl Probetrainings} >= 6, "⛔ Limit erreicht – nur mit Antrag", "🔴 Probetraining " & ({Anzahl Probetrainings} & "") & "/6"))
+IF({Anzahl Probetrainings} >= 3, "⛔ Limit erreicht – nur mit Antrag", "🔴 Probetraining " & ({Anzahl Probetrainings} & "") & "/3"))
 ```
 Löschen fällig (ohne „Spielberechtigt seit“ gilt ein spielberechtigtes Kind sofort als fällig – Rückfall, falls Automation 5 nicht lief):
 ```
@@ -87,7 +87,7 @@ IF(OR(
 | 7 | E-Mail unzustellbar: Trainer informieren | `wflepxM0tNONTlyMq` | „E-Mail unzustellbar“ = ✓ | Mail an Trainer (Lookup) mit Bitte, die E-Mail in der App zu korrigieren | – |
 | 6 | Formular-Anmeldung: 1. Probetraining eintragen (**nicht einschalten**, nur für das Airtable-Reserveformular) | `wflxlxrVhaLWPSY8c` | Formular `pag2AaadRpeiFuvDB` abgeschickt | Status = Probetraining, Zähler = 1, erstes + letztes Probetraining = heute | – |
 
-Automation 1: Mailtext am 03.11.2026 auf 6 Probetrainings angepasst („Insgesamt sind 6 Probetrainings möglich. Ab dem 7. Training … nur mit Antrag“); Auslöser bleibt „nach dem 2. Training“.
+Automation 1: Mailtext am 06.11.2026 auf 3 Probetrainings angepasst („Insgesamt sind 3 Probetrainings möglich. Ab dem 4. Training … nur mit Antrag“); Auslöser bleibt „nach dem 2. Training“.
 
 ### Ablauf bei unzustellbarer Antragsmail
 1. Verwaltung bemerkt die Unzustellbar-Meldung und setzt beim Kind **„E-Mail unzustellbar“**.

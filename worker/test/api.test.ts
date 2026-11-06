@@ -51,7 +51,7 @@ describe("Anmeldung", () => {
   it("/api/me liefert nur die eigenen Mannschaften", async () => {
     const b = await body(await api(req("GET", "/api/me", D1)));
     expect(b.teams.map((t: any) => t.id)).toEqual(["recTeamD1aaaaaaaa", "recTeamD2aaaaaaaa"]);
-    expect(b.max).toBe(6);
+    expect(b.max).toBe(3);
     expect(b.today).toBe(TODAY);
   });
 
@@ -119,7 +119,7 @@ describe("Limit", () => {
     expect(k.attendedToday).toBe(true);
   });
 
-  it("das 6. Training ist erlaubt, danach ist Schluss", async () => {
+  it("das 3. Training ist erlaubt, danach ist Schluss", async () => {
     const res = await api(req("POST", "/api/kids/recKidF1fuenf0001/attend", F1));
     expect(res.status).toBe(200);
     const k = (await body(res)).kid as KidDto;

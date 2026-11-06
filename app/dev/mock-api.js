@@ -1,7 +1,7 @@
 /* Testversion: ersetzt den Worker durch einen Nachbau im Browser (gleiche Regeln wie worker/src/domain.ts + api.ts).
    Nur erfundene Daten, nichts wird gespeichert – Neuladen setzt alles zurück. Nicht in der echten App verwenden. */
 (function(){
-  var MAX = 6, SHOW_PLAYABLE_DAYS = 14;
+  var MAX = 3, SHOW_PLAYABLE_DAYS = 14;
   var offset = 0, mode = 'ok', offline = false, user = 'jan', nextId = 100;
 
   function iso(d){ return new Intl.DateTimeFormat('en-CA',{timeZone:'Europe/Berlin',year:'numeric',month:'2-digit',day:'2-digit'}).format(d); }
@@ -24,9 +24,9 @@
     function k(id,team,name,jg,count,last,status,parent,phone,since,paper){ return {id:id,team:team,name:name,jg:jg,count:count,first:ago(30),last:last,status:status,parent:parent,phone:phone,since:since||null,paper:!!paper}; }
     kids = [
       k('k1','F1','Max Beispiel',2018,1,ago(4),'probetraining','Anna Beispiel','0171 0000001'),
-      k('k2','F1','Mia Schulz',2019,4,ago(4),'probetraining','Jörg Schulz','0160 0000002',null,true),
-      k('k3','F1','Noah Wagner',2018,6,ago(2),'antrag_verschickt','Sevgi Wagner','0152 0000003'),
-      (function(){ var x = k('k4','F1','Ella Hoffmann',2018,5,ago(7),'antrag_verschickt','Tim Hoffmann','0176 0000004'); x.email = 'tim.hoffmann@gmx.dee'; x.bounced = true; return x; })(),
+      k('k2','F1','Mia Schulz',2019,2,ago(4),'probetraining','Jörg Schulz','0160 0000002',null,true),
+      k('k3','F1','Noah Wagner',2018,3,ago(2),'antrag_verschickt','Sevgi Wagner','0152 0000003'),
+      (function(){ var x = k('k4','F1','Ella Hoffmann',2018,2,ago(7),'antrag_verschickt','Tim Hoffmann','0176 0000004'); x.email = 'tim.hoffmann@gmx.dee'; x.bounced = true; return x; })(),
       k('k5','F1','Emil Test',2018,2,ago(21),'antrag_eingegangen','Petra Test','0175 0000005'),
       k('k6','F1','Lukas Becker',2019,2,ago(35),'dfbnet_erfasst','Nina Becker','0157 0000006'),
       k('k7','F1','Lina Spiel',2018,3,ago(20),'spielberechtigt','Ole Spiel','0157 0000007',ago(3)),
@@ -34,7 +34,7 @@
       k('k9','F1','Abgesagtes Kind',2018,1,ago(40),'abgesagt','X','0'),
       k('k10','F2','Paul Klein',2019,1,ago(3),'probetraining','Sandra Klein','0170 0000010'),
       k('k11','E1','Lena Muster',2016,2,ago(3),'probetraining','Tom Muster','0163 0000011'),
-      k('k12','E1','Ida Krüger',2016,6,ago(6),'antrag_verschickt','Marco Krüger','0151 0000012')
+      k('k12','E1','Ida Krüger',2016,3,ago(6),'antrag_verschickt','Marco Krüger','0151 0000012')
     ];
     undo = {};
   }

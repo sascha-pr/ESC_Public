@@ -15,7 +15,7 @@ und bei jeder Änderung fortgeschrieben.
 
 | | |
 |---|---|
-| Zweck | Handy-Web-App für Jugendtrainer: Status der Probetraining-Kinder (max. 6 Trainings) → Antrag → Mitglied → spielberechtigt. DFBnet bleibt führend und wird nicht angebunden. |
+| Zweck | Handy-Web-App für Jugendtrainer: Status der Probetraining-Kinder (max. 3 Trainings) → Antrag → Mitglied → spielberechtigt. DFBnet bleibt führend und wird nicht angebunden. |
 | Nutzer | Trainer (Login), Eltern (eigenes Anmeldeformular per QR-Code, **ohne Login**), Verwaltung (Airtable) |
 | Bausteine | Cloudflare Worker (App, API, Elternformular), Cloudflare Access (Login), Turnstile (Bot-Check), Workers KV, Airtable (Daten, Automationen) |
 | Adressen | `https://probetraining.<APP-DOMAIN>` (Trainer, mit Login) und `https://anmeldung.<APP-DOMAIN>` (Eltern, ohne Login) auf einer **eigenen Vereinsdomain nur für die App** |
@@ -166,6 +166,7 @@ neuen Token erst nach Klärung setzen; Vorstand informieren (Meldepflichten prü
 | 05.11.2026 | „Eltern ohne Handy“: Trainer öffnet das Elternformular auf dem eigenen Handy (gleiches Formular, gleiche Prüfungen) | Projektleitung |
 | 05.11.2026 | Teilnahme-Protokoll („Trainingstermine“) und Papierantrag für Eltern ohne E-Mail (Feld „Antrag auf Papier“, Hinweis in der Trainer-App) | Projektleitung |
 | 06.11.2026 | Absicherung falscher E-Mail-Adressen: „E-Mail wiederholen“ und Tippfehler-Hinweis im Formular; Feld „E-Mail unzustellbar“, Automation 7 (Trainer-Info), Korrektur in der Trainer-App mit automatischem Neuversand | Projektleitung |
+| 06.11.2026 | Limit von 6 auf 3 Probetrainings gesenkt; Trainer-App: kompakte Liste als Standardansicht (Umschalter zur Kartenansicht), Überblick im Kopf mit „Kinder“ ausgeschrieben | Projektleitung |
 | | Domain registriert: | |
 | | Cloudflare-Konto, Zone, Access eingerichtet | |
 | | Worker veröffentlicht, Abnahme (deployment.md Schritt 6) bestanden | |

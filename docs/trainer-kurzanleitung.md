@@ -22,10 +22,11 @@ Kein Code da? Im Spam-Ordner nachsehen. Steht da „Kein Zugang“, bitte bei mi
 
 2️⃣ Kind war beim Training
 Bei jedem Probetraining-Kind „War heute da“ tippen. Fertig.
+Oben seht ihr auf einen Blick, wie viele Kinder im Probetraining sind. Die Liste zeigt jedes Kind in einer Zeile; über „Karten“ könnt ihr auf die große Ansicht wechseln.
 • Nach dem 2. Mal bekommen die Eltern automatisch den Mitgliedsantrag per Mail.
 • Kam die Antragsmail zurück, steht auf der Karte rot „E-Mail unzustellbar“ (ihr bekommt dazu auch eine Mail). Dann beim Training die richtige Adresse erfragen und „E-Mail korrigieren“ tippen – der Antrag geht automatisch neu raus.
 • Haben die Eltern keine E-Mail, steht auf der Karte gelb „Mitgliedsantrag auf Papier mitgeben“ – dann bitte einen Papierantrag mitgeben.
-• Nach dem 6. Mal ist Schluss: Die Karte wird rot, ab dann nur noch mit Antrag. Die Telefonnummer der Eltern steht direkt dabei.
+• Nach dem 3. Mal ist Schluss: Das Kind wird rot markiert, ab dann nur noch mit Antrag. Die Telefonnummer der Eltern steht direkt dabei.
 • Vertippt? „Rückgängig“ antippen (geht am selben Tag).
 • Pro Kind zählt nur ein Training am Tag. Habt ihr mehrere Trainer und ein anderer hat das Kind schon eingetragen, sagt euch die App das beim Tippen.
 

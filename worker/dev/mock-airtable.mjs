@@ -28,9 +28,9 @@ const tables = {
   ],
   [K.table]: [
     kid("recMockKid0000001", "recMockTeamF1xxxx", "Max Beispiel", "2018-03-01", 1, ago(4), "Probetraining", "Anna Beispiel", "0171 0000001"),
-    (() => { const r = kid("recMockKid0000002", "recMockTeamF1xxxx", "Mia Schulz", "2019-06-12", 4, ago(4), "Probetraining", "Jörg Schulz", "0160 0000002"); r.fields[K.paper] = true; return r; })(),
-    kid("recMockKid0000003", "recMockTeamF1xxxx", "Noah Wagner", "2018-01-20", 6, ago(2), "Antrag ausgehändigt/verschickt", "Sevgi Wagner", "0152 0000003"),
-    (() => { const r = kid("recMockKid0000004", "recMockTeamF1xxxx", "Ella Hoffmann", "2018-09-09", 5, ago(7), "Antrag ausgehändigt/verschickt", "Tim Hoffmann", "0176 0000004"); r.fields[K.email] = "tim.hoffmann@gmx.dee"; r.fields[K.bounced] = true; return r; })(),
+    (() => { const r = kid("recMockKid0000002", "recMockTeamF1xxxx", "Mia Schulz", "2019-06-12", 2, ago(4), "Probetraining", "Jörg Schulz", "0160 0000002"); r.fields[K.paper] = true; return r; })(),
+    kid("recMockKid0000003", "recMockTeamF1xxxx", "Noah Wagner", "2018-01-20", 3, ago(2), "Antrag ausgehändigt/verschickt", "Sevgi Wagner", "0152 0000003"),
+    (() => { const r = kid("recMockKid0000004", "recMockTeamF1xxxx", "Ella Hoffmann", "2018-09-09", 2, ago(7), "Antrag ausgehändigt/verschickt", "Tim Hoffmann", "0176 0000004"); r.fields[K.email] = "tim.hoffmann@gmx.dee"; r.fields[K.bounced] = true; return r; })(),
     kid("recMockKid0000005", "recMockTeamF1xxxx", "Emil Test", "2018-02-02", 2, ago(21), "Antrag eingegangen", "Petra Test", "0175 0000005"),
     kid("recMockKid0000006", "recMockTeamF1xxxx", "Lukas Becker", "2019-04-04", 2, ago(35), "In DFBnet erfasst", "Nina Becker", "0157 0000006"),
     kid("recMockKid0000007", "recMockTeamF1xxxx", "Lina Spiel", "2018-05-05", 3, ago(20), "Spielberechtigt", "Ole Spiel", "0157 0000007", ago(3)),
