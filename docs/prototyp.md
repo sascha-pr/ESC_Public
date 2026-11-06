@@ -10,7 +10,7 @@ Einzelne HTML-Datei, kein Build. Im Browser direkt öffnen. Ursprünglich als cl
 - Wappen als Base64 in der Variable `LOGO` eingebettet (Original in `assets/`).
 
 ## Logik (im `<script>` am Ende)
-- `MAX = 6` – Probetrainings bis Antrag Pflicht (Prototyp; die echte App nutzt seit 06.11.2026 **3**).
+- `MAX = 3` – Probetrainings bis Antrag Pflicht (seit 06.11.2026, vorher 6; Demo-Löschfrist im Formulartext 8 Wochen).
 - `TEAMS` – Demo-Mannschaften mit Trainer-E-Mail (später aus `/api/me`).
 - `seed()` – Beispielkinder (später aus `/api/kids`).
 - `state` – lokaler Zustand; `undo` merkt sich den Vorwert pro Kind (später serverseitig).

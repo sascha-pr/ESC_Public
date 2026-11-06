@@ -182,7 +182,7 @@ section{display:grid;gap:10px}
   function esc(s){ return String(s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]}); }
   function first(n){ return n.split(' ')[0]; }
 
-  var MAX = 6; /* Probetrainings bis Mitgliedsantrag Pflicht ist */
+  var MAX = 3; /* Probetrainings bis Mitgliedsantrag Pflicht ist */
   var TEAMS = {
     F1:{name:'F1-Jugend', klasse:'F-Jugend · Jahrgang 2018/19', trainer:'Jan', email:'jan.f1@beispiel-verein.de', jg:2018},
     E1:{name:'E1-Jugend', klasse:'E-Jugend · Jahrgang 2016/17', trainer:'Kathrin', email:'kathrin.e1@beispiel-verein.de', jg:2016},
@@ -191,15 +191,15 @@ section{display:grid;gap:10px}
 
   function seed(){ return [
     {id:1, team:'F1', name:'Max Beispiel',  jg:2018, count:1, last:ago(4),  status:'probe', parent:'Anna Beispiel', phone:'0171 2345678'},
-    {id:2, team:'F1', name:'Mia Schulz',    jg:2019, count:4, last:ago(4),  status:'probe', parent:'Jörg Schulz', phone:'0160 9876543'},
-    {id:3, team:'F1', name:'Noah Wagner',   jg:2018, count:6, last:ago(2),  status:'probe', parent:'Sevgi Wagner', phone:'0152 1122334'},
+    {id:2, team:'F1', name:'Mia Schulz',    jg:2019, count:2, last:ago(4),  status:'probe', parent:'Jörg Schulz', phone:'0160 9876543'},
+    {id:3, team:'F1', name:'Noah Wagner',   jg:2018, count:3, last:ago(2),  status:'probe', parent:'Sevgi Wagner', phone:'0152 1122334'},
     {id:4, team:'F1', name:'Ella Hoffmann', jg:2018, count:2, last:ago(9),  status:'antrag', parent:'Tim Hoffmann', phone:'0176 3344556'},
     {id:5, team:'F1', name:'Emil Test',     jg:2018, count:2, last:ago(21), status:'mitglied', parent:'Petra Test', phone:'0175 5566778'},
     {id:6, team:'F1', name:'Lukas Becker',  jg:2019, count:2, last:ago(35), status:'spielberechtigt', parent:'Nina Becker', phone:'0157 6677889'},
-    {id:7, team:'E1', name:'Lena Muster',   jg:2017, count:6, last:ago(3),  status:'probe', parent:'Tom Muster', phone:'0163 2233445'},
+    {id:7, team:'E1', name:'Lena Muster',   jg:2017, count:3, last:ago(3),  status:'probe', parent:'Tom Muster', phone:'0163 2233445'},
     {id:8, team:'E1', name:'Paul Klein',    jg:2016, count:1, last:ago(3),  status:'probe', parent:'Sandra Klein', phone:'0170 9988776'},
     {id:9, team:'E1', name:'Ida Krüger',    jg:2016, count:2, last:ago(10), status:'antrag', parent:'Marco Krüger', phone:'0151 7788990'},
-    {id:10,team:'D1', name:'Finn Richter',  jg:2014, count:3, last:ago(5),  status:'probe', parent:'Julia Richter', phone:'0172 4433221'},
+    {id:10,team:'D1', name:'Finn Richter',  jg:2014, count:2, last:ago(5),  status:'probe', parent:'Julia Richter', phone:'0172 4433221'},
     {id:11,team:'D1', name:'Jonas Probe',   jg:2015, count:2, last:ago(12), status:'antrag', parent:'Sabine Probe', phone:'0177 1212343'},
     {id:12,team:'D1', name:'Ben Wolf',      jg:2014, count:2, last:ago(28), status:'mitglied', parent:'Aylin Wolf', phone:'0159 5656787'}
   ]; }
@@ -362,7 +362,7 @@ section{display:grid;gap:10px}
         field('f-eltern','Name eines Elternteils','text','Kerstin Neumann')+
         field('f-mail','E-Mail der Eltern','email','k.neumann@beispiel.de')+
         field('f-tel','Telefon (für Rückfragen)','tel','0151 4455667')+
-        '<div class="field check"><label for="f-dsgvo"><input type="checkbox" id="f-dsgvo"><span>Ich bin erziehungsberechtigt und willige ein, dass der Verein diese Daten für das Probetraining und die Kontaktaufnahme wegen einer Mitgliedschaft verarbeitet. Die Daten werden spätestens 6 Wochen nach dem ersten Training gelöscht. Ich kann jederzeit widerrufen.</span></label>'+
+        '<div class="field check"><label for="f-dsgvo"><input type="checkbox" id="f-dsgvo"><span>Ich bin erziehungsberechtigt und willige ein, dass der Verein diese Daten für das Probetraining und die Kontaktaufnahme wegen einer Mitgliedschaft verarbeitet. Die Daten werden spätestens 8 Wochen nach dem ersten Training gelöscht. Ich kann jederzeit widerrufen.</span></label>'+
           '<div class="err" id="e-dsgvo" hidden></div></div>'+
         '<button class="big" type="button" data-action="submit">Zum Probetraining anmelden</button>'+
         '<div><button class="linkbtn" type="button" data-action="toqr">Zurück zum QR-Code</button></div>';
