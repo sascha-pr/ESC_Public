@@ -84,27 +84,26 @@ section{display:grid;gap:10px}
 .viewsw button{border:0;background:none;padding:6px 14px;border-radius:999px;font-size:14px;font-weight:600;color:var(--muted)}
 .viewsw button[aria-pressed="true"]{background:var(--fg);color:var(--bg)}
 .klist{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow)}
-.krow{display:flex;align-items:center;gap:12px;padding:12px 14px}
+.krow{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;column-gap:10px;row-gap:3px;padding:9px 14px}
 .krow + .krow{border-top:1px solid var(--line)}
 .krow.is-limit{box-shadow:inset 4px 0 0 var(--red)}
-.kmain{min-width:0;flex:1}
-.kname{font-family:var(--display);font-weight:700;font-size:21px;line-height:1.05}
-.kmeta{font-size:14px;color:var(--muted);display:flex;align-items:center;gap:4px 8px;flex-wrap:wrap;margin-top:4px;font-variant-numeric:tabular-nums}
+.kname{font-family:var(--display);font-weight:700;font-size:21px;line-height:1.1;min-width:0;overflow-wrap:anywhere}
+.kmeta{grid-column:1 / -1;font-size:14px;color:var(--muted);display:flex;align-items:center;gap:4px 8px;flex-wrap:wrap;font-variant-numeric:tabular-nums}
 .kmeta strong{color:var(--fg);font-weight:600}
 .klast{white-space:nowrap}
 .mdots{display:inline-flex;gap:3px}
 .md{width:11px;height:11px;border-radius:50%;border:1.5px solid var(--line-strong);display:inline-block}
 .md.on{background:var(--accent);border-color:var(--accent)}
-.khint{font-size:13.5px;margin-top:6px;border-radius:6px;padding:4px 8px;display:inline-block}
+.khint{grid-column:1 / -1;justify-self:start;font-size:13.5px;margin-top:3px;border-radius:6px;padding:3px 8px}
 .khint .linkbtn{padding:0 0 0 4px;font-size:13.5px;color:inherit;font-weight:600}
 .khint.red{background:var(--red-bg);color:var(--red)}
 .khint.amber{background:var(--amber-bg);color:var(--amber);font-weight:600}
 .khint.muted{background:var(--probe-bg);color:var(--muted)}
-.kbtn{flex:none;min-height:48px;width:96px;border:0;border-radius:var(--radius);background:var(--accent);color:var(--accent-ink);font-family:var(--display);font-size:16px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:4px 8px;line-height:1.05}
+.kbtn{min-height:40px;border:0;border-radius:var(--radius);background:var(--accent);color:var(--accent-ink);font-family:var(--display);font-size:16px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:0 14px;white-space:nowrap}
 .kbtn:active{transform:scale(.97)}
 .kbtn:disabled{opacity:.6}
-.kdone{flex:none;display:flex;flex-direction:column;align-items:flex-end;gap:2px;color:var(--green);font-weight:600;font-size:15px}
-.kdone .linkbtn{padding:2px 0;font-size:14px;color:var(--fg)}
+.kdone{display:flex;align-items:center;gap:8px;color:var(--green);font-weight:600;font-size:15px;white-space:nowrap;min-height:40px}
+.kdone .linkbtn{padding:4px 0;font-size:14px;color:var(--fg)}
 .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:16px;display:grid;gap:12px;box-shadow:var(--shadow)}
 .card.is-limit{border-color:var(--red);border-width:2px;padding:15px}
 .card-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
@@ -234,6 +233,7 @@ a.big{text-decoration:none;box-sizing:border-box}
   try { if (localStorage.getItem('pt-view') === 'karten') state.view = 'karten'; } catch(e){}
   /* Zahlen für Menschen: „1 Kind“, „3 Kinder“ */
   function kinder(n){ return n === 1 ? '1 Kind' : n + ' Kinder'; }
+  function fmtBirth(s){ return s.slice(8,10)+'.'+s.slice(5,7)+'.'+s.slice(0,4); }
 
   var $ = function(id){ return document.getElementById(id); };
   function kid(id){ for (var i=0;i<state.kids.length;i++) if (state.kids[i].id===id) return state.kids[i]; return null; }
@@ -363,8 +363,8 @@ a.big{text-decoration:none;box-sizing:border-box}
       : limit ? '<span class="pill t-stop">Limit</span>'
       : '<button class="kbtn" type="button" data-action="attend" data-id="'+id+'"'+(busy?' disabled aria-busy="true"':'')+'>'+(busy?'…':'War heute da')+'</button>';
     return '<div class="krow'+(limit?' is-limit':'')+'" id="k-'+id+'">'+
-      '<div class="kmain"><div class="kname">'+esc(k.name)+'</div><div class="kmeta" aria-label="'+k.count+' von '+MAX+' Probetrainings">'+meta+'</div>'+hint+'</div>'+
-      action+'</div>';
+      '<div class="kname">'+esc(k.name)+'</div>'+action+
+      '<div class="kmeta" aria-label="'+k.count+' von '+MAX+' Probetrainings">'+meta+'</div>'+hint+'</div>';
   }
 
   function card(k){
@@ -386,7 +386,7 @@ a.big{text-decoration:none;box-sizing:border-box}
       : (limit ? '' : '<button class="big" type="button" data-action="attend" data-id="'+esc(k.id)+'"'+(busy?' disabled aria-busy="true"':'')+'>'+(busy?'Wird eingetragen …':'War heute da')+'</button>');
     return '<article class="card'+(limit?' is-limit':'')+'" id="k-'+esc(k.id)+'">'+
       '<div class="card-head"><div><div class="name">'+esc(k.name)+'</div>'+
-      '<div class="meta">'+(k.jg?'Jg. '+esc(k.jg)+' · ':'')+(k.last ? 'zuletzt '+(k.last===state.today?'heute':esc(fmt(k.last))) : 'noch kein Training')+'</div></div>'+pill+'</div>'+
+      '<div class="meta">'+(k.birthDate ? 'geb. '+esc(fmtBirth(k.birthDate))+' · ' : (k.jg?'Jg. '+esc(k.jg)+' · ':''))+(k.last ? 'zuletzt '+(k.last===state.today?'heute':esc(fmt(k.last))) : 'noch kein Training')+'</div></div>'+pill+'</div>'+
       '<div class="dots" role="img" aria-label="'+k.count+' von '+MAX+' Probetrainings"><span class="dlabel">Probetrainings</span>'+dots+'</div>'+
       (k.emailProblem && !limit ? '' : '<p class="note'+(paperDue && !limit ? ' paper' : '')+'">'+note+'</p>')+mailfix(k)+contact+action+'</article>';
   }

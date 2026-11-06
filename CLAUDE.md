@@ -76,7 +76,7 @@ Ziel-URL: probetraining.<APP-DOMAIN> auf eigener Vereinsdomain nur für die App 
 | Methode | Pfad | Zweck |
 |---|---|---|
 | GET | `/api/me` | Trainer + Mannschaft(en) zur eingeloggten E-Mail |
-| GET | `/api/kids` | Kinder der eigenen Mannschaft, nur nötige Felder (Name, Jg., Zähler, letztes Training, Status, Eltern-Name, Telefon nur bei Limit) |
+| GET | `/api/kids` | Kinder der eigenen Mannschaft, nur nötige Felder (Name, Jg., Geburtsdatum (seit 06.11.2026), Zähler, letztes Training, Status, Eltern-Name, Telefon nur bei Limit) |
 | POST | `/api/kids/:id/attend` | Zähler +1, „Letztes Probetraining“ = heute; serverseitig Limit prüfen |
 | POST | `/api/kids/:id/undo` | letzten „War heute da“ zurücknehmen (vorherige Werte vom Server merken, nicht vom Client übernehmen) |
 

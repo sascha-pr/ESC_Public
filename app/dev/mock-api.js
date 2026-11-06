@@ -43,7 +43,8 @@
   var APP = {probetraining:'probe', antrag_verschickt:'probe', antrag_eingegangen:'antrag', dfbnet_erfasst:'mitglied', spielberechtigt:'spielberechtigt', abgesagt:null};
   function visible(k){ var s = APP[k.status]; if (!s) return false; if (s==='spielberechtigt' && k.since) return days(k.since,today()) <= SHOW_PLAYABLE_DAYS; return true; }
   function dto(k){
-    var s = APP[k.status] || 'probe', d = {id:k.id, name:k.name, jg:k.jg, count:k.count, last:k.last, status:s, attendedToday:k.last===today()};
+    var n = parseInt(String(k.id).replace(/\D/g,''),10) || 1;
+    var s = APP[k.status] || 'probe', d = {id:k.id, name:k.name, jg:k.jg, birthDate: k.jg + '-' + String(n % 12 + 1).padStart(2,'0') + '-' + String(n * 7 % 27 + 1).padStart(2,'0'), count:k.count, last:k.last, status:s, attendedToday:k.last===today()};
     if (s==='probe' && k.count>=MAX) d.contact = {parent:k.parent, phone:k.phone};
     if (s==='probe' && k.paper) d.paperApplication = true;
     if (s==='probe' && k.bounced && !k.paper) d.emailProblem = {email: k.email || null};

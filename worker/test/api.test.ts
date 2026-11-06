@@ -97,15 +97,16 @@ describe("Mannschafts-Filter", () => {
 });
 
 describe("Datensparsamkeit", () => {
-  it("nur Jahrgang statt Geburtsdatum, Elternkontakt nur bei Limit", async () => {
+  it("Jahrgang und Geburtsdatum, Elternkontakt nur bei Limit", async () => {
     const kids: KidDto[] = (await body(await api(req("GET", "/api/kids", F1)))).kids;
     const anton = kids.find((k) => k.name === "Anton")!;
     const berta = kids.find((k) => k.name === "Berta")!;
     expect(anton).toEqual({
-      id: "recKidF1probe0001", name: "Anton", jg: 2018, count: 1, last: "2026-10-27", status: "probe", attendedToday: false,
+      id: "recKidF1probe0001", name: "Anton", jg: 2018, birthDate: "2018-05-04", count: 1, last: "2026-10-27", status: "probe", attendedToday: false,
     });
     expect(berta.contact).toEqual({ parent: "Elternteil Beispiel", phone: "0170 0000000" });
-    expect(JSON.stringify(kids)).not.toContain("2018-05-04");
+    // Eltern-E-Mail und Telefon (ohne Limit) gehen nicht an die App
+    expect(anton).not.toHaveProperty("contact");
   });
 });
 

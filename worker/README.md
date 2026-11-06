@@ -17,8 +17,8 @@ Trainer-Bereich (hinter Cloudflare Access). Alle Antworten sind JSON mit `Cache-
 | POST | `/api/kids/:id/email` | `{ kid: KidDto }` – Body `{ email }` oder `{ paper: true }`; nur wenn „E-Mail unzustellbar“ gesetzt ist; setzt das Häkchen zurück und den Status von „Antrag verschickt“ auf „Probetraining“ (Automation 1 sendet neu) |
 | POST | `/api/kids/:id/undo` | `{ kid: KidDto }` – stellt die serverseitig gemerkten Werte wieder her |
 
-`KidDto`: `{ id, name, jg, count, last, status: "probe"|"antrag"|"mitglied"|"spielberechtigt", attendedToday, contact?, paperApplication?, emailProblem?: { email } }`
-– `contact: { parent, phone }` gibt es **nur bei erreichtem Limit**. Geburtsdatum, Eltern-E-Mail und Bemerkungen verlassen den Worker nie.
+`KidDto`: `{ id, name, jg, birthDate, count, last, status: "probe"|"antrag"|"mitglied"|"spielberechtigt", attendedToday, contact?, paperApplication?, emailProblem?: { email } }`
+– `contact: { parent, phone }` gibt es **nur bei erreichtem Limit**. Eltern-E-Mail (außer bei „unzustellbar“) und Bemerkungen verlassen den Worker nie. Das Geburtsdatum geht seit 06.11.2026 an die App (Kartenansicht).
 
 Fehlercodes: `unauthenticated` (401), `unknown_trainer` / `forbidden_team` / `bad_origin` (403),
 `not_found` (404, auch für Kinder fremder Mannschaften), `not_in_trial` / `already_today` / `limit_reached` /

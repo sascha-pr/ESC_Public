@@ -60,8 +60,10 @@ export interface KidRecord {
 export interface KidDto {
   id: string;
   name: string;
-  /** Nur der Jahrgang, nicht das Geburtsdatum. */
+  /** Jahrgang */
   jg: number | null;
+  /** Geburtsdatum (YYYY-MM-DD) – für die Kartenansicht (Entscheidung 06.11.2026) */
+  birthDate: string | null;
   count: number;
   last: string | null;
   status: AppStatus;
@@ -129,6 +131,7 @@ export function toKidDto(kid: KidRecord, today: string): KidDto {
     id: kid.id,
     name: kid.name,
     jg: Number.isFinite(jg) ? jg : null,
+    birthDate: kid.birthDate,
     count: kid.count,
     last: kid.lastTraining,
     status,

@@ -97,7 +97,7 @@ legt das Kind direkt in Airtable an (Status Probetraining, Zähler 1, Datum heut
 | Daten | Ort | Zugriff |
 |---|---|---|
 | Kind (Name, Geburtsdatum), Mannschaft, Elternteil (Name, E-Mail, Telefon), Einwilligung, Zähler/Daten, Status | Airtable (Airtable Inc., USA) | Verwaltung (Airtable), Trainer der eigenen Mannschaft (App, eingeschränkt) |
-| In der App beim Trainer | Name, **Jahrgang**, Zähler, letztes Training, Status, Hinweis „Papierantrag“; Elternname/Telefon **nur** bei erreichtem Limit | Trainer der Mannschaft |
+| In der App beim Trainer | Name, **Geburtsdatum** (Kartenansicht, seit 06.11.2026), Zähler, letztes Training, Status, Hinweis „Papierantrag“; Elternname/Telefon **nur** bei erreichtem Limit | Trainer der Mannschaft |
 | Teilnahme-Protokoll (jedes Probetraining-Datum) | Airtable, Feld „Trainingstermine“; nicht in der Trainer-App | Verwaltung |
 | Rückgängig-Werte | Cloudflare Workers KV, 24 h; nur Datensatz-ID, Zähler, Datum | technisch |
 | Elternformular | wird direkt nach Airtable geschrieben, im Worker nicht gespeichert; Turnstile wertet Browsermerkmale für den Bot-Check aus | – |
@@ -168,6 +168,7 @@ neuen Token erst nach Klärung setzen; Vorstand informieren (Meldepflichten prü
 | 06.11.2026 | Absicherung falscher E-Mail-Adressen: „E-Mail wiederholen“ und Tippfehler-Hinweis im Formular; Feld „E-Mail unzustellbar“, Automation 7 (Trainer-Info), Korrektur in der Trainer-App mit automatischem Neuversand | Projektleitung |
 | 06.11.2026 | Limit von 6 auf 3 Probetrainings gesenkt; Trainer-App: kompakte Liste als Standardansicht (Umschalter zur Kartenansicht), Überblick im Kopf mit „Kinder“ ausgeschrieben | Projektleitung |
 | 06.11.2026 | Erster Prototyp archiviert; öffentlicher Link verweist auf Testversion und Formular-Vorschau | Projektleitung |
+| 06.11.2026 | Trainer-App: Liste noch kompakter (Button auf der Namenszeile); Kartenansicht zeigt das **Geburtsdatum** statt nur des Jahrgangs – bewusste Entscheidung der Projektleitung, die bisherige Vorgabe „nur Jahrgang“ entfällt | Projektleitung |
 | | Domain registriert: | |
 | | Cloudflare-Konto, Zone, Access eingerichtet | |
 | | Worker veröffentlicht, Abnahme (deployment.md Schritt 6) bestanden | |
