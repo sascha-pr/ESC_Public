@@ -1,4 +1,7 @@
-# Prototyp `prototype/index.html` – Aufbau
+# Prototyp `prototype/index.html` – Aufbau (Archiv)
+
+> **Seit 06.11.2026 Archiv:** wird nicht mehr gepflegt. Maßgeblich sind die echte App (`app/`) und die Testversion. Der öffentliche
+> Prototyp-Link zeigt eine Hinweisseite (`prototype/weiterleitung.html`) mit Links zur Testversion und zur Formular-Vorschau.
 
 Einzelne HTML-Datei, kein Build. Im Browser direkt öffnen. Ursprünglich als claude.ai-Artifact gebaut
 (dort ohne `<html>/<head>`-Gerüst); die Datei hier ist um das Gerüst ergänzt und läuft eigenständig.

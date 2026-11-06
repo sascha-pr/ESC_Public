@@ -1,6 +1,6 @@
 # Probetraining-App ESC Rellinghausen 06 – Übergabe an Claude Code
 
-Stand: 03.11.2026 · Auftraggeber: Sascha (Projektleitung, ehrenamtlich für den Verein)
+Stand: 06.11.2026 · Auftraggeber: Sascha (Projektleitung, ehrenamtlich für den Verein)
 Sprache: Antworte und kommentiere auf **Deutsch** (Code-Bezeichner dürfen englisch sein).
 
 ## 1. Worum geht es
@@ -21,17 +21,34 @@ nur die Zeit zwischen erstem Training und fertigem Pass.
 | Baustein | Status | Wo |
 |---|---|---|
 | Airtable-Base „Probetraining & Neuanmeldungen“ | angelegt, mit Beispieldaten | `docs/airtable-schema.md` (alle IDs) |
-| 6 Airtable-Automationen | als Entwurf angelegt, **ausgeschaltet**; Antrags-Link und Verwaltungs-Mail vorläufig | `docs/airtable-schema.md` |
+| 7 Airtable-Automationen (Nr. 6 nur Reserve) | als Entwurf angelegt, **ausgeschaltet**; Antrags-Link, Verwaltungs-Mail und „Antwort an“ vorläufig | `docs/airtable-schema.md` |
 | Airtable-Interface (Trainer-Liste + Verwaltungs-Kanban) | veröffentlicht – Trainern zu unintuitiv, wird durch eigene App ersetzt; Kanban bleibt für Verwaltung | `docs/airtable-schema.md` |
-| **Klickbarer Prototyp der Trainer-App** | fertig, von Trainern positiv bewertet, **nur Beispieldaten im Browser** | `prototype/index.html` |
+| Klickbarer Prototyp (erste Demo) | **Archiv, wird nicht mehr gepflegt** (06.11.2026); öffentlicher Link zeigt jetzt eine Hinweisseite zur Testversion | `prototype/index.html`, `prototype/weiterleitung.html` |
 | Vereinswappen | vorhanden | `assets/` |
 | Trainer-Kurzanleitung (WhatsApp) & Einwilligungstext | Kurzanleitung final (Link fehlt), Einwilligung mit Platzhaltern | `docs/` |
 | **Echte Trainer-App** + Aushang | fertig, gegen API gebaut, lokal getestet | `app/` |
-| **Worker (API + Elternformular)** | fertig, 68 Tests, noch nicht deployt | `worker/` |
+| **Worker (API + Elternformular)** | fertig, 88 Tests, noch nicht deployt | `worker/` |
+| **Testversion** (echte App + Server-Nachbau) und **Formular-Vorschau** | aktuell, auf claude.ai veröffentlicht (Links unten) | `app/dev/mock-api.js`, `worker/dev/build-*.mjs` |
+| PDFs (IT-Doku, Deployment, Kurzanleitung, Aushang-Muster, Trainer-App, Elternformular) | aktuell | `docs/*.pdf` |
 | **Elternformular (eigenes, ohne Login)** | fertig, getestet; Turnstile-Schlüssel und Einwilligungsangaben offen | `app/anmeldung/`, `worker/src/public.ts` |
 | Deployment-Anleitung (Variante C) + IT-Dokumentation (Entscheidung, Inventar, Betrieb, Änderungsprotokoll) | fertig, Domainname noch offen | `docs/deployment.md`, `docs/deployment-it.md` |
 
-Live-Version des Prototyps (claude.ai-Artifact, öffentlicher Link): https://claude.ai/artifact/P2dsyiesCqNT7KQNyYb63n
+Links (claude.ai):
+- Testversion der Trainer-App: https://claude.ai/artifact/CdAt886T2tT8TcRVnJMRKa (neu bauen: `cd worker && node dev/build-testversion.mjs`, dann `testversion/index.html` veröffentlichen)
+- Formular-Vorschau: https://claude.ai/artifact/PZPQsEicRrsYcjVtrKkbK5 (`node dev/build-formular-vorschau.mjs` → `testversion/anmeldung.html`)
+- Antrags-Platzhalterseite: https://claude.ai/artifact/EMnvhd112CQZsZw9DdW4cs (privat; `mitgliedsantrag/index.html`)
+- Alter Prototyp-Link: https://claude.ai/artifact/P2dsyiesCqNT7KQNyYb63n → Hinweisseite (`prototype/weiterleitung.html`)
+
+### Aktueller Funktionsstand (06.11.2026)
+- **Limit 3 Probetrainings**, Antragsmail nach dem 2. Training (Automation 1), Teilnahme-Protokoll („Trainingstermine“).
+- **Trainer-App:** Liste als Standard (Umschalter zu Karten), Zahlen in Worten, „War heute da“/„Rückgängig“ (serverseitig),
+  Hinweise Papierantrag (Eltern ohne E-Mail) und „E-Mail unzustellbar“ mit Korrektur in der App (`POST /api/kids/:id/email`),
+  mehrere Mannschaften, QR-Code + Aushang, „Eltern ohne Handy“ → Formular auf dem Trainer-Handy.
+- **Elternformular** (`anmeldung.<APP-DOMAIN>`, ohne Login, Turnstile): Mannschaft fest aus dem QR-Code, E-Mail doppelt +
+  Tippfehler-Hinweis, Option „keine E-Mail → Papierantrag“, Dublettenerkennung, Geschwister.
+- **Offen beim Verein:** Domainname, Cloudflare-Konto, Datenschutz (Vorstand, AV-Verträge, Einwilligungsangaben in
+  `app/anmeldung/config.js`), Nichtmitglieder-Versicherung (LSB NRW/ARAG), Vereinspostfach für Automation 1,
+  echte Mannschaften (Aufgabe 3), echter Antrags-Link (ggf. DFBnet „Mitgliedsantrag online“), Automationen einschalten.
 
 ## 3. Ziel der nächsten Phase: echte Datenanbindung („Weg B“)
 

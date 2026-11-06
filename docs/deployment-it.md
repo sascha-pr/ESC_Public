@@ -167,6 +167,7 @@ neuen Token erst nach Klärung setzen; Vorstand informieren (Meldepflichten prü
 | 05.11.2026 | Teilnahme-Protokoll („Trainingstermine“) und Papierantrag für Eltern ohne E-Mail (Feld „Antrag auf Papier“, Hinweis in der Trainer-App) | Projektleitung |
 | 06.11.2026 | Absicherung falscher E-Mail-Adressen: „E-Mail wiederholen“ und Tippfehler-Hinweis im Formular; Feld „E-Mail unzustellbar“, Automation 7 (Trainer-Info), Korrektur in der Trainer-App mit automatischem Neuversand | Projektleitung |
 | 06.11.2026 | Limit von 6 auf 3 Probetrainings gesenkt; Trainer-App: kompakte Liste als Standardansicht (Umschalter zur Kartenansicht), Überblick im Kopf mit „Kinder“ ausgeschrieben | Projektleitung |
+| 06.11.2026 | Erster Prototyp archiviert; öffentlicher Link verweist auf Testversion und Formular-Vorschau | Projektleitung |
 | | Domain registriert: | |
 | | Cloudflare-Konto, Zone, Access eingerichtet | |
 | | Worker veröffentlicht, Abnahme (deployment.md Schritt 6) bestanden | |

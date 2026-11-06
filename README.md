@@ -7,7 +7,7 @@ Daten in Airtable, Login über Cloudflare Access, DFBnet bleibt führend.
 |---|---|
 | `app/` | Trainer-App (eine HTML-Datei ohne Build) und Aushang mit QR-Code |
 | `worker/` | Cloudflare Worker: Login-Prüfung, API, Auslieferung der App – siehe `worker/README.md` |
-| `prototype/` | Klickbarer Prototyp mit Beispieldaten (Demo, ohne Login) |
+| `prototype/` | Erste Demo (Archiv, nicht mehr gepflegt) und Hinweisseite für den alten Link |
 | `mitgliedsantrag/` | Vorläufige Seite für den Mitgliedsantrag |
 | `docs/` | Airtable-Schema, Deployment-Anleitung, Trainer-Kurzanleitung, Einwilligung & Rollen |
 

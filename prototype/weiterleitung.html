@@ -1,0 +1,68 @@
+<title>Probetraining-App</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Barlow:wght@400;500;600&display=swap">
+<style>
+/* Layout: eine Handy-Spalte im Vereinslook der Trainer-App; schwarzer Kopf mit roter Kante, darunter zwei große Links */
+:root{
+  --bg:#f3f3f4; --surface:#ffffff; --fg:#141414; --muted:#5f5f64; --line:#e1e1e4;
+  --pitch:#141414; --pitch-ink:#ffffff; --chalk:rgba(255,255,255,.08);
+  --brand:#c9252b; --accent:#c9252b; --accent-ink:#ffffff; --focus:#c9252b;
+  --amber:#8a5a0c; --amber-bg:#fbf0d6;
+  --display:"Barlow Condensed","Arial Narrow",system-ui,sans-serif;
+  --body:"Barlow",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0f0f10; --surface:#1b1b1d; --fg:#ededee; --muted:#a3a3a9; --line:#2c2c30;
+  --pitch:#000000; --chalk:rgba(255,255,255,.07); --accent:#de3a40; --focus:#ff6b7a;
+  --amber:#e9b45d; --amber-bg:#36290f; color-scheme:dark;
+}}
+:root[data-theme="dark"]{
+  --bg:#0f0f10; --surface:#1b1b1d; --fg:#ededee; --muted:#a3a3a9; --line:#2c2c30;
+  --pitch:#000000; --chalk:rgba(255,255,255,.07); --accent:#de3a40; --focus:#ff6b7a;
+  --amber:#e9b45d; --amber-bg:#36290f; color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased}
+.gut{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.col{max-width:520px;margin:0 auto}
+p{margin:0}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.top{background:var(--pitch);color:var(--pitch-ink);border-bottom:5px solid var(--brand);position:relative;overflow:hidden}
+.top::before{content:"";position:absolute;width:230px;height:230px;border:2px solid var(--chalk);border-radius:50%;right:-95px;top:50%;transform:translateY(-50%)}
+.hdr{position:relative;padding-block:22px 24px}
+.eyebrow{font-size:13px;letter-spacing:.09em;text-transform:uppercase;font-weight:600}
+h1{font-family:var(--display);font-weight:700;font-size:42px;line-height:.95;margin:12px 0 8px;text-transform:uppercase;letter-spacing:.01em;text-wrap:balance}
+.sub{opacity:.86;font-size:15px}
+main{padding-block:22px 40px}
+.stack{display:grid;gap:16px}
+.note{background:var(--amber-bg);color:var(--amber);border-radius:10px;padding:12px 14px;font-weight:600;font-size:15px}
+.link{display:grid;gap:4px;background:var(--surface);border:1px solid var(--line);border-left:5px solid var(--brand);border-radius:6px;padding:16px;text-decoration:none;color:var(--fg)}
+.link strong{font-family:var(--display);font-size:24px;line-height:1.05;text-transform:uppercase;letter-spacing:.02em;color:var(--accent)}
+.link span{color:var(--muted);font-size:15px}
+.foot{font-size:13px;color:var(--muted)}
+</style>
+
+<header class="top gut">
+  <div class="col hdr">
+    <div class="eyebrow">ESC Rellinghausen 06 e.&nbsp;V. · Jugend</div>
+    <h1>Probetraining-App</h1>
+    <p class="sub">Danke fürs Ausprobieren und für euer Feedback!</p>
+  </div>
+</header>
+
+<main class="gut">
+  <div class="col stack">
+    <p class="note">Diese erste Demo wurde durch eine neue Testversion ersetzt. Sie enthält eure Rückmeldungen und alles, was seitdem dazugekommen ist.</p>
+    <a class="link" href="https://claude.ai/artifact/CdAt886T2tT8TcRVnJMRKa" target="_blank" rel="noopener">
+      <strong>Zur Testversion für Trainer</strong>
+      <span>Kinder im Probetraining auf einen Blick, „War heute da“ tippen, neues Kind per QR-Code – mit Beispieldaten.</span>
+    </a>
+    <a class="link" href="https://claude.ai/artifact/PZPQsEicRrsYcjVtrKkbK5" target="_blank" rel="noopener">
+      <strong>Zum Anmeldeformular für Eltern</strong>
+      <span>So sieht das Formular aus, das Eltern über den QR-Code öffnen – ohne Konto und ohne Anmeldung.</span>
+    </a>
+    <p class="foot">Beide Seiten nutzen nur erfundene Beispieldaten. Es wird nichts an den Verein übertragen.</p>
+  </div>
+</main>
